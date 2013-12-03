@@ -1,5 +1,5 @@
 <module>
-  <define-linker name="appcache" class="org.realityforge.gwt.org.realityforge.gwt.appcache.linker.AppcacheLinker"/>
+  <define-linker name="appcache" class="org.realityforge.gwt.appcache.linker.AppcacheLinker"/>
 
   <!-- Define the property that identifies additional static files that be included in the build -->
   <define-configuration-property name="appcache_static_files" is-multi-valued="true"/>
