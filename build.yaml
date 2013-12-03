@@ -1,0 +1,8 @@
+repositories:
+  remote:
+   - http://repo1.maven.org/maven2
+
+artifacts:
+  javax_servlet: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:jar:1.0
+  gwt_user: com.google.gwt:gwt-user:jar:2.6.0-rc1
+  gwt_dev: com.google.gwt:gwt-dev:jar:2.6.0-rc1
