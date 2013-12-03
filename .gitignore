@@ -4,6 +4,7 @@
 /*.iws
 /*.ipr
 /*.iml
+/*/*.iml
 /*.ids
 /_buildr.rb
 /tmp
