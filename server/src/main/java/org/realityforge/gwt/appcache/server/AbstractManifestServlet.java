@@ -220,7 +220,7 @@ public abstract class AbstractManifestServlet
   }
 
   @Nonnull
-  private String getModuleName( @Nonnull final javax.servlet.http.HttpServletRequest request )
+  private String getModuleName( @Nonnull final HttpServletRequest request )
     throws ServletException
   {
     // request url should be something like .../modulename.manifest" within
