@@ -212,7 +212,7 @@ public abstract class AbstractManifestServlet
     if ( null == _bindingMap )
     {
       final String realPath =
-        getServletContext().getRealPath( baseUrl + moduleName + "/" + AppcacheLinker.MANIFEST_MAP_FILE_NAME );
+        getServletContext().getRealPath( baseUrl + moduleName + "/" + AppcacheLinker.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
 
       _bindingMap = XMLPermutationProvider.deserialize( new FileInputStream( realPath ) );
     }
