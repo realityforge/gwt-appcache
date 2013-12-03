@@ -17,43 +17,51 @@ The simplest way to appcache enable a GWT application is to;
 
 * add the dependency into the build system. i.e.
 
-    <dependency>
-       <groupId>org.realityforge.gwt.appcache</groupId>
-       <artifactId>gwt-appcache-server</artifactId>
-       <version>0.1</version>
-    </dependency>
+```xml
+<dependency>
+   <groupId>org.realityforge.gwt.appcache</groupId>
+   <artifactId>gwt-appcache-server</artifactId>
+   <version>0.1</version>
+</dependency>
+```
 
 * add the following snippet into the .gwt.xml file.
 
-    <module rename-to='myapp'>
-      ...
+```xml
+<module rename-to='myapp'>
+  ...
 
-      <!-- enable the linker that generates the manifest -->
-      <add-linker name="appcache"/>
+  <!-- enable the linker that generates the manifest -->
+  <add-linker name="appcache"/>
 
-      <!-- configure all the static files not managed by the GWT compiler -->
-      <extend-configuration-property name="appcache_static_files" value="./"/>
-      <extend-configuration-property name="appcache_static_files" value="index.html"/>
-    </module>
+  <!-- configure all the static files not managed by the GWT compiler -->
+  <extend-configuration-property name="appcache_static_files" value="./"/>
+  <extend-configuration-property name="appcache_static_files" value="index.html"/>
+</module>
+```
 
 * configure html that launches the application to look for the manifest.
 
-    <!doctype html>
-    <html manifest="myapp.appcache">
-       ...
-    </html>
+```xml
+<!doctype html>
+<html manifest="myapp.appcache">
+   ...
+</html>
+```
 
 * declare the servlet that serves the manifest.
 
-    @WebServlet( urlPatterns = { "/myapp.manifest" } )
-    public class ManifestServlet
-      extends AbstractManifestServlet
-    {
-      public ManifestServlet()
-      {
-        addPropertyProvider( new UserAgentPropertyProvider() );
-      }
-    }
+```java
+@WebServlet( urlPatterns = { "/myapp.manifest" } )
+public class ManifestServlet
+  extends AbstractManifestServlet
+{
+  public ManifestServlet()
+  {
+    addPropertyProvider( new UserAgentPropertyProvider() );
+  }
+}
+```
 
 This should be sufficient to get your application using the appcache. If you
 load the application in a modern browser you should see it making use of the
