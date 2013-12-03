@@ -223,9 +223,10 @@ public abstract class AbstractManifestServlet
   private String getModuleName( @Nonnull final HttpServletRequest request )
     throws ServletException
   {
-    // request url should be something like .../modulename.manifest" within
+    // request url should be something like .../modulename.appcache" within
     // the same folder of your host page...
-    final Pattern pattern = Pattern.compile( "/([a-zA-Z0-9]+)\\.manifest$" );
+    final Pattern pattern =
+      Pattern.compile( "/([a-zA-Z0-9]+)\\" + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
     final Matcher matcher = pattern.matcher( request.getServletPath() );
     if ( !matcher.find() )
     {
