@@ -15,5 +15,6 @@ define 'gwt-appcache' do
     compile.with :javax_servlet, :gwt_user, :gwt_dev
 
     package(:jar)
+    package(:sources)
   end
 end
