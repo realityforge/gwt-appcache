@@ -30,6 +30,7 @@ public abstract class AbstractManifestServlet
   private static final long serialVersionUID = -2540671294104865306L;
 
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
+  private transient long _permutationDescriptorLastModified = Long.MIN_VALUE;
   private transient Map<String, List<BindingProperty>> _bindingMap;
 
   protected final void addPropertyProvider( final PropertyProvider propertyProvider )
@@ -209,12 +210,14 @@ public abstract class AbstractManifestServlet
                                                             @Nonnull final String moduleName )
     throws Exception
   {
-    if ( null == _bindingMap )
+    final String realPath =
+      getServletContext().getRealPath( baseUrl + moduleName + "/" + AppcacheLinker.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
+    final File permutationDescriptor = new File( realPath );
+    final long lastModified = permutationDescriptor.lastModified();
+    if ( null == _bindingMap || _permutationDescriptorLastModified < lastModified )
     {
-      final String realPath =
-        getServletContext().getRealPath( baseUrl + moduleName + "/" + AppcacheLinker.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
-
       _bindingMap = XMLPermutationProvider.deserialize( new FileInputStream( realPath ) );
+      _permutationDescriptorLastModified = lastModified;
     }
     return _bindingMap;
   }
