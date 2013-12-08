@@ -39,23 +39,31 @@ public abstract class AbstractManifestServlet
   }
 
   @Override
-  protected void doGet( final HttpServletRequest req, final HttpServletResponse resp )
+  protected void doGet( final HttpServletRequest request, final HttpServletResponse response )
     throws ServletException, IOException
   {
-    final String moduleName = getModuleName( req );
-    final String baseUrl = getBaseUrl( req );
-    final Set<BindingProperty> computedBindings = calculateBindingPropertiesForClient( req );
+    final String moduleName = getModuleName( request );
+    final String baseUrl = getBaseUrl( request );
+    final Set<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
     final String strongName = getPermutationStrongName( baseUrl, moduleName, computedBindings );
     if ( null != strongName )
     {
-      final String manifest =
-        readManifest( baseUrl + moduleName + "/" + strongName + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING );
-      serveStringManifest( resp, manifest );
+      final String manifest = loadManifest( baseUrl, moduleName, strongName );
+      serveStringManifest( response, manifest );
     }
     else
     {
       throw new ServletException( "unknown device" );
     }
+  }
+
+  private String loadManifest( final String baseUrl, final String moduleName, final String strongName )
+    throws ServletException
+  {
+    final String filePath = baseUrl + moduleName + "/" + strongName + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING;
+    final String realPath = getServletContext().getRealPath( filePath );
+    assert null != realPath;
+    return readFile( new File( realPath ) );
   }
 
   private String getBaseUrl( final HttpServletRequest request )
@@ -65,23 +73,22 @@ public abstract class AbstractManifestServlet
     return base.substring( 0, base.lastIndexOf( "/" ) + 1 );
   }
 
-  private String readManifest( final String filePath )
+  private String readFile( final File file )
     throws ServletException
   {
-    final File manifestFile = new File( getServletContext().getRealPath( filePath ) );
-
-    final StringWriter manifestWriter = new StringWriter();
-    BufferedReader br = null;
+    final StringWriter sw = new StringWriter();
+    FileReader fileReader = null;
     try
     {
-      br = new BufferedReader( new FileReader( manifestFile ) );
+      fileReader = new FileReader( file );
+      final BufferedReader br = new BufferedReader( fileReader );
       String line;
-      while ( ( line = br.readLine() ) != null )
+      while ( null != ( line = br.readLine() ) )
       {
-        manifestWriter.append( line ).append( "\n" );
+        sw.append( line ).append( "\n" );
       }
 
-      return manifestWriter.toString();
+      return sw.toString();
     }
     catch ( final Exception e )
     {
@@ -89,11 +96,11 @@ public abstract class AbstractManifestServlet
     }
     finally
     {
-      if ( null != br )
+      if ( null != fileReader )
       {
         try
         {
-          br.close();
+          fileReader.close();
         }
         catch ( final IOException ioe )
         {
