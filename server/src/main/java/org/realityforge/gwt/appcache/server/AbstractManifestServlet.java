@@ -121,32 +121,36 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  private void serveStringManifest( final HttpServletResponse resp, final String manifest )
+  private void serveStringManifest( final HttpServletResponse response, final String manifest )
     throws ServletException
   {
-    final Date now = new Date();
-    // set create date to current timestamp
-    resp.setDateHeader( "Date", now.getTime() );
-    // set modify date to current timestamp
-    resp.setDateHeader( "Last-Modified", now.getTime() );
-    // set expiry to back in the past (makes us a bad candidate for caching)
-    resp.setDateHeader( "Expires", 0 );
-    // HTTP 1.1 (disable caching of any kind)
-    // HTTP 1.1 'pre-check=0, post-check=0' => (Internet Explorer should always check)
-    resp.setHeader( "Cache-control", "no-cache, no-store, must-revalidate, pre-check=0, post-check=0" );
-    resp.setHeader( "Pragma", "no-cache" );
+    configureForNoCaching( response );
 
-    resp.setContentType( "text/cache-manifest" );
-
+    response.setContentType( "text/cache-manifest" );
     try
     {
       final byte[] data = manifest.getBytes( "UTF-8" );
-      resp.getOutputStream().write( data, 0, data.length );
+      response.getOutputStream().write( data, 0, data.length );
     }
     catch ( final Exception e )
     {
       throw new ServletException( "can not write manifest to output stream", e );
     }
+  }
+
+  private void configureForNoCaching( final HttpServletResponse response )
+  {
+    final Date now = new Date();
+    // set create date to current timestamp
+    response.setDateHeader( "Date", now.getTime() );
+    // set modify date to current timestamp
+    response.setDateHeader( "Last-Modified", now.getTime() );
+    // set expiry to back in the past (makes us a bad candidate for caching)
+    response.setDateHeader( "Expires", 0 );
+    // HTTP 1.1 (disable caching of any kind)
+    // HTTP 1.1 'pre-check=0, post-check=0' => (Internet Explorer should always check)
+    response.setHeader( "Cache-control", "no-cache, no-store, must-revalidate, pre-check=0, post-check=0" );
+    response.setHeader( "Pragma", "no-cache" );
   }
 
   private String getPermutationStrongName( @Nonnull final String baseUrl,
