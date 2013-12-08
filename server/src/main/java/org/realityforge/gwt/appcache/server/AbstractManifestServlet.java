@@ -150,8 +150,8 @@ public abstract class AbstractManifestServlet
   }
 
   private String getPermutationStrongName( @Nonnull final String baseUrl,
-                                                   @Nonnull final String moduleName,
-                                                   @Nonnull final Set<BindingProperty> computedBindings )
+                                           @Nonnull final String moduleName,
+                                           @Nonnull final Set<BindingProperty> computedBindings )
     throws ServletException
   {
     try
