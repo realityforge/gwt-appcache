@@ -182,14 +182,10 @@ public abstract class AbstractManifestServlet
           {
             if ( requirement.getName().equals( candidate.getName() ) )
             {
-              final String[] values = requirement.getValue().split( "," );
-              for ( final String value : values )
+              if ( requirement.matches( candidate.getValue() ) )
               {
-                if ( value.equals( candidate.getValue() ) )
-                {
-                  propertyMatched = true;
-                  break;
-                }
+                propertyMatched = true;
+                break;
               }
             }
           }

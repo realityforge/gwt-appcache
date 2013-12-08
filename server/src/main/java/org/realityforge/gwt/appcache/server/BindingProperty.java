@@ -6,11 +6,13 @@ public final class BindingProperty
 {
   private final String _name;
   private final String _value;
+  private final String[] _components;
 
   public BindingProperty( @Nonnull final String name, @Nonnull final String value )
   {
     _name = name;
     _value = value;
+    _components = value.split( "," );
   }
 
   @Nonnull
@@ -23,6 +25,18 @@ public final class BindingProperty
   public String getValue()
   {
     return _value;
+  }
+
+  public boolean matches( @Nonnull final String value )
+  {
+    for ( final String component : _components )
+    {
+      if ( component.equals( value ) )
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
