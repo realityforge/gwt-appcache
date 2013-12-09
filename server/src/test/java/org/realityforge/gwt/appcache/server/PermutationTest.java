@@ -16,6 +16,9 @@ public class PermutationTest
     assertEquals( permutation1.getBindingProperties().size(), 0 );
     permutation1.getBindingProperties().put( 0, new HashSet<BindingProperty>() );
     assertEquals( permutation1.getBindingProperties().size(), 1 );
+    assertEquals( permutation1.getPermutationFiles().size(), 0 );
+    permutation1.getPermutationFiles().add( "foo.txt" );
+    assertEquals( permutation1.getPermutationFiles().size(), 1 );
     assertFalse( permutation1.equals( permutation2 ) );
     assertTrue( permutation1.equals( permutation1 ) );
   }
