@@ -218,8 +218,8 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  private Map<String, List<BindingProperty>> getBindingMap( @Nonnull final String baseUrl,
-                                                            @Nonnull final String moduleName )
+  final Map<String, List<BindingProperty>> getBindingMap( @Nonnull final String baseUrl,
+                                                          @Nonnull final String moduleName )
     throws Exception
   {
     final String realPath =
