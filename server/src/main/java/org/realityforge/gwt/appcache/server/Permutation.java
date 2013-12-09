@@ -24,10 +24,10 @@ public class Permutation
   @Override
   public boolean equals( final Object obj )
   {
-   if( !(obj instanceof Permutation) )
-   {
-     return false;
-   }
+    if ( !( obj instanceof Permutation ) )
+    {
+      return false;
+    }
     final Permutation other = (Permutation) obj;
     return other._permutationName.equals( _permutationName );
   }

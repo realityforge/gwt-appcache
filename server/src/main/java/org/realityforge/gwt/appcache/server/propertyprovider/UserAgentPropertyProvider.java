@@ -18,7 +18,7 @@ public class UserAgentPropertyProvider
       return "ie9";
     }
     // Assume that the 7 string indicates ie8 in compatibility mode
-    else if ( userAgent.contains( "msie 8." ) || userAgent.contains( "msie 7." ))
+    else if ( userAgent.contains( "msie 8." ) || userAgent.contains( "msie 7." ) )
     {
       return "ie8";
     }

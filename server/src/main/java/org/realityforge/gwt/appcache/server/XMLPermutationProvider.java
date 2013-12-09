@@ -39,7 +39,7 @@ public final class XMLPermutationProvider
     final String tagName = permutationsNode.getTagName();
     if ( !PERMUTATIONS.equals( tagName ) )
     {
-      throw new Exception("unexpected xml structure: Expected node : '" + PERMUTATIONS + "' got: '" + tagName + "'");
+      throw new Exception( "unexpected xml structure: Expected node : '" + PERMUTATIONS + "' got: '" + tagName + "'" );
     }
 
     final NodeList permutationsChildren = permutationsNode.getChildNodes();
