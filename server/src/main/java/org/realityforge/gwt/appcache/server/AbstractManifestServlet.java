@@ -114,7 +114,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  private Set<BindingProperty> calculateBindingPropertiesForClient( final HttpServletRequest request )
+  final Set<BindingProperty> calculateBindingPropertiesForClient( final HttpServletRequest request )
     throws ServletException
   {
     try

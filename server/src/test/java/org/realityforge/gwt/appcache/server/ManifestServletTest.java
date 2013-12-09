@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -29,6 +32,51 @@ public class ManifestServletTest
       }
       return _servletContext;
     }
+  }
+
+  static class TestPropertyProvider
+    implements PropertyProvider
+  {
+    private final String _key;
+    private final String _value;
+
+    TestPropertyProvider( final String key, final String value )
+    {
+      _key = key;
+      _value = value;
+    }
+
+    @Override
+    public String getPropertyName()
+    {
+      return _key;
+    }
+
+    @Override
+    public String getPropertyValue( final HttpServletRequest request )
+      throws Exception
+    {
+      return _value;
+    }
+  }
+
+  @Test
+  public void calculateBindingPropertiesForClient()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "X", "1" ) );
+    servlet.addPropertyProvider( new TestPropertyProvider( "Y", "2" ) );
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final Set<BindingProperty> properties = servlet.calculateBindingPropertiesForClient( request );
+    assertEquals( properties.size(), 2 );
+    final Iterator<BindingProperty> iterator = properties.iterator();
+    final BindingProperty property1 = iterator.next();
+    final BindingProperty property2 = iterator.next();
+    assertEquals( property1.getName(), "X" );
+    assertEquals( property1.getValue(), "1" );
+    assertEquals( property2.getName(), "Y" );
+    assertEquals( property2.getValue(), "2" );
   }
 
   @Test
@@ -77,7 +125,7 @@ public class ManifestServletTest
 
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
 
-    final Map<String,List<BindingProperty>> bindings = servlet.getBindingMap( "/foo/", "myapp" );
+    final Map<String, List<BindingProperty>> bindings = servlet.getBindingMap( "/foo/", "myapp" );
     assertNotNull( bindings );
 
     assertTrue( bindings == servlet.getBindingMap( "/foo/", "myapp" ) );
