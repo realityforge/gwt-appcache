@@ -165,9 +165,9 @@ public abstract class AbstractManifestServlet
     response.setHeader( "Pragma", "no-cache" );
   }
 
-  private String getPermutationStrongName( @Nonnull final String baseUrl,
-                                           @Nonnull final String moduleName,
-                                           @Nonnull final Set<BindingProperty> computedBindings )
+  final String getPermutationStrongName( @Nonnull final String baseUrl,
+                                         @Nonnull final String moduleName,
+                                         @Nonnull final Set<BindingProperty> computedBindings )
     throws ServletException
   {
     try
