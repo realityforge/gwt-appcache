@@ -34,6 +34,22 @@ public class ManifestServletTest
   }
 
   @Test
+  public void loadManifest()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final String expectedManifest = "XXXX\n";
+    final File manifestFile = createFile( "manifest", "appcache", expectedManifest );
+
+    when( servlet.getServletContext().getRealPath( "/foo/myapp/12345.appcache" ) ).
+      thenReturn( manifestFile.getAbsolutePath() );
+
+    final String manifest = servlet.loadManifest( "/foo/", "myapp", "12345" );
+    assertEquals( manifest, expectedManifest  );
+  }
+
+  @Test
   public void calculateBindingPropertiesForClient()
     throws Exception
   {
@@ -93,7 +109,7 @@ public class ManifestServletTest
 
     final ServletContext servletContext = servlet.getServletContext();
     final String permutationContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations></permutations>\n";
-    final File permutations = createPermutationsXML( permutationContent );
+    final File permutations = createFile( "permutations", "xml", permutationContent );
     assertTrue( permutations.setLastModified( 0 ) );
 
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
@@ -190,7 +206,7 @@ public class ManifestServletTest
     final TestManifestServlet servlet = new TestManifestServlet();
 
     final ServletContext servletContext = servlet.getServletContext();
-    final File permutations = createPermutationsXML( permutationContent );
+    final File permutations = createFile( "permutations", "xml", permutationContent );
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
 
     final String permutationStrongName = servlet.getPermutationStrongName( "/foo/", "myapp", computedBindings );
@@ -198,13 +214,13 @@ public class ManifestServletTest
     assertEquals( permutationStrongName, expected );
   }
 
-  private File createPermutationsXML( final String permutationContent )
+  private File createFile( final String prefix, final String extension, final String content )
     throws IOException
   {
-    final File permutations = File.createTempFile( "permutations", "xml" );
+    final File permutations = File.createTempFile( prefix, extension );
     permutations.deleteOnExit();
     final FileOutputStream outputStream = new FileOutputStream( permutations );
-    outputStream.write( permutationContent.getBytes() );
+    outputStream.write( content.getBytes() );
     outputStream.close();
     return permutations;
   }

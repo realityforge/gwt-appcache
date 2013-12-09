@@ -61,7 +61,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  private String loadManifest( final String baseUrl, final String moduleName, final String strongName )
+  final String loadManifest( final String baseUrl, final String moduleName, final String strongName )
     throws ServletException
   {
     final String filePath = baseUrl + moduleName + "/" + strongName + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING;
