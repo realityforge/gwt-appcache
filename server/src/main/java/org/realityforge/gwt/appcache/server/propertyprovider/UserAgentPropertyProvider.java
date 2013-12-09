@@ -9,7 +9,20 @@ public class UserAgentPropertyProvider
   public String getPropertyValue( final HttpServletRequest request )
   {
     final String userAgent = request.getHeader( "User-Agent" ).toLowerCase();
-    if ( userAgent.contains( "opera" ) )
+    if ( userAgent.contains( "msie 10." ) )
+    {
+      return "ie10";
+    }
+    else if ( userAgent.contains( "msie 9." ) )
+    {
+      return "ie9";
+    }
+    // Assume that the 7 string indicates ie8 in compatibility mode
+    else if ( userAgent.contains( "msie 8." ) || userAgent.contains( "msie 7." ))
+    {
+      return "ie8";
+    }
+    else if ( userAgent.contains( "opera" ) )
     {
       return "opera";
     }
