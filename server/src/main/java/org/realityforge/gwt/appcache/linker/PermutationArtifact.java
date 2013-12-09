@@ -3,6 +3,7 @@ package org.realityforge.gwt.appcache.linker;
 import com.google.gwt.core.ext.Linker;
 import com.google.gwt.core.ext.linker.Artifact;
 import com.google.gwt.core.ext.linker.Transferable;
+import org.realityforge.gwt.appcache.server.Permutation;
 
 @Transferable
 public class PermutationArtifact

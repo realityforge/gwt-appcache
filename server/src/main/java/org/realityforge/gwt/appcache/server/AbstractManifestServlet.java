@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.realityforge.gwt.appcache.linker.AppcacheLinker;
-import org.realityforge.gwt.appcache.linker.XMLPermutationProvider;
 import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
 public abstract class AbstractManifestServlet

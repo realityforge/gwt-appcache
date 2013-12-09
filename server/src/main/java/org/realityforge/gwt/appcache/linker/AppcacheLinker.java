@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
+import org.realityforge.gwt.appcache.server.Permutation;
+import org.realityforge.gwt.appcache.server.XMLPermutationProvider;
 
 @LinkerOrder( LinkerOrder.Order.POST )
 @Shardable
