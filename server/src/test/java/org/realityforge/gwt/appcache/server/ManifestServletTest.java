@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -31,32 +30,6 @@ public class ManifestServletTest
         _servletContext = mock( ServletContext.class );
       }
       return _servletContext;
-    }
-  }
-
-  static class TestPropertyProvider
-    implements PropertyProvider
-  {
-    private final String _key;
-    private final String _value;
-
-    TestPropertyProvider( final String key, final String value )
-    {
-      _key = key;
-      _value = value;
-    }
-
-    @Override
-    public String getPropertyName()
-    {
-      return _key;
-    }
-
-    @Override
-    public String getPropertyValue( final HttpServletRequest request )
-      throws Exception
-    {
-      return _value;
     }
   }
 
