@@ -15,6 +15,7 @@ define 'gwt-appcache' do
     compile.with :javax_servlet, :gwt_user, :gwt_dev
 
     test.using :testng
+    test.with :mockito
 
     package(:jar)
     package(:sources)

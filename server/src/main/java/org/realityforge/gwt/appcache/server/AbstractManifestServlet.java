@@ -29,6 +29,11 @@ public abstract class AbstractManifestServlet
 {
   private static final long serialVersionUID = -2540671294104865306L;
 
+  // request url should be something like .../modulename.appcache" within
+  // the same folder of your host page...
+  private static final Pattern MODULE_PATTERN =
+    Pattern.compile( "/([a-zA-Z0-9]+)\\" + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
+
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
   private transient long _permutationDescriptorLastModified = Long.MIN_VALUE;
   private transient Map<String, List<BindingProperty>> _bindingMap;
@@ -230,19 +235,19 @@ public abstract class AbstractManifestServlet
   }
 
   @Nonnull
-  private String getModuleName( @Nonnull final HttpServletRequest request )
+  final String getModuleName( @Nonnull final HttpServletRequest request )
     throws ServletException
   {
-    // request url should be something like .../modulename.appcache" within
-    // the same folder of your host page...
-    final Pattern pattern =
-      Pattern.compile( "/([a-zA-Z0-9]+)\\" + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
-    final Matcher matcher = pattern.matcher( request.getServletPath() );
+    final String servletPath = request.getServletPath();
+    if ( null == servletPath )
+    {
+      throw new ServletException( "Unable to determine the servlet path." );
+    }
+    final Matcher matcher = MODULE_PATTERN.matcher( servletPath );
     if ( !matcher.find() )
     {
-      throw new ServletException( "can not calculate module base from url: '" + request.getServletPath() + "'" );
+      throw new ServletException( "Unable to determine the module base from url: '" + servletPath + "'" );
     }
-
     return matcher.group( 1 );
   }
 }
