@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -48,7 +46,7 @@ public abstract class AbstractManifestServlet
   {
     final String moduleName = getModuleName( request );
     final String baseUrl = getBaseUrl( request );
-    final Set<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
+    final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
     final String strongName = getPermutationStrongName( baseUrl, moduleName, computedBindings );
     if ( null != strongName )
     {
@@ -114,12 +112,12 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  final Set<BindingProperty> calculateBindingPropertiesForClient( final HttpServletRequest request )
+  final List<BindingProperty> calculateBindingPropertiesForClient( final HttpServletRequest request )
     throws ServletException
   {
     try
     {
-      final Set<BindingProperty> computedBindings = new HashSet<BindingProperty>();
+      final List<BindingProperty> computedBindings = new ArrayList<BindingProperty>( _providers.size() );
       for ( final PropertyProvider provider : _providers )
       {
         computedBindings.add( new BindingProperty( provider.getPropertyName(), provider.getPropertyValue( request ) ) );
@@ -166,7 +164,7 @@ public abstract class AbstractManifestServlet
 
   final String getPermutationStrongName( @Nonnull final String baseUrl,
                                          @Nonnull final String moduleName,
-                                         @Nonnull final Set<BindingProperty> computedBindings )
+                                         @Nonnull final List<BindingProperty> computedBindings )
     throws ServletException
   {
     try

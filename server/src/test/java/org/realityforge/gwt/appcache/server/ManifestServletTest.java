@@ -3,11 +3,9 @@ package org.realityforge.gwt.appcache.server;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,11 +55,10 @@ public class ManifestServletTest
     servlet.addPropertyProvider( new TestPropertyProvider( "X", "1" ) );
     servlet.addPropertyProvider( new TestPropertyProvider( "Y", "2" ) );
     final HttpServletRequest request = mock( HttpServletRequest.class );
-    final Set<BindingProperty> properties = servlet.calculateBindingPropertiesForClient( request );
+    final List<BindingProperty> properties = servlet.calculateBindingPropertiesForClient( request );
     assertEquals( properties.size(), 2 );
-    final Iterator<BindingProperty> iterator = properties.iterator();
-    final BindingProperty property1 = iterator.next();
-    final BindingProperty property2 = iterator.next();
+    final BindingProperty property1 = properties.get( 0 );
+    final BindingProperty property2 = properties.get( 1 );
     assertEquals( property1.getName(), "X" );
     assertEquals( property1.getValue(), "1" );
     assertEquals( property2.getName(), "Y" );
@@ -139,7 +136,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final HashSet<BindingProperty> computedBindings = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
@@ -162,7 +159,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final HashSet<BindingProperty> computedBindings = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
@@ -190,7 +187,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final HashSet<BindingProperty> computedBindings = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
     computedBindings.add( new BindingProperty( "screen.size", "biggo" ) );
     computedBindings.add( new BindingProperty( "color.depth", "much" ) );
@@ -199,7 +196,7 @@ public class ManifestServletTest
   }
 
   private void ensureStrongPermutationReturned( final String permutationContent,
-                                                final HashSet<BindingProperty> computedBindings,
+                                                final List<BindingProperty> computedBindings,
                                                 final String expected )
     throws IOException, ServletException
   {
