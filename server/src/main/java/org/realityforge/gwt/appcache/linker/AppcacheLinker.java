@@ -34,7 +34,6 @@ public final class AppcacheLinker
   public static final String STATIC_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_static_files";
   public static final String IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME =
     "appcache_ignorable_permutation_properties";
-  public static final String PERMUTATION_MANIFEST_FILE_ENDING = ".appcache";
 
   @Override
   public String getDescription()
@@ -99,7 +98,7 @@ public final class AppcacheLinker
 
       // build manifest
       final String maniFest = writeManifest( externalFiles, filesForCurrentPermutation );
-      final String filename = permutation.getPermutation().getPermutationName() + PERMUTATION_MANIFEST_FILE_ENDING;
+      final String filename = permutation.getPermutation().getPermutationName() + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
       results.add( emitString( logger, maniFest, filename ) );
     }
 

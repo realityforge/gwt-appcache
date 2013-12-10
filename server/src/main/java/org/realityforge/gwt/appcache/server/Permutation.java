@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class Permutation
 {
+  public static final String PERMUTATION_MANIFEST_FILE_ENDING = ".appcache";
   private final String _permutationName;
   private final Map<Integer, Set<BindingProperty>> _bindingProperties = new HashMap<Integer, Set<BindingProperty>>();
   private final HashSet<String> _permutationFiles = new HashSet<String>();

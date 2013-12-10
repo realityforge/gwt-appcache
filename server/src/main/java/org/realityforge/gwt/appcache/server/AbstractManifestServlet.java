@@ -18,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.realityforge.gwt.appcache.linker.AppcacheLinker;
 import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
 public abstract class AbstractManifestServlet
@@ -29,7 +28,7 @@ public abstract class AbstractManifestServlet
   // request url should be something like .../modulename.appcache" within
   // the same folder of your host page...
   private static final Pattern MODULE_PATTERN =
-    Pattern.compile( "/([a-zA-Z0-9]+)\\" + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
+    Pattern.compile( "/([a-zA-Z0-9]+)\\" + Permutation.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
 
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
   private transient long _permutationDescriptorLastModified = Long.MIN_VALUE;
@@ -62,7 +61,7 @@ public abstract class AbstractManifestServlet
   final String loadManifest( final String baseUrl, final String moduleName, final String strongName )
     throws ServletException
   {
-    final String filePath = baseUrl + moduleName + "/" + strongName + AppcacheLinker.PERMUTATION_MANIFEST_FILE_ENDING;
+    final String filePath = baseUrl + moduleName + "/" + strongName + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
     final String realPath = getServletContext().getRealPath( filePath );
     assert null != realPath;
     return readFile( new File( realPath ) );
