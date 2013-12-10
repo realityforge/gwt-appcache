@@ -35,6 +35,17 @@ public class ManifestServletTest
   }
 
   @Test
+  public void getBaseUrl()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    when(request.getServletPath()).thenReturn( "/fgis.appcache" );
+    assertEquals( servlet.getBaseUrl( request ), "/" );
+  }
+
+  @Test
   public void serveStringManifest()
     throws Exception
   {

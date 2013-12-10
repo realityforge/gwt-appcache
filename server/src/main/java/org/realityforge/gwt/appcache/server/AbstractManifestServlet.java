@@ -68,7 +68,7 @@ public abstract class AbstractManifestServlet
     return readFile( new File( realPath ) );
   }
 
-  private String getBaseUrl( final HttpServletRequest request )
+  final String getBaseUrl( final HttpServletRequest request )
   {
     final String base = request.getServletPath();
     // cut off module
