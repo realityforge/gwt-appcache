@@ -174,7 +174,7 @@ public final class AppcacheLinker
    * @param cacheResources  the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
-  private String writeManifest( @Nonnull final Set<String> staticResources, @Nonnull final Set<String> cacheResources )
+  final String writeManifest( @Nonnull final Set<String> staticResources, @Nonnull final Set<String> cacheResources )
   {
     final StringBuilder sb = new StringBuilder();
     sb.append( "CACHE MANIFEST\n" );
