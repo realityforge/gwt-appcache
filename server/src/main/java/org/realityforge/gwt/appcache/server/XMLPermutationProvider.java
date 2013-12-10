@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 
 public final class XMLPermutationProvider
 {
+  public static final String PERMUTATIONS_DESCRIPTOR_FILE_NAME = "permutations.xml";
   private static final String PERMUTATION_NODE = "permutation";
   private static final String PERMUTATION_NAME = "name";
   private static final String PERMUTATIONS = "permutations";

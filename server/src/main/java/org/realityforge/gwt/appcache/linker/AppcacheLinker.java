@@ -35,7 +35,6 @@ public final class AppcacheLinker
   public static final String IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME =
     "appcache_ignorable_permutation_properties";
   public static final String PERMUTATION_MANIFEST_FILE_ENDING = ".appcache";
-  public static final String PERMUTATIONS_DESCRIPTOR_FILE_NAME = "permutations.xml";
 
   @Override
   public String getDescription()
@@ -233,7 +232,7 @@ public final class AppcacheLinker
     try
     {
       final String string = XMLPermutationProvider.serialize( calculateBindings( context, permutationArtifacts ) );
-      return emitString( logger, string, PERMUTATIONS_DESCRIPTOR_FILE_NAME );
+      return emitString( logger, string, XMLPermutationProvider.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     }
     catch ( final Exception e )
     {

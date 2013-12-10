@@ -220,7 +220,7 @@ public abstract class AbstractManifestServlet
     throws Exception
   {
     final String realPath =
-      getServletContext().getRealPath( baseUrl + moduleName + "/" + AppcacheLinker.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
+      getServletContext().getRealPath( baseUrl + moduleName + "/" + XMLPermutationProvider.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     final File permutationDescriptor = new File( realPath );
     final long lastModified = permutationDescriptor.lastModified();
     if ( null == _bindingMap || _permutationDescriptorLastModified < lastModified )
