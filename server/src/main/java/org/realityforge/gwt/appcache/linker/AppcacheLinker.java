@@ -24,7 +24,7 @@ import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.Permutation;
-import org.realityforge.gwt.appcache.server.XMLPermutationProvider;
+import org.realityforge.gwt.appcache.server.PermutationsIO;
 
 @LinkerOrder( LinkerOrder.Order.POST )
 @Shardable
@@ -231,8 +231,8 @@ public final class AppcacheLinker
   {
     try
     {
-      final String string = XMLPermutationProvider.serialize( calculateBindings( context, permutationArtifacts ) );
-      return emitString( logger, string, XMLPermutationProvider.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
+      final String string = PermutationsIO.serialize( calculateBindings( context, permutationArtifacts ) );
+      return emitString( logger, string, PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     }
     catch ( final Exception e )
     {

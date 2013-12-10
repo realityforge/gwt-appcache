@@ -220,12 +220,12 @@ public abstract class AbstractManifestServlet
     throws Exception
   {
     final String realPath =
-      getServletContext().getRealPath( baseUrl + moduleName + "/" + XMLPermutationProvider.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
+      getServletContext().getRealPath( baseUrl + moduleName + "/" + PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     final File permutationDescriptor = new File( realPath );
     final long lastModified = permutationDescriptor.lastModified();
     if ( null == _bindingMap || _permutationDescriptorLastModified < lastModified )
     {
-      _bindingMap = XMLPermutationProvider.deserialize( new FileInputStream( realPath ) );
+      _bindingMap = PermutationsIO.deserialize( new FileInputStream( realPath ) );
       _permutationDescriptorLastModified = lastModified;
     }
     return _bindingMap;
