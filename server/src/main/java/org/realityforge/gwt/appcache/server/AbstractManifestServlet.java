@@ -139,7 +139,7 @@ public abstract class AbstractManifestServlet
     try
     {
       final byte[] data = manifest.getBytes( "UTF-8" );
-      response.getOutputStream().write( data, 0, data.length );
+      response.getOutputStream().write( data );
     }
     catch ( final Exception e )
     {
