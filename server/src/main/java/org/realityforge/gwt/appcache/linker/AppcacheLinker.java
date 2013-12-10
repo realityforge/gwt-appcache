@@ -205,7 +205,7 @@ public final class AppcacheLinker
     return sb.toString();
   }
 
-  private Set<String> getConfigurationValues( final LinkerContext context, final String propertyName )
+  final Set<String> getConfigurationValues( final LinkerContext context, final String propertyName )
   {
     final HashSet<String> set = new HashSet<String>();
     final SortedSet<ConfigurationProperty> properties = context.getConfigurationProperties();

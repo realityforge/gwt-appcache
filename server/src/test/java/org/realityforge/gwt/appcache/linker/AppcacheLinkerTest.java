@@ -1,11 +1,32 @@
 package org.realityforge.gwt.appcache.linker;
 
+import com.google.gwt.core.ext.LinkerContext;
+import com.google.gwt.core.ext.linker.ConfigurationProperty;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import org.testng.annotations.Test;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 public class AppcacheLinkerTest
 {
+  @Test
+  public void getConfigurationValues()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final TreeSet<ConfigurationProperty> properties = new TreeSet<ConfigurationProperty>();
+    properties.add( new TestConfigurationProperty( "ba", new ArrayList<String>() ) );
+    properties.add( new TestConfigurationProperty( "foo", Arrays.asList( "V1", "V2" ) ) );
+    final LinkerContext context = mock( LinkerContext.class );
+    when( context.getConfigurationProperties() ).thenReturn( properties );
+    final Set<String> values = linker.getConfigurationValues( context, "foo" );
+    assertTrue( values.contains( "V1" ) );
+    assertTrue( values.contains( "V2" ) );
+  }
+
   @Test
   public void writeManifest()
   {
