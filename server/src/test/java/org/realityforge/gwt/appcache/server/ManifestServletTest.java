@@ -41,7 +41,7 @@ public class ManifestServletTest
     final TestManifestServlet servlet = new TestManifestServlet();
 
     final HttpServletRequest request = mock( HttpServletRequest.class );
-    when(request.getServletPath()).thenReturn( "/fgis.appcache" );
+    when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
     assertEquals( servlet.getBaseUrl( request ), "/" );
   }
 
