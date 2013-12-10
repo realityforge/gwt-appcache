@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.testng.annotations.Test;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
@@ -29,6 +32,28 @@ public class ManifestServletTest
       }
       return _servletContext;
     }
+  }
+
+  @Test
+  public void serveStringManifest()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    final ServletOutputStream output = mock( ServletOutputStream.class );
+    when( response.getOutputStream() ).thenReturn( output );
+
+    servlet.serveStringManifest( response, "DD" );
+
+    verify( response ).setDateHeader( eq( "Date" ), anyLong() );
+    verify( response ).setDateHeader( eq( "Last-Modified" ), anyLong() );
+    verify( response ).setDateHeader( "Expires", 0 );
+    verify( response ).setHeader( "Cache-control", "no-cache, no-store, must-revalidate, pre-check=0, post-check=0" );
+    verify( response ).setHeader( "Pragma", "no-cache" );
+    verify( response ).setContentType( "text/cache-manifest" );
+
+    verify( output ).write( "DD".getBytes( "US-ASCII" ) );
   }
 
   @Test

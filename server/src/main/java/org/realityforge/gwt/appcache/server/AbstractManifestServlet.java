@@ -130,7 +130,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  private void serveStringManifest( final HttpServletResponse response, final String manifest )
+  final void serveStringManifest( final HttpServletResponse response, final String manifest )
     throws ServletException
   {
     configureForNoCaching( response );
