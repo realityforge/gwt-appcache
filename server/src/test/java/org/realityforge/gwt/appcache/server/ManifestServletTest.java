@@ -35,6 +35,42 @@ public class ManifestServletTest
   }
 
   @Test
+  public void doGet()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "user.agent", "ie9" ) );
+
+    final String strongPermutation = "C7D408F8EFA266A7F9A31209F8AA7446";
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      "   <permutation name=\"" + strongPermutation + "\">\n" +
+      "      <user.agent>ie8,ie9,safari,ie10,gecko1_8</user.agent>\n" +
+      "   </permutation>\n" +
+      "</permutations>\n";
+
+    final File permutations = createFile( "permutations", "xml", permutationContent );
+    final String manifestContent = "ZANG!\n";
+    final File manifest = createFile( "manifest", "appcache", manifestContent );
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
+    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.getAbsolutePath() );
+    when( servlet.getServletContext().getRealPath( "/fgis/" + strongPermutation + ".appcache" ) ).
+      thenReturn( manifest.getAbsolutePath() );
+
+    final ServletOutputStream output = mock( ServletOutputStream.class );
+    when( response.getOutputStream() ).thenReturn( output );
+
+    servlet.doGet( request, response );
+
+    verify( output ).write( manifestContent.getBytes( "US-ASCII" ) );
+  }
+
+  @Test
   public void getBaseUrl()
     throws Exception
   {
