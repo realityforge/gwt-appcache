@@ -69,7 +69,7 @@ public class ManifestServletTest
       thenReturn( manifestFile.getAbsolutePath() );
 
     final String manifest = servlet.loadManifest( "/foo/", "myapp", "12345" );
-    assertEquals( manifest, expectedManifest  );
+    assertEquals( manifest, expectedManifest );
   }
 
   @Test
