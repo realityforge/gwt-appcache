@@ -226,12 +226,12 @@ public final class AppcacheLinker
 
   private EmittedArtifact createPermutationMap( final TreeLogger logger,
                                                 final LinkerContext context,
-                                                final Collection<PermutationArtifact> permutationArtifacts )
+                                                final Collection<PermutationArtifact> artifacts )
     throws UnableToCompleteException
   {
     try
     {
-      final String string = PermutationsIO.serialize( calculateBindings( context, permutationArtifacts ) );
+      final String string = PermutationsIO.serialize( collectPermutationSelectors( context, artifacts ) );
       return emitString( logger, string, PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     }
     catch ( final Exception e )
@@ -241,16 +241,16 @@ public final class AppcacheLinker
     }
   }
 
-  private Map<String, Set<BindingProperty>> calculateBindings( final LinkerContext context,
-                                                               final Collection<PermutationArtifact> permutationArtifacts )
+  private Map<String, Set<BindingProperty>> collectPermutationSelectors( final LinkerContext context,
+                                                                         final Collection<PermutationArtifact> artifacts )
   {
     final Set<String> ignoreConfigs =
       getConfigurationValues( context, IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME );
-    return calculateBindings( permutationArtifacts, ignoreConfigs );
+    return collectPermutationSelectors( artifacts, ignoreConfigs );
   }
 
-  final Map<String, Set<BindingProperty>> calculateBindings( final Collection<PermutationArtifact> artifacts,
-                                                             final Set<String> ignoreConfigs )
+  final Map<String, Set<BindingProperty>> collectPermutationSelectors( final Collection<PermutationArtifact> artifacts,
+                                                                       final Set<String> ignoreConfigs )
   {
     final Map<String, Set<BindingProperty>> permutationBindings = new HashMap<String, Set<BindingProperty>>();
     for ( final PermutationArtifact artifact : artifacts )
