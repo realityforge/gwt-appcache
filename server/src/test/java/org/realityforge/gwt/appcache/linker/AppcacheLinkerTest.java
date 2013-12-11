@@ -5,8 +5,12 @@ import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import org.realityforge.gwt.appcache.server.BindingProperty;
+import org.realityforge.gwt.appcache.server.Permutation;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -25,6 +29,43 @@ public class AppcacheLinkerTest
     final Set<String> values = linker.getConfigurationValues( context, "foo" );
     assertTrue( values.contains( "V1" ) );
     assertTrue( values.contains( "V2" ) );
+  }
+
+  @Test
+  public void joinValues()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final TreeSet<String> strings = new TreeSet<String>();
+    assertEquals( linker.joinValues( strings ), "" );
+    strings.add( "a" );
+    assertEquals( linker.joinValues( strings ), "a" );
+    strings.add( "b" );
+    strings.add( "c" );
+    assertEquals( linker.joinValues( strings ), "a,b,c" );
+  }
+
+  @Test
+  public void collectValuesForKey()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final TreeMap<Integer, Set<BindingProperty>> bindings = new TreeMap<Integer, Set<BindingProperty>>();
+    final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
+    binding0.add( new BindingProperty( "a", "z1" ) );
+    binding0.add( new BindingProperty( "b", "z2" ) );
+    bindings.put( 0, binding0 );
+    final HashSet<String> values0 = linker.collectValuesForKey( bindings, "a" );
+    assertEquals( values0.size(), 1 );
+    assertTrue( values0.contains( "z1" ) );
+
+    final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
+    binding1.add( new BindingProperty( "a", "w1" ) );
+    binding1.add( new BindingProperty( "b", "w2" ) );
+    bindings.put( 1, binding1 );
+
+    final HashSet<String> values1 = linker.collectValuesForKey( bindings, "a" );
+    assertEquals( values1.size(), 2 );
+    assertTrue( values1.contains( "z1" ) );
+    assertTrue( values1.contains( "w1" ) );
   }
 
   @Test

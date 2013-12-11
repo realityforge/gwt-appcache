@@ -98,7 +98,8 @@ public final class AppcacheLinker
 
       // build manifest
       final String maniFest = writeManifest( externalFiles, filesForCurrentPermutation );
-      final String filename = permutation.getPermutation().getPermutationName() + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
+      final String filename =
+        permutation.getPermutation().getPermutationName() + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
       results.add( emitString( logger, maniFest, filename ) );
     }
 
@@ -245,59 +246,65 @@ public final class AppcacheLinker
   {
     final Set<String> ignoreConfigs =
       getConfigurationValues( context, IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME );
+    return calculateBindings( permutationArtifacts, ignoreConfigs );
+  }
+
+  final Map<String, Set<BindingProperty>> calculateBindings( final Collection<PermutationArtifact> artifacts,
+                                                             final Set<String> ignoreConfigs )
+  {
     final Map<String, Set<BindingProperty>> permutationBindings = new HashMap<String, Set<BindingProperty>>();
-    for ( final PermutationArtifact permutationArtifact : permutationArtifacts )
+    for ( final PermutationArtifact artifact : artifacts )
     {
-      final Permutation permutation = permutationArtifact.getPermutation();
+      final Permutation permutation = artifact.getPermutation();
       final HashSet<BindingProperty> calculatedBindings = new HashSet<BindingProperty>();
       permutationBindings.put( permutation.getPermutationName(), calculatedBindings );
 
       final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
       final Set<BindingProperty> firstBindingProperties = bindings.values().iterator().next();
-      if ( 1 == bindings.size() )
+      for ( final BindingProperty p : firstBindingProperties )
       {
-        // No soft permutations
-        for ( final BindingProperty b : firstBindingProperties )
+        final String key = p.getName();
+        if ( !ignoreConfigs.contains( key ) )
         {
-          calculatedBindings.add( new BindingProperty( b.getName(), b.getValue() ) );
-        }
-      }
-      else
-      {
-        for ( final BindingProperty p : firstBindingProperties )
-        {
-          if ( ignoreConfigs.contains( p.getName() ) )
-          {
-            continue;
-          }
-          final HashSet<String> values = new HashSet<String>();
-          for ( final Set<BindingProperty> properties : bindings.values() )
-          {
-            for ( final BindingProperty property : properties )
-            {
-              if ( property.getName().equals( p.getName() ) )
-              {
-                values.add( property.getValue() );
-              }
-            }
-          }
+          final HashSet<String> values = collectValuesForKey( bindings, key );
           if ( values.size() > 1 )
           {
-            final StringBuilder sb = new StringBuilder();
-            for ( final String value : values )
-            {
-              if ( 0 != sb.length() )
-              {
-                sb.append( "," );
-              }
-              sb.append( value );
-            }
-            calculatedBindings.add( new BindingProperty( p.getName(), sb.toString() ) );
+            calculatedBindings.add( new BindingProperty( key, joinValues( values ) ) );
           }
         }
       }
     }
     return permutationBindings;
+  }
+
+  final HashSet<String> collectValuesForKey( final Map<Integer, Set<BindingProperty>> bindings, final String key )
+  {
+    final HashSet<String> values = new HashSet<String>();
+    for ( final Set<BindingProperty> properties : bindings.values() )
+    {
+      for ( final BindingProperty property : properties )
+      {
+        if ( property.getName().equals( key ) )
+        {
+          values.add( property.getValue() );
+        }
+      }
+    }
+    return values;
+  }
+
+  final String joinValues( final Set<String> values )
+  {
+    final StringBuilder sb = new StringBuilder();
+    for ( final String value : values )
+    {
+      if ( 0 != sb.length() )
+      {
+        sb.append( "," );
+      }
+      sb.append( value );
+    }
+    return sb.toString();
   }
 
   private Collection<Permutation> calculatePermutations( final LinkerContext context, final ArtifactSet artifacts )
