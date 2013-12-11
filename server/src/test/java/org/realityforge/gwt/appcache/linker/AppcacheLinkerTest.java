@@ -69,6 +69,62 @@ public class AppcacheLinkerTest
   }
 
   @Test
+  public void collectPermutationSelectors()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+
+    final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
+    final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
+    binding0.add( new BindingProperty( "user.agent", "ie8" ) );
+    binding0.add( new BindingProperty( "user.agent", "ie9" ) );
+    binding0.add( new BindingProperty( "user.agent", "ie10" ) );
+    addPermutation( artifacts, "X", binding0 );
+
+    final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
+    binding1.add( new BindingProperty( "user.agent", "safari" ) );
+    addPermutation( artifacts, "Y", binding1 );
+
+    final HashSet<BindingProperty> binding2 = new HashSet<BindingProperty>();
+    binding2.add( new BindingProperty( "user.agent", "gecko_16" ) );
+    addPermutation( artifacts, "Z", binding2 );
+
+    final HashSet<String> ignoreConfigs = new HashSet<String>();
+    final Map<String, Set<BindingProperty>> values = linker.collectPermutationSelectors( artifacts, ignoreConfigs );
+
+    assertEquals( values.size(), 3 );
+
+    assertTrue( values.containsKey( "X" ) );
+    final Set<BindingProperty> x = values.get( "X" );
+    assertEquals( x.size(), 1 );
+    final BindingProperty b_x = x.iterator().next();
+    assertEquals( b_x.getName(), "user.agent" );
+    assertEquals( b_x.getValue(), "ie8,ie9,ie10" );
+
+    assertTrue( values.containsKey( "Z" ) );
+    final Set<BindingProperty> z = values.get( "Z" );
+    assertEquals( z.size(), 1 );
+    final BindingProperty b_z = z.iterator().next();
+    assertEquals( b_z.getName(), "user.agent" );
+    assertEquals( b_z.getValue(), "gecko_16" );
+
+    assertTrue( values.containsKey( "Y" ) );
+    final Set<BindingProperty> y = values.get( "Y" );
+    assertEquals( y.size(), 1 );
+    final BindingProperty b_y = y.iterator().next();
+    assertEquals( b_y.getName(), "user.agent" );
+    assertEquals( b_y.getValue(), "safari" );
+  }
+
+  private void addPermutation( final ArrayList<PermutationArtifact> artifacts,
+                               final String permutationName,
+                               final HashSet<BindingProperty> bindings )
+  {
+    final Permutation permutation = new Permutation( permutationName );
+    permutation.getBindingProperties().put( 0, bindings );
+    artifacts.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
+  }
+
+  @Test
   public void writeManifest()
   {
     final AppcacheLinker linker = new AppcacheLinker();
