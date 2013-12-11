@@ -257,6 +257,7 @@ public final class AppcacheLinker
     {
       final Permutation permutation = artifact.getPermutation();
       final HashSet<BindingProperty> calculatedBindings = new HashSet<BindingProperty>();
+      final HashSet<String> completed = new HashSet<String>();
       permutationBindings.put( permutation.getPermutationName(), calculatedBindings );
 
       final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
@@ -264,13 +265,11 @@ public final class AppcacheLinker
       for ( final BindingProperty p : firstBindingProperties )
       {
         final String key = p.getName();
-        if ( !ignoreConfigs.contains( key ) )
+        if ( !ignoreConfigs.contains( key ) && !completed.contains( key ) )
         {
           final HashSet<String> values = collectValuesForKey( bindings, key );
-          if ( values.size() > 1 )
-          {
-            calculatedBindings.add( new BindingProperty( key, joinValues( values ) ) );
-          }
+          calculatedBindings.add( new BindingProperty( key, joinValues( values ) ) );
+          completed.add( key );
         }
       }
     }
