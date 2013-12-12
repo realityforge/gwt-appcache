@@ -78,15 +78,15 @@ public class AppcacheLinkerTest
     binding0.add( new BindingProperty( "user.agent", "ie8" ) );
     binding0.add( new BindingProperty( "user.agent", "ie9" ) );
     binding0.add( new BindingProperty( "user.agent", "ie10" ) );
-    addPermutation( artifacts, "X", binding0 );
+    addPermutation( artifacts, "X", binding0, new HashSet<String>() );
 
     final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
     binding1.add( new BindingProperty( "user.agent", "safari" ) );
-    addPermutation( artifacts, "Y", binding1 );
+    addPermutation( artifacts, "Y", binding1, new HashSet<String>() );
 
     final HashSet<BindingProperty> binding2 = new HashSet<BindingProperty>();
     binding2.add( new BindingProperty( "user.agent", "gecko_16" ) );
-    addPermutation( artifacts, "Z", binding2 );
+    addPermutation( artifacts, "Z", binding2, new HashSet<String>() );
 
     final HashSet<String> ignoreConfigs = new HashSet<String>();
     final Map<String, Set<BindingProperty>> values = linker.collectPermutationSelectors( artifacts, ignoreConfigs );
@@ -117,11 +117,30 @@ public class AppcacheLinkerTest
 
   private void addPermutation( final ArrayList<PermutationArtifact> artifacts,
                                final String permutationName,
-                               final HashSet<BindingProperty> bindings )
+                               final HashSet<BindingProperty> bindings,
+                               final HashSet<String> files )
   {
     final Permutation permutation = new Permutation( permutationName );
     permutation.getBindingProperties().put( 0, bindings );
+    permutation.getPermutationFiles().addAll( files );
     artifacts.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
+  }
+
+  @Test
+  public void getAllPermutationFiles()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
+    final HashSet<String> files1 = new HashSet<String>();
+    files1.add( "File1.txt" );
+    addPermutation( artifacts, "X", new HashSet<BindingProperty>(), files1 );
+    final HashSet<String> files2 = new HashSet<String>();
+    files2.add( "File2.txt" );
+    addPermutation( artifacts, "X", new HashSet<BindingProperty>(), files2 );
+    final Set<String> files = linker.getAllPermutationFiles( artifacts );
+    assertEquals( files.size(), 2 );
+    assertTrue( files.contains( "File1.txt" ) );
+    assertTrue( files.contains( "File2.txt" ) );
   }
 
   @Test

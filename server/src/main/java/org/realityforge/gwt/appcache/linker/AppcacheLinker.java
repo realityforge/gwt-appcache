@@ -128,7 +128,7 @@ public final class AppcacheLinker
     return results;
   }
 
-  private Set<String> getAllPermutationFiles( final ArrayList<PermutationArtifact> artifacts )
+  final Set<String> getAllPermutationFiles( final ArrayList<PermutationArtifact> artifacts )
   {
     final Set<String> files = new HashSet<String>();
     for ( final PermutationArtifact artifact : artifacts )
