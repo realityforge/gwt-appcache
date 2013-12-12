@@ -64,15 +64,14 @@ public final class AppcacheLinker
     throws UnableToCompleteException
   {
     final ArtifactSet results = new ArtifactSet( artifacts );
-    final Collection<Permutation> permutations = calculatePermutations( context, artifacts );
+    final ArrayList<PermutationArtifact> permutationArtifacts = getPermutationArtifacts( artifacts );
 
-    if ( 0 == permutations.size() )
+    if ( 0 == permutationArtifacts.size() )
     {
       // hosted mode
       return results;
     }
 
-    final ArrayList<PermutationArtifact> permutationArtifacts = getPermutationArtifacts( artifacts );
     final Set<String> externalFiles = getConfigurationValues( context, STATIC_FILES_CONFIGURATION_PROPERTY_NAME );
     final Set<String> allPermutationFiles = getAllPermutationFiles( permutationArtifacts );
 
@@ -112,19 +111,15 @@ public final class AppcacheLinker
                                           final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
-    final Collection<Permutation> permutations = calculatePermutations( context, artifacts );
-
-    // since we are in onePermutation there should be just one
-    // strongName - better make sure..
-    if ( 1 != permutations.size() )
+    final Permutation permutation = calculatePermutation( context, artifacts );
+    if ( null == permutation )
     {
-      logger.log( Type.ERROR,
-                  "There should be only one permutation right now, but there were: '" + permutations.size() + "'" );
+      logger.log( Type.ERROR, "Unable to calculate permutation " );
       throw new UnableToCompleteException();
     }
 
     final ArtifactSet results = new ArtifactSet( artifacts );
-    results.add( new PermutationArtifact( AppcacheLinker.class, permutations.iterator().next() ) );
+    results.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
     return results;
   }
 
@@ -306,20 +301,25 @@ public final class AppcacheLinker
     return sb.toString();
   }
 
-  private Collection<Permutation> calculatePermutations( final LinkerContext context, final ArtifactSet artifacts )
+  /**
+   * Return the permutation for a single link step.
+   */
+  final Permutation calculatePermutation( final LinkerContext context, final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
-    final HashMap<String, Permutation> map = new HashMap<String, Permutation>();
+    Permutation permutation = null;
     for ( final SelectionInformation result : artifacts.find( SelectionInformation.class ) )
     {
       final String strongName = result.getStrongName();
-      Permutation permutation = map.get( strongName );
+      if ( null != permutation && !permutation.getPermutationName().equals( strongName ) )
+      {
+        throw new UnableToCompleteException();
+      }
       if ( null == permutation )
       {
         permutation = new Permutation( strongName );
         final Set<String> artifactsForCompilation = getArtifactsForCompilation( context, artifacts );
         permutation.getPermutationFiles().addAll( artifactsForCompilation );
-        map.put( strongName, permutation );
       }
       final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
       final int softPermutationId = result.getSoftPermutationId();
@@ -334,6 +334,6 @@ public final class AppcacheLinker
         list.add( new BindingProperty( entry.getKey(), entry.getValue() ) );
       }
     }
-    return map.values();
+    return permutation;
   }
 }
