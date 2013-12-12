@@ -186,7 +186,6 @@ public class AppcacheLinkerTest
     final Set<String> files =
       linker.getArtifactsForCompilation( linkerContext, artifacts1 );
     assertEquals( files.size(), 2 );
-    System.out.println( "files = " + files );
     assertTrue( files.contains( "myapp/path1" ) );
     assertTrue( files.contains( "myapp/path2" ) );
   }
