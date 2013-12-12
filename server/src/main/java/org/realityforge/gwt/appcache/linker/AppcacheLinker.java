@@ -138,7 +138,7 @@ public final class AppcacheLinker
     return files;
   }
 
-  private ArrayList<PermutationArtifact> getPermutationArtifacts( final ArtifactSet artifacts )
+  final ArrayList<PermutationArtifact> getPermutationArtifacts( final ArtifactSet artifacts )
   {
     final ArrayList<PermutationArtifact> results = new ArrayList<PermutationArtifact>();
     for ( final PermutationArtifact permutationArtifact : artifacts.find( PermutationArtifact.class ) )
