@@ -148,7 +148,7 @@ public final class AppcacheLinker
     return results;
   }
 
-  private Set<String> getArtifactsForCompilation( final LinkerContext context, final ArtifactSet artifacts )
+  final Set<String> getArtifactsForCompilation( final LinkerContext context, final ArtifactSet artifacts )
   {
     final Set<String> artifactNames = new HashSet<String>();
     for ( final EmittedArtifact artifact : artifacts.find( EmittedArtifact.class ) )

@@ -4,6 +4,7 @@ import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.LinkerContext;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
+import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,6 +162,33 @@ public class AppcacheLinkerTest
     assertEquals( permutationArtifacts.size(), 2 );
     assertTrue( permutationArtifacts.contains( artifact1 ) );
     assertTrue( permutationArtifacts.contains( artifact2 ) );
+  }
+
+  @Test
+  public void getArtifactsForCompilation()
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final ArtifactSet artifacts1 = new ArtifactSet();
+    final PermutationArtifact artifact1 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) );
+    final PermutationArtifact artifact2 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "2" ) );
+    artifacts1.add( artifact1 );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "path1", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "path2", new byte[ 0 ] ) );
+    final StandardGeneratedResource resource =
+      new StandardGeneratedResource( Generator.class, "path3", new byte[ 0 ] );
+    resource.setVisibility( Visibility.Private );
+    artifacts1.add( resource );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "compilation-mappings.txt", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( artifact2 );
+    final LinkerContext linkerContext = mock( LinkerContext.class );
+    when(linkerContext.getModuleName()).thenReturn( "myapp" );
+    final Set<String> files =
+      linker.getArtifactsForCompilation( linkerContext, artifacts1 );
+    assertEquals( files.size(), 2 );
+    System.out.println( "files = " + files );
+    assertTrue( files.contains( "myapp/path1" ) );
+    assertTrue( files.contains( "myapp/path2" ) );
   }
 
   @Test
