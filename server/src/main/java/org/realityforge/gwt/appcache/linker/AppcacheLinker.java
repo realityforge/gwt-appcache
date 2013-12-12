@@ -63,13 +63,12 @@ public final class AppcacheLinker
                                       final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
-    final ArtifactSet results = new ArtifactSet( artifacts );
     final ArrayList<PermutationArtifact> permutationArtifacts = getPermutationArtifacts( artifacts );
 
     if ( 0 == permutationArtifacts.size() )
     {
       // hosted mode
-      return results;
+      return new ArtifactSet( artifacts );
     }
 
     final Set<String> externalFiles = getConfigurationValues( context, STATIC_FILES_CONFIGURATION_PROPERTY_NAME );
@@ -78,6 +77,7 @@ public final class AppcacheLinker
     // get all artifacts
     final Set<String> allArtifacts = getArtifactsForCompilation( context, artifacts );
 
+    final ArtifactSet results = new ArtifactSet( artifacts );
     for ( final PermutationArtifact permutation : permutationArtifacts )
     {
       // make a copy of all artifacts
@@ -86,12 +86,11 @@ public final class AppcacheLinker
       filesForCurrentPermutation.removeAll( allPermutationFiles );
       // add files of the one permutation we are interested in
       // leaving the common stuff for all permutations in...
-      final Set<String> permutationFiles = permutation.getPermutation().getPermutationFiles();
-      for ( final String permutationFile : permutationFiles )
+      for ( final String file : permutation.getPermutation().getPermutationFiles() )
       {
-        if ( allArtifacts.contains( permutationFile ) )
+        if ( allArtifacts.contains( file ) )
         {
-          filesForCurrentPermutation.add( permutationFile );
+          filesForCurrentPermutation.add( file );
         }
       }
 
