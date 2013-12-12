@@ -2,12 +2,15 @@ package org.realityforge.gwt.appcache.linker;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.LinkerContext;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
+import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -162,6 +165,66 @@ public class AppcacheLinkerTest
     assertEquals( permutationArtifacts.size(), 2 );
     assertTrue( permutationArtifacts.contains( artifact1 ) );
     assertTrue( permutationArtifacts.contains( artifact2 ) );
+  }
+
+  @Test
+  public void calculatePermutation()
+    throws UnableToCompleteException
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final ArtifactSet artifacts1 = new ArtifactSet();
+    artifacts1.add( new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) ) );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "file1.txt", new byte[ 0 ] ) );
+    final TreeMap<String, String> configs2 = new TreeMap<String, String>();
+    configs2.put( "user.agent", "ie9" );
+    configs2.put( "screen.size", "large" );
+    artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
+    final TreeMap<String, String> configs3 = new TreeMap<String, String>();
+    configs3.put( "user.agent", "ie9" );
+    configs3.put( "screen.size", "small" );
+    artifacts1.add( new SelectionInformation( "S2", 1, configs3 ) );
+
+    final LinkerContext linkerContext = mock( LinkerContext.class );
+    when(linkerContext.getModuleName()).thenReturn( "myapp" );
+    final Permutation permutation = linker.calculatePermutation( linkerContext, artifacts1 );
+
+    assertEquals( permutation.getPermutationName(), "S2" );
+    final Set<String> files = permutation.getPermutationFiles();
+    assertEquals( files.size(), 1 );
+    assertTrue( files.contains( "myapp/file1.txt" ) );
+
+    final Map<Integer, Set<BindingProperty>> softPermutations = permutation.getBindingProperties();
+    assertEquals( softPermutations.size(), 2 );
+    final Set<BindingProperty> bp0 = softPermutations.get( 0 );
+    final BindingProperty property01 = findProperty( "user.agent", bp0 );
+    assertNotNull( property01 );
+    assertEquals( property01.getValue(), "ie9" );
+
+    final BindingProperty property02 = findProperty( "screen.size", bp0 );
+    assertNotNull( property02 );
+    assertEquals( property02.getValue(), "large" );
+
+    final Set<BindingProperty> bp1 = softPermutations.get( 1 );
+    final BindingProperty property11 = findProperty( "user.agent", bp1 );
+    assertNotNull( property11 );
+    assertEquals( property11.getValue(), "ie9" );
+
+    final BindingProperty property12 = findProperty( "screen.size", bp1 );
+    assertNotNull( property12 );
+    assertEquals( property12.getValue(), "small" );
+  }
+
+  private BindingProperty findProperty( final String key, final Set<BindingProperty> bindingProperties )
+  {
+    for ( final BindingProperty p : bindingProperties )
+    {
+      if ( p.getName().equals( key ) )
+      {
+        return p;
+      }
+    }
+    return null;
   }
 
   @Test
