@@ -131,7 +131,7 @@ public class AppcacheLinkerTest
     final HashSet<String> staticResources = new HashSet<String>();
     staticResources.add( "index.html" );
     final HashSet<String> cacheResources = new HashSet<String>();
-    staticResources.add( "5435435435435435FDEC.js" );
+    cacheResources.add( "5435435435435435FDEC.js" );
     final String manifest = linker.writeManifest( staticResources, cacheResources );
     final String[] lines = manifest.split( "\n" );
     assertEquals( lines[ 0 ], "CACHE MANIFEST" );
