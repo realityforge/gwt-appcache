@@ -106,9 +106,9 @@ public final class AppcacheLinker
     return results;
   }
 
-  private ArtifactSet perPermutationLink( final TreeLogger logger,
-                                          final LinkerContext context,
-                                          final ArtifactSet artifacts )
+  final ArtifactSet perPermutationLink( final TreeLogger logger,
+                                        final LinkerContext context,
+                                        final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
     final Permutation permutation = calculatePermutation( context, artifacts );

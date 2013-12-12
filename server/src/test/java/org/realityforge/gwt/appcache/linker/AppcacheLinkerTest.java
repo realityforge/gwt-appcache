@@ -10,10 +10,10 @@ import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import org.realityforge.gwt.appcache.server.BindingProperty;
@@ -213,6 +213,44 @@ public class AppcacheLinkerTest
     final BindingProperty property12 = findProperty( "screen.size", bp1 );
     assertNotNull( property12 );
     assertEquals( property12.getValue(), "small" );
+  }
+
+  @Test
+  public void perPermutationLink()
+    throws UnableToCompleteException
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final ArtifactSet artifacts1 = new ArtifactSet();
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( Generator.class, "file1.txt", new byte[ 0 ] ) );
+    final TreeMap<String, String> configs2 = new TreeMap<String, String>();
+    configs2.put( "user.agent", "ie9" );
+    artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
+
+    final LinkerContext linkerContext = mock( LinkerContext.class );
+    when( linkerContext.getModuleName() ).thenReturn( "myapp" );
+
+    {
+      final ArtifactSet artifactSet = linker.perPermutationLink( null, linkerContext, artifacts1 );
+      final SortedSet<PermutationArtifact> permutationArtifacts = artifactSet.find( PermutationArtifact.class );
+      assertEquals( permutationArtifacts.size(), 1 );
+      final PermutationArtifact permutationArtifact = permutationArtifacts.iterator().next();
+      final Permutation permutation = permutationArtifact.getPermutation();
+      assertEquals( permutation.getPermutationName(), "S2" );
+      assertTrue( permutation.getPermutationFiles().contains( "myapp/file1.txt" ) );
+      assertEquals( permutation.getBindingProperties().size(), 1 );
+    }
+
+    {
+      final ArtifactSet artifactSet = linker.link( null, linkerContext, artifacts1, true );
+      final SortedSet<PermutationArtifact> permutationArtifacts = artifactSet.find( PermutationArtifact.class );
+      assertEquals( permutationArtifacts.size(), 1 );
+      final PermutationArtifact permutationArtifact = permutationArtifacts.iterator().next();
+      final Permutation permutation = permutationArtifact.getPermutation();
+      assertEquals( permutation.getPermutationName(), "S2" );
+      assertTrue( permutation.getPermutationFiles().contains( "myapp/file1.txt" ) );
+      assertEquals( permutation.getBindingProperties().size(), 1 );
+    }
   }
 
   private BindingProperty findProperty( final String key, final Set<BindingProperty> bindingProperties )
