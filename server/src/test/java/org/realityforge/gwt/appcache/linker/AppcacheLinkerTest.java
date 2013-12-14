@@ -193,7 +193,7 @@ public class AppcacheLinkerTest
     artifacts1.add( new SelectionInformation( "S2", 1, configs3 ) );
 
     final LinkerContext linkerContext = mock( LinkerContext.class );
-    when(linkerContext.getModuleName()).thenReturn( "myapp" );
+    when( linkerContext.getModuleName() ).thenReturn( "myapp" );
     final Permutation permutation = linker.calculatePermutation( linkerContext, artifacts1 );
 
     assertEquals( permutation.getPermutationName(), "S2" );
@@ -331,7 +331,7 @@ public class AppcacheLinkerTest
     artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
     artifacts1.add( artifact2 );
     final LinkerContext linkerContext = mock( LinkerContext.class );
-    when(linkerContext.getModuleName()).thenReturn( "myapp" );
+    when( linkerContext.getModuleName() ).thenReturn( "myapp" );
     final Set<String> files =
       linker.getArtifactsForCompilation( linkerContext, artifacts1 );
     assertEquals( files.size(), 2 );
