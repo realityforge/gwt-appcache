@@ -18,6 +18,7 @@ public class UserAgentPropertyProviderTest
       { UserAgents.Mobile.IPHONE_IOS5, "safari" },
       { UserAgents.Mobile.ANDROID_PHONE_2x, "safari" },
       { UserAgents.Mobile.ANDROID_TABLET, "safari" },
+      { UserAgents.Mobile.BLACKBERRY, "safari" },
       { UserAgents.Desktop.IE10, "ie10" },
       { UserAgents.Desktop.IE9, "ie9" },
       { UserAgents.Desktop.IE8, "ie8" },
