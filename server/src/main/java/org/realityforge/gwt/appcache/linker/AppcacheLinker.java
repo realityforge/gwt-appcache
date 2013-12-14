@@ -218,9 +218,9 @@ public final class AppcacheLinker
     return set;
   }
 
-  private EmittedArtifact createPermutationMap( final TreeLogger logger,
-                                                final LinkerContext context,
-                                                final Collection<PermutationArtifact> artifacts )
+  final EmittedArtifact createPermutationMap( final TreeLogger logger,
+                                              final LinkerContext context,
+                                              final Collection<PermutationArtifact> artifacts )
     throws UnableToCompleteException
   {
     try

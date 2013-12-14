@@ -2,14 +2,20 @@ package org.realityforge.gwt.appcache.linker;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.LinkerContext;
+import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
+import com.google.gwt.core.ext.linker.EmittedArtifact;
 import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +27,7 @@ import org.realityforge.gwt.appcache.server.Permutation;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class AppcacheLinkerTest
 {
@@ -251,6 +258,47 @@ public class AppcacheLinkerTest
       assertTrue( permutation.getPermutationFiles().contains( "myapp/file1.txt" ) );
       assertEquals( permutation.getBindingProperties().size(), 1 );
     }
+  }
+
+  @Test
+  public void createPermutationMap()
+    throws UnableToCompleteException, IOException
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final ArrayList<PermutationArtifact> artifacts1 = new ArrayList<PermutationArtifact>();
+    final Permutation permutation = new Permutation( "X" );
+
+    artifacts1.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
+    final HashSet<BindingProperty> configs2 = new HashSet<BindingProperty>();
+    configs2.add( new BindingProperty( "user.agent", "ie9" ) );
+    permutation.getBindingProperties().put( 0, configs2 );
+
+    final LinkerContext linkerContext = mock( LinkerContext.class );
+    when( linkerContext.getModuleName() ).thenReturn( "myapp" );
+
+    final EmittedArtifact artifacts = linker.createPermutationMap( null, linkerContext, artifacts1 );
+    assertEquals( artifacts.getVisibility(), Visibility.Public );
+    assertEquals( artifacts.getPartialPath(), "permutations.xml" );
+    assertTrue( ( artifacts.getLastModified() - System.currentTimeMillis() < 1000L ) );
+    final String content = toContents( artifacts );
+    assertEquals( content, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations>\n" +
+                          "<permutation name=\"X\">\n" +
+                          "<user.agent>ie9</user.agent>\n" +
+                          "</permutation>\n" +
+                          "</permutations>\n" );
+  }
+
+  private String toContents( final EmittedArtifact artifacts )
+    throws UnableToCompleteException, IOException
+  {
+    final InputStream contents = artifacts.getContents( TreeLogger.NULL );
+    final StringBuilder sb = new StringBuilder(  );
+    int ch;
+    while(-1 != (ch=contents.read()))
+    {
+      sb.append( (char) ch );
+    }
+    return sb.toString();
   }
 
   private BindingProperty findProperty( final String key, final Set<BindingProperty> bindingProperties )
