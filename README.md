@@ -25,6 +25,13 @@ The simplest way to appcache enable a GWT application is to;
 </dependency>
 ```
 
+It should be added that the library is not yet currently deployed
+to maven central. The library has been stored in a pseudo-maven
+repository layout on github and can be downloaded if you add a
+repository url such as;
+
+  http://github.com/realityforge/repository/raw/master
+
 * add the following snippet into the .gwt.xml file.
 
 ```xml
