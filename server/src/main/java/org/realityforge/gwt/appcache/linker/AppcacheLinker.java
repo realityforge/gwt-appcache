@@ -64,7 +64,6 @@ public final class AppcacheLinker
     throws UnableToCompleteException
   {
     final ArrayList<PermutationArtifact> permutationArtifacts = getPermutationArtifacts( artifacts );
-
     if ( 0 == permutationArtifacts.size() )
     {
       // hosted mode
