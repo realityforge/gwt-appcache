@@ -4,7 +4,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.client.ApplicationCache;
-import org.realityforge.gwt.appcache.client.ApplicationCacheStatus;
 import org.realityforge.gwt.appcache.client.event.CachedEvent;
 import org.realityforge.gwt.appcache.client.event.CheckingEvent;
 import org.realityforge.gwt.appcache.client.event.DownloadingEvent;

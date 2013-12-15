@@ -4,7 +4,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.client.ApplicationCache;
-import org.realityforge.gwt.appcache.client.ApplicationCacheStatus;
 
 public class Html5ApplicationCache
   extends AbstractApplicationCache
@@ -30,9 +29,9 @@ public class Html5ApplicationCache
 
   @Nonnull
   @Override
-  public ApplicationCacheStatus getStatus()
+  public Status getStatus()
   {
-    return ApplicationCacheStatus.values()[ getStatus0() ];
+    return Status.values()[ getStatus0() ];
   }
 
   protected native int getStatus0()/*-{

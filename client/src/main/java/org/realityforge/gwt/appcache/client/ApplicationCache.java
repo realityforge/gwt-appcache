@@ -13,8 +13,18 @@ import org.realityforge.gwt.appcache.client.event.UpdateReadyEvent;
 
 public interface ApplicationCache
 {
+  enum Status
+  {
+    UNCACHED,
+    IDLE,
+    CHECKING,
+    DOWNLOADING,
+    UPDATEREADY,
+    OBSOLETE
+  }
+
   @Nonnull
-  ApplicationCacheStatus getStatus();
+  Status getStatus();
 
   void swapCache();
 
