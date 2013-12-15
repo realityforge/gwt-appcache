@@ -10,14 +10,7 @@ public class Html5ApplicationCache
 {
   public static ApplicationCache createIfSupported()
   {
-    if ( !isSupported() )
-    {
-      return null;
-    }
-    else
-    {
-      return new Html5ApplicationCache( new SimpleEventBus() );
-    }
+    return isSupported() ? new Html5ApplicationCache() : null;
   }
 
   private static native boolean isSupported()/*-{
