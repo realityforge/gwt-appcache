@@ -144,6 +144,15 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
+TODO:
+-----
+
+If a resources such as '/myapp.nocache.js' is present and an existing filter marks
+it as not to be cached (or more specifically 'no-store'), then Firefox will attempt
+to re-download that file even if offline. We need to verify and address this behaviour.
+It may be that we are able to replace '/myapp.nocache.js' with '/myapp.js' in offline
+mode.
+
 Appendix
 --------
 
