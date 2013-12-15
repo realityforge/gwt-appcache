@@ -24,7 +24,7 @@ public class Html5ApplicationCache
   protected Html5ApplicationCache( final EventBus eventBus )
   {
     super( eventBus );
-    initialize();
+    registerListeners0();
   }
 
   @Nonnull
@@ -38,7 +38,7 @@ public class Html5ApplicationCache
     return $wnd.applicationCache.status;
   }-*/;
 
-  protected native void initialize() /*-{
+  protected native void registerListeners0() /*-{
     var that = this;
 
     var check = $entry( function () {
