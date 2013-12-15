@@ -53,13 +53,11 @@ public final class Html5ApplicationCache
 
     var onError = $entry( function () {
       that.@org.realityforge.gwt.appcache.client.html5.AbstractApplicationCache::onError()();
-
     } );
     $wnd.applicationCache.addEventListener( "error", onError );
 
     var onNoUpdate = $entry( function () {
       that.@org.realityforge.gwt.appcache.client.html5.AbstractApplicationCache::onNoUpdate()();
-
     } );
     $wnd.applicationCache.addEventListener( "noupdate", onNoUpdate );
 
@@ -87,6 +85,5 @@ public final class Html5ApplicationCache
       that.@org.realityforge.gwt.appcache.client.html5.AbstractApplicationCache::onObsolete()();
     } );
     $wnd.applicationCache.addEventListener( "obsolete", onObsolete );
-
   }-*/;
 }
