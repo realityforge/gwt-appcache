@@ -15,9 +15,15 @@ Quick Start
 
 The simplest way to appcache enable a GWT application is to;
 
-* add the dependency into the build system. i.e.
+* add the following dependencies into the build system. i.e.
 
 ```xml
+<dependency>
+   <groupId>org.realityforge.gwt.appcache</groupId>
+   <artifactId>gwt-appcache-linker</artifactId>
+   <version>0.3</version>
+   <scope>provided</scope>
+</dependency>
 <dependency>
    <groupId>org.realityforge.gwt.appcache</groupId>
    <artifactId>gwt-appcache-server</artifactId>

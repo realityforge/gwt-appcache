@@ -11,6 +11,16 @@ define 'gwt-appcache' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
+  define 'linker' do
+    compile.with :gwt_user, :gwt_dev, project('server')
+
+    test.using :testng
+    test.with :mockito
+
+    package(:jar)
+    package(:sources)
+  end
+
   define 'server' do
     compile.with :javax_servlet, :gwt_user, :gwt_dev
 
