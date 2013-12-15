@@ -7,7 +7,7 @@ import static org.testng.Assert.*;
 public class ApplicationCacheTest
 {
   @Test
-  public void basicOperation()
+  public void registryTest()
   {
     assertNull( ApplicationCache.get() );
     ApplicationCache.register( new TestApplicationCache( new SimpleEventBus() ) );
