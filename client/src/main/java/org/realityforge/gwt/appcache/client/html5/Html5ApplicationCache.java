@@ -24,6 +24,11 @@ public class Html5ApplicationCache
     return typeof ($wnd.applicationCache) == "object";
   }-*/;
 
+  protected Html5ApplicationCache()
+  {
+    super( new SimpleEventBus() );
+  }
+
   protected Html5ApplicationCache( final EventBus eventBus )
   {
     super( eventBus );
