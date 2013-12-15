@@ -14,7 +14,7 @@ import org.realityforge.gwt.appcache.client.event.ProgressEvent;
 import org.realityforge.gwt.appcache.client.event.UpdateReadyEvent;
 
 public abstract class AbstractApplicationCache
-  implements ApplicationCache
+  extends ApplicationCache
 {
   private final EventBus _eventBus;
 

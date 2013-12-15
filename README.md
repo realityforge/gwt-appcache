@@ -91,7 +91,7 @@ public class ManifestServlet
 * interact with the application from within the browser.
 
 ```java
-final ApplicationCache cache = ApplicationCacheFactory.get();
+final ApplicationCache cache = ApplicationCache.get();
 if ( null != cache )
 {
   cache.addUpdateReadyHandler( new UpdateReadyEvent.Handler()

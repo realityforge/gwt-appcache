@@ -1,5 +1,6 @@
 package org.realityforge.gwt.appcache.client;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.client.event.CachedEvent;
@@ -10,10 +11,11 @@ import org.realityforge.gwt.appcache.client.event.NoUpdateEvent;
 import org.realityforge.gwt.appcache.client.event.ObsoleteEvent;
 import org.realityforge.gwt.appcache.client.event.ProgressEvent;
 import org.realityforge.gwt.appcache.client.event.UpdateReadyEvent;
+import org.realityforge.gwt.appcache.client.html5.Html5ApplicationCache;
 
-public interface ApplicationCache
+public abstract class ApplicationCache
 {
-  enum Status
+  public static enum Status
   {
     UNCACHED,
     IDLE,
@@ -23,34 +25,66 @@ public interface ApplicationCache
     OBSOLETE
   }
 
+  private static ApplicationCache _cache;
+
+  public static ApplicationCache get()
+  {
+    if ( null == _cache )
+    {
+      if ( GWT.isClient() && Html5ApplicationCache.isSupported() )
+      {
+        register( new Html5ApplicationCache() );
+      }
+    }
+    return _cache;
+  }
+
+  public static void register( @Nonnull final ApplicationCache applicationCache )
+  {
+    _cache = applicationCache;
+  }
+
+  public static boolean deregister( @Nonnull final ApplicationCache applicationCache )
+  {
+    if ( _cache != applicationCache )
+    {
+      return false;
+    }
+    else
+    {
+      _cache = null;
+      return true;
+    }
+  }
+
   @Nonnull
-  Status getStatus();
+  public abstract Status getStatus();
 
-  void swapCache();
+  public abstract void swapCache();
 
-  void update();
-
-  @Nonnull
-  HandlerRegistration addCheckingHandler( @Nonnull CheckingEvent.Handler handler );
+  public abstract void update();
 
   @Nonnull
-  HandlerRegistration addCachedHandler( @Nonnull CachedEvent.Handler handler );
+  public abstract HandlerRegistration addCheckingHandler( @Nonnull CheckingEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addDownloadingHandler( @Nonnull DownloadingEvent.Handler handler );
+  public abstract HandlerRegistration addCachedHandler( @Nonnull CachedEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addErrorHandler( @Nonnull ErrorEvent.Handler handler );
+  public abstract HandlerRegistration addDownloadingHandler( @Nonnull DownloadingEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addNoUpdateHandler( @Nonnull NoUpdateEvent.Handler handler );
+  public abstract HandlerRegistration addErrorHandler( @Nonnull ErrorEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addObsoleteHandler( @Nonnull ObsoleteEvent.Handler handler );
+  public abstract HandlerRegistration addNoUpdateHandler( @Nonnull NoUpdateEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addProgressHandler( @Nonnull ProgressEvent.Handler handler );
+  public abstract HandlerRegistration addObsoleteHandler( @Nonnull ObsoleteEvent.Handler handler );
 
   @Nonnull
-  HandlerRegistration addUpdateReadyHandler( @Nonnull UpdateReadyEvent.Handler handler );
+  public abstract HandlerRegistration addProgressHandler( @Nonnull ProgressEvent.Handler handler );
+
+  @Nonnull
+  public abstract HandlerRegistration addUpdateReadyHandler( @Nonnull UpdateReadyEvent.Handler handler );
 }
