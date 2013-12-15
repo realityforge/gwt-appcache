@@ -14,10 +14,13 @@ public class Html5ApplicationCache
     {
       return null;
     }
-    return new Html5ApplicationCache( new SimpleEventBus() );
+    else
+    {
+      return new Html5ApplicationCache( new SimpleEventBus() );
+    }
   }
 
-  protected static native boolean isSupported()/*-{
+  private static native boolean isSupported()/*-{
     return typeof ($wnd.applicationCache) == "object";
   }-*/;
 
@@ -34,11 +37,21 @@ public class Html5ApplicationCache
     return Status.values()[ getStatus0() ];
   }
 
-  protected native int getStatus0()/*-{
+  @Override
+  public native void swapCache() /*-{
+    $wnd.applicationCache.swapCache();
+  }-*/;
+
+  @Override
+  public native void update() /*-{
+    $wnd.applicationCache.update();
+  }-*/;
+
+  private native int getStatus0()/*-{
     return $wnd.applicationCache.status;
   }-*/;
 
-  protected native void registerListeners0() /*-{
+  private native void registerListeners0() /*-{
     var that = this;
 
     var check = $entry( function () {
@@ -83,15 +96,5 @@ public class Html5ApplicationCache
     } );
     $wnd.applicationCache.addEventListener( "obsolete", onObsolete );
 
-  }-*/;
-
-  @Override
-  public native void swapCache() /*-{
-    $wnd.applicationCache.swapCache();
-  }-*/;
-
-  @Override
-  public native void update() /*-{
-    $wnd.applicationCache.update();
   }-*/;
 }
