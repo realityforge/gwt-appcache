@@ -6,7 +6,7 @@ gwt-appcache
 The HTML5 Appcache specification is one mechanism for enabling offline
 HTML5 applications. This library provides a simple way to generate the
 required cache manifests and serve for each separate permutation. The
-library does not (yet) support the browser side aspect of appcache
+library also supports the browser side aspect of appcache
 specification. The appendix section includes further references for
 the appcache spec.
 
@@ -18,6 +18,12 @@ The simplest way to appcache enable a GWT application is to;
 * add the following dependencies into the build system. i.e.
 
 ```xml
+<dependency>
+   <groupId>org.realityforge.gwt.appcache</groupId>
+   <artifactId>gwt-appcache-client</artifactId>
+   <version>0.3</version>
+   <scope>provided</scope>
+</dependency>
 <dependency>
    <groupId>org.realityforge.gwt.appcache</groupId>
    <artifactId>gwt-appcache-linker</artifactId>
@@ -43,6 +49,12 @@ repository url such as;
 ```xml
 <module rename-to='myapp'>
   ...
+
+  <!-- Enable the client-side library -->
+  <inherits name="org.realityforge.gwt.appcache.Appcache"/>
+
+  <!-- Enable the linker -->
+  <inherits name="org.realityforge.gwt.appcache.linker.Linker"/>
 
   <!-- enable the linker that generates the manifest -->
   <add-linker name="appcache"/>
@@ -75,6 +87,29 @@ public class ManifestServlet
   }
 }
 ```
+
+* interact with the application from within the browser.
+
+```java
+final ApplicationCache cache = Html5ApplicationCache.createIfSupported();
+if ( null != cache )
+{
+  cache.addUpdateReadyHandler( new UpdateReadyEvent.Handler()
+  {
+    @Override
+    public void onUpdateReadyEvent( @Nonnull final UpdateReadyEvent event )
+    {
+      //Force a cache update if new version is available
+      cache.swapCache();
+    }
+  } );
+
+  // Ask the browser to recheck the cache
+  cache.update();
+
+  ...
+```
+
 
 This should be sufficient to get your application using the appcache. If you
 load the application in a modern browser you should see it making use of the
