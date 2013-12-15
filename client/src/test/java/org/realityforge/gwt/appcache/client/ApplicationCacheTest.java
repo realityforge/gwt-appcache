@@ -12,7 +12,9 @@ public class ApplicationCacheTest
     assertNull( ApplicationCache.get() );
     ApplicationCache.register( new TestApplicationCache( new SimpleEventBus() ) );
     assertNotNull( ApplicationCache.get() );
-    assertNotNull( ApplicationCache.deregister( ApplicationCache.get() ) );
+    final ApplicationCache applicationCache = ApplicationCache.get();
+    assertTrue( ApplicationCache.deregister( applicationCache ) );
     assertNull( ApplicationCache.get() );
+    assertFalse( ApplicationCache.deregister( applicationCache ) );
   }
 }
