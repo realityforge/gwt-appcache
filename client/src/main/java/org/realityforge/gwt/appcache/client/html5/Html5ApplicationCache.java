@@ -3,26 +3,20 @@ package org.realityforge.gwt.appcache.client.html5;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import javax.annotation.Nonnull;
-import org.realityforge.gwt.appcache.client.ApplicationCache;
 
-public class Html5ApplicationCache
+public final class Html5ApplicationCache
   extends AbstractApplicationCache
 {
-  public static ApplicationCache createIfSupported()
-  {
-    return isSupported() ? new Html5ApplicationCache() : null;
-  }
-
-  private static native boolean isSupported()/*-{
+  public static native boolean isSupported()/*-{
     return typeof ($wnd.applicationCache) == "object";
   }-*/;
 
-  protected Html5ApplicationCache()
+  public Html5ApplicationCache()
   {
-    super( new SimpleEventBus() );
+    this( new SimpleEventBus() );
   }
 
-  protected Html5ApplicationCache( final EventBus eventBus )
+  public Html5ApplicationCache( final EventBus eventBus )
   {
     super( eventBus );
     registerListeners0();
