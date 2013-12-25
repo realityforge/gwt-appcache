@@ -1,3 +1,13 @@
+## 0.6:
+
+* If the containing html page does not contain a manifest declaration
+  then do not create a ApplicationCache in singleton.
+* Add the file count and total file count fields to the ProgressEvent.
+* Ensure that the file names declared in the manifest file are correctly
+  encoded.
+* Support pre 1.8 versions of gecko renderer when doing server side
+  selection of the manifest file.
+
 ## 0.5:
 
 * Convert ApplicationCache into an abstract class and merge in the code from
