@@ -94,7 +94,7 @@ public final class AppcacheLinker
       }
 
       // build manifest
-      final String maniFest = writeManifest( externalFiles, filesForCurrentPermutation );
+      final String maniFest = writeManifest( logger, externalFiles, filesForCurrentPermutation );
       final String filename =
         permutation.getPermutation().getPermutationName() + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
       results.add( emitString( logger, maniFest, filename ) );
@@ -168,7 +168,8 @@ public final class AppcacheLinker
    * @param cacheResources  the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
-  final String writeManifest( @Nonnull final Set<String> staticResources, @Nonnull final Set<String> cacheResources )
+  final String writeManifest( final TreeLogger logger, @Nonnull final Set<String> staticResources, @Nonnull final Set<String> cacheResources )
+    throws UnableToCompleteException
   {
     final StringBuilder sb = new StringBuilder();
     sb.append( "CACHE MANIFEST\n" );
@@ -181,21 +182,55 @@ public final class AppcacheLinker
     sb.append( "\n" );
     sb.append( "CACHE:\n" );
     sb.append( "# Static app files\n" );
-    for ( final String resources : staticResources )
+    for ( final String resource : staticResources )
     {
-      sb.append( resources ).append( "\n" );
+      sb.append( urlEncode( logger, resource ) ).append( "\n" );
     }
 
     sb.append( "\n# GWT compiled files\n" );
-    for ( final String resources : cacheResources )
+    for ( final String resource : cacheResources )
     {
-      sb.append( resources ).append( "\n" );
+      sb.append( urlEncode( logger, resource ) ).append( "\n" );
     }
 
     sb.append( "\n\n" );
     sb.append( "# All other resources require the client to be online.\n" );
     sb.append( "NETWORK:\n" );
     sb.append( "*\n" );
+    return sb.toString();
+  }
+
+  private String urlEncode( final TreeLogger logger, final String path )
+    throws UnableToCompleteException
+  {
+    final int length = path.length();
+    final StringBuilder sb = new StringBuilder( length );
+    for ( int i = 0; i != length; ++i )
+    {
+      if ( path.codePointAt( i ) > 255 )
+      {
+        logger.log( TreeLogger.Type.ERROR, "Manifest entry '" + path + "' contains illegal character at index " + i );
+        throw new UnableToCompleteException();
+      }
+      final char ch = path.charAt( i );
+      if ( ( ch >= '0' && ch <= '9' ) ||
+           ( ch >= 'A' && ch <= 'Z' ) ||
+           ( ch >= 'a' && ch < 'z' ) ||
+           '.' == ch ||
+           '-' == ch ||
+           '_' == ch )
+      {
+        sb.append( ch );
+      }
+      else if ( '/' == ch || '\\' == ch )
+      {
+        sb.append( '/' );
+      }
+      else
+      {
+        sb.append( '%' ).append( Integer.toHexString( ch ).toUpperCase() );
+      }
+    }
     return sb.toString();
   }
 

@@ -25,7 +25,6 @@ import org.realityforge.gwt.appcache.server.Permutation;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
-import static org.testng.Assert.assertEquals;
 
 public class AppcacheLinkerTest
 {
@@ -358,13 +357,16 @@ public class AppcacheLinkerTest
 
   @Test
   public void writeManifest()
+    throws Exception
   {
     final AppcacheLinker linker = new AppcacheLinker();
     final HashSet<String> staticResources = new HashSet<String>();
     staticResources.add( "index.html" );
+    staticResources.add( "file with space.html" );
     final HashSet<String> cacheResources = new HashSet<String>();
+    cacheResources.add( "mydir/file_with_$.js" );
     cacheResources.add( "5435435435435435FDEC.js" );
-    final String manifest = linker.writeManifest( staticResources, cacheResources );
+    final String manifest = linker.writeManifest( TreeLogger.NULL, staticResources, cacheResources );
     final String[] lines = manifest.split( "\n" );
     assertEquals( lines[ 0 ], "CACHE MANIFEST" );
 
@@ -373,7 +375,9 @@ public class AppcacheLinkerTest
 
     assertNotEquals( findLine( lines, networkSectionStart + 1, lines.length, "*" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "index.html" ), -1 );
+    assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "file%20with%20space.html" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "5435435435435435FDEC.js" ), -1 );
+    assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "mydir/file_with_%24.js" ), -1 );
   }
 
   private int findLine( final String[] lines, final int start, final int end, final String line )
