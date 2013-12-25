@@ -41,6 +41,25 @@ public class ProgressEvent
     return TYPE;
   }
 
+  private final int _loaded;
+  private final int _total;
+
+  public ProgressEvent( final int loaded, final int total )
+  {
+    _loaded = loaded;
+    _total = total;
+  }
+
+  public int getLoaded()
+  {
+    return _loaded;
+  }
+
+  public int getTotal()
+  {
+    return _total;
+  }
+
   @Override
   public GwtEvent.Type<Handler> getAssociatedType()
   {

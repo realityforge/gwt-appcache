@@ -97,10 +97,10 @@ public class ApplicationCacheTest
     {
       final ProgressEvent.Handler handler = mock( ProgressEvent.Handler.class );
       final HandlerRegistration registration = applicationCache.addProgressHandler( handler );
-      applicationCache.onProgress();
-      verify( handler, only() ).onProgressEvent( Mockito.<ProgressEvent>anyObject() );
+      applicationCache.onProgress( 2, 5 );
+      verify( handler, only() ).onProgressEvent( refEq( new ProgressEvent( 2, 5 ), "source" ) );
       registration.removeHandler();
-      applicationCache.onProgress();
+      applicationCache.onProgress( 3, 5 );
       verify( handler, atMost( 1 ) ).onProgressEvent( Mockito.<ProgressEvent>anyObject() );
     }
 

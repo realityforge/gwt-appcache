@@ -67,8 +67,8 @@ public final class Html5ApplicationCache
     } );
     $wnd.applicationCache.addEventListener( "downloading", onDownloading );
 
-    var onProgress = $entry( function () {
-      that.@org.realityforge.gwt.appcache.client.ApplicationCache::onProgress()();
+    var onProgress = $entry( function (event) {
+      that.@org.realityforge.gwt.appcache.client.ApplicationCache::onProgress(II)(event.loaded, event.total);
     } );
     $wnd.applicationCache.addEventListener( "progress", onProgress );
 

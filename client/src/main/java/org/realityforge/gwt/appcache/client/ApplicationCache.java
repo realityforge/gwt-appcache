@@ -140,9 +140,9 @@ public abstract class ApplicationCache
     _eventBus.fireEventFromSource( new DownloadingEvent(), this );
   }
 
-  protected final void onProgress()
+  protected final void onProgress( final int loaded, final int total )
   {
-    _eventBus.fireEventFromSource( new ProgressEvent(), this );
+    _eventBus.fireEventFromSource( new ProgressEvent( loaded, total ), this );
   }
 
   protected final void onUpdateReady()
