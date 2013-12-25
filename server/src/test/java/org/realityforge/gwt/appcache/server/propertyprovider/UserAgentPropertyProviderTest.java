@@ -26,6 +26,8 @@ public class UserAgentPropertyProviderTest
       { UserAgents.Desktop.IE7, "ie8" },
       { UserAgents.Desktop.OPERA, "opera" },
       { UserAgents.Desktop.FIREFOX, "gecko1_8" },
+      { UserAgents.Desktop.FIREFOX_BOUNDARY, "gecko1_8" },
+      { UserAgents.Desktop.FIREFOX_OLD, "gecko" },
     };
   }
 

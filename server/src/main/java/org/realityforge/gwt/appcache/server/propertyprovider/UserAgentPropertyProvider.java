@@ -1,10 +1,14 @@
 package org.realityforge.gwt.appcache.server.propertyprovider;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 public class UserAgentPropertyProvider
   implements PropertyProvider
 {
+  private final Pattern _geckoRevisionPattern = Pattern.compile( "rv:([0-9]+)\\.([0-9]+)" );
+
   @Override
   public String getPropertyValue( final HttpServletRequest request )
   {
@@ -32,7 +36,14 @@ public class UserAgentPropertyProvider
     }
     else if ( userAgent.contains( "gecko" ) )
     {
-      return "gecko1_8";
+      if ( parseGeckoVersion( userAgent ) >= 1008 )
+      {
+        return "gecko1_8";
+      }
+      else
+      {
+        return "gecko";
+      }
     }
     else
     {
@@ -44,5 +55,21 @@ public class UserAgentPropertyProvider
   public String getPropertyName()
   {
     return "user.agent";
+  }
+
+  private int parseGeckoVersion( final String userAgent )
+  {
+    final Matcher matcher = _geckoRevisionPattern.matcher( userAgent );
+    if ( matcher.find() )
+    {
+      final int major = Integer.parseInt( matcher.group( 1 ) );
+      final int minor = Integer.parseInt( matcher.group( 2 ) );
+
+      return major * 1000 + minor;
+    }
+    else
+    {
+      return 0;
+    }
   }
 }

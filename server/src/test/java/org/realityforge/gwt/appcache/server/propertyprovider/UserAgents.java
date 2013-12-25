@@ -5,6 +5,8 @@ interface UserAgents
   interface Desktop
   {
     String FIREFOX = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:18.0) Gecko/20100101 Firefox/18.0";
+    String FIREFOX_BOUNDARY = "Mozilla/5.0 (X11; U; OpenBSD sparc64; pl-PL; rv:1.8.0.2) Gecko/20060429 Firefox/1.5.0.2";
+    String FIREFOX_OLD = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.10) Gecko/20050921 Firefox/1.5.0.2 Mandriva/1.0.6-15mdk (2006.0)";
     String OPERA = "Opera/9.80 (Windows NT 6.1; U; ko) Presto/2.7.62 Version/11.00";
     String CHROME =
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36";
