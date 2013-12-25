@@ -34,7 +34,7 @@ public abstract class ApplicationCache
   {
     if ( null == g_cache )
     {
-      if ( GWT.isClient() && Html5ApplicationCache.isSupported() )
+      if ( GWT.isClient() && Html5ApplicationCache.isSupported() && Html5ApplicationCache.hasManifest() )
       {
         register( new Html5ApplicationCache() );
       }

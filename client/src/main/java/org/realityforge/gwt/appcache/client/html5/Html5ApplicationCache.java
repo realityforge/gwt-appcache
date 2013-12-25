@@ -1,5 +1,6 @@
 package org.realityforge.gwt.appcache.client.html5;
 
+import com.google.gwt.dom.client.Document;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import javax.annotation.Nonnull;
@@ -11,6 +12,14 @@ public final class Html5ApplicationCache
   public static native boolean isSupported()/*-{
     return typeof ($wnd.applicationCache) == "object";
   }-*/;
+
+  /**
+   * @return true if the document has an AppCache manifest attached
+   */
+  public static boolean hasManifest()
+  {
+    return Document.get().getDocumentElement().hasAttribute( "manifest" );
+  }
 
   public Html5ApplicationCache()
   {
