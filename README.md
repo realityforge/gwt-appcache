@@ -145,7 +145,34 @@ the correct permutation and thus the correct manifest file. The selected manifes
 file is returned to the requester.
 
 TODO:
------
+=====
+
+Publish to maven central
+------------------------
+
+Publish jars with source, javadocs and poms to maven central.
+
+Improve selection property derivation
+-------------------------------------
+
+Rework the linker so that derived selection configuration items will not appear in
+permutations.xml. i.e. It should be possible to determine that audioElementSupport
+is always "maybe" when chrome browser. It should also be possible to specify exactly
+which configuration properties are selection properties.
+
+Server-side selection
+---------------------
+
+Consider doing server-side selection of configuration properties. Deriving browser
+properties from cookies if need be.
+
+Catch exceptions in update
+--------------------------
+
+Wrap update in exception handler.
+
+Handle no-cache resources
+-------------------------
 
 If a resources such as '/myapp.nocache.js' is present and an existing filter marks
 it as not to be cached (or more specifically 'no-store'), then Firefox will attempt
