@@ -27,4 +27,9 @@ final class TestApplicationCache
   public void update()
   {
   }
+
+  @Override
+  public void removeCache()
+  {
+  }
 }

@@ -1,5 +1,7 @@
 ## 0.6:
 
+* Update the client library to support the attempt to remove the local
+  cache by re-requesting manifest with cookie disabling appcache set.
 * Support disabling the application cache by setting a cookie named
   "appcache_disable" to "1".
 * If the containing html page does not contain a manifest declaration

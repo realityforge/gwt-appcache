@@ -72,6 +72,8 @@ public abstract class ApplicationCache
 
   public abstract void update();
 
+  public abstract void removeCache();
+
   @Nonnull
   public final HandlerRegistration addCheckingHandler( @Nonnull CheckingEvent.Handler handler )
   {

@@ -1,14 +1,25 @@
 package org.realityforge.gwt.appcache.client.html5;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.user.client.Cookies;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.client.ApplicationCache;
+import org.realityforge.gwt.appcache.client.event.CachedEvent;
+import org.realityforge.gwt.appcache.client.event.ErrorEvent;
+import org.realityforge.gwt.appcache.client.event.NoUpdateEvent;
+import org.realityforge.gwt.appcache.client.event.ObsoleteEvent;
+import org.realityforge.gwt.appcache.client.event.UpdateReadyEvent;
 
 public final class Html5ApplicationCache
   extends ApplicationCache
 {
+  private static final String DISABLE_MANIFEST_COOKIE_NAME = "appcache_disable";
+  private static final String DISABLE_MANIFEST_COOKIE_VALUE = "1";
+
   public static native boolean isSupported()/*-{
     return typeof ($wnd.applicationCache) == "object";
   }-*/;
@@ -45,13 +56,85 @@ public final class Html5ApplicationCache
   }-*/;
 
   @Override
-  public native void update() /*-{
+  public void update()
+  {
+    enableAppCache();
+    update0();
+  }
+
+  private native void update0() /*-{
     $wnd.applicationCache.update();
   }-*/;
 
   private native int getStatus0()/*-{
     return $wnd.applicationCache.status;
   }-*/;
+
+  @Override
+  public void removeCache()
+  {
+    Cookies.setCookie( DISABLE_MANIFEST_COOKIE_NAME, DISABLE_MANIFEST_COOKIE_VALUE );
+
+    // Register handlers for every terminal event so we can ensure that we remove the cookie.
+    // All of these may be required due to; network failure, intermediate cache not passing
+    // back to server, overlapping requests etc.
+    final ArrayList<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
+    registrations.add( addErrorHandler( new ErrorEvent.Handler()
+    {
+      @Override
+      public void onErrorEvent( @Nonnull final ErrorEvent event )
+      {
+        cacheRemovalCleanup( registrations );
+      }
+    } ) );
+    registrations.add( addObsoleteHandler( new ObsoleteEvent.Handler()
+    {
+      @Override
+      public void onObsoleteEvent( @Nonnull final ObsoleteEvent event )
+      {
+        cacheRemovalCleanup( registrations );
+      }
+    } ) );
+    registrations.add( addNoUpdateHandler( new NoUpdateEvent.Handler()
+    {
+      @Override
+      public void onNoUpdateEvent( @Nonnull final NoUpdateEvent event )
+      {
+        cacheRemovalCleanup( registrations );
+      }
+    } ) );
+    registrations.add( addUpdateReadyHandler( new UpdateReadyEvent.Handler()
+    {
+      @Override
+      public void onUpdateReadyEvent( @Nonnull final UpdateReadyEvent event )
+      {
+        cacheRemovalCleanup( registrations );
+      }
+    } ) );
+    registrations.add( addCachedHandler( new CachedEvent.Handler()
+    {
+      @Override
+      public void onCachedEvent( @Nonnull final CachedEvent event )
+      {
+        cacheRemovalCleanup( registrations );
+      }
+    } ) );
+    update0();
+  }
+
+  private void cacheRemovalCleanup( final ArrayList<HandlerRegistration> registrations )
+  {
+    for ( final HandlerRegistration registration : registrations )
+    {
+      registration.removeHandler();
+    }
+    enableAppCache();
+  }
+
+  private void enableAppCache()
+  {
+    Cookies.removeCookie( DISABLE_MANIFEST_COOKIE_NAME );
+  }
 
   private native void registerListeners0() /*-{
     var that = this;
