@@ -3,7 +3,6 @@ package org.realityforge.gwt.appcache.server;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,10 +29,10 @@ public final class PermutationsIO
   {
   }
 
-  public static Map<String, List<BindingProperty>> deserialize( final InputStream stream )
+  public static List<PermutationDescriptor> deserialize( final InputStream stream )
     throws Exception
   {
-    final Map<String, List<BindingProperty>> map = new HashMap<String, List<BindingProperty>>();
+    final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
 
     final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( stream );
     final Element permutationsNode = document.getDocumentElement();
@@ -54,18 +53,17 @@ public final class PermutationsIO
         continue;
       }
       final Element permutationNode = (Element) node;
-      handlePermutation( map, permutationNode );
+      handlePermutation( descriptors, permutationNode );
     }
-    return map;
+    return descriptors;
   }
 
-  private static void handlePermutation( final Map<String, List<BindingProperty>> map, final Element permutationNode )
+  private static void handlePermutation( final List<PermutationDescriptor> descriptors, final Element permutationNode )
     throws Exception
   {
     final String strongName = permutationNode.getAttribute( PERMUTATION_NAME );
 
     final ArrayList<BindingProperty> list = new ArrayList<BindingProperty>();
-    map.put( strongName, list );
 
     final NodeList variableNodes = permutationNode.getChildNodes();
     for ( int i = 0; i < variableNodes.getLength(); i++ )
@@ -86,6 +84,7 @@ public final class PermutationsIO
       final String varValue = childNodes.item( 0 ).getNodeValue();
       list.add( new BindingProperty( varKey, varValue ) );
     }
+    descriptors.add( new PermutationDescriptor( strongName, list ) );
   }
 
   public static String serialize( final Map<String, Set<BindingProperty>> permutationBindings )

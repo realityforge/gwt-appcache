@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
@@ -32,21 +31,21 @@ public class PermutationsIOTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final Map<String, List<BindingProperty>> bindings =
+    final List<PermutationDescriptor> descriptors =
       PermutationsIO.deserialize( new ByteArrayInputStream( permutationContent.getBytes( "US-ASCII" ) ) );
-    assertEquals( bindings.size(), 3 );
-    final List<BindingProperty> binding1 = ensureBinding( bindings, "C7D408F8EFA266A7F9A31209F8AA7446" );
+    assertEquals( descriptors.size(), 3 );
+    final List<BindingProperty> binding1 = ensureBinding( descriptors, "C7D408F8EFA266A7F9A31209F8AA7446" );
     assertEquals( binding1.size(), 3 );
     assertBinding( binding1, "user.agent", "ie8,ie9,safari,ie10,gecko1_8" );
     assertBinding( binding1, "screen.size", "biggo" );
     assertBinding( binding1, "color.depth", "much" );
 
-    final List<BindingProperty> binding2 = ensureBinding( bindings, "Other2" );
+    final List<BindingProperty> binding2 = ensureBinding( descriptors, "Other2" );
     assertEquals( binding2.size(), 2 );
     assertBinding( binding2, "user.agent", "ie8,ie9,safari,ie10,gecko1_8" );
     assertBinding( binding2, "screen.size", "biggo" );
 
-    final List<BindingProperty> binding3 = ensureBinding( bindings, "Other" );
+    final List<BindingProperty> binding3 = ensureBinding( descriptors, "Other" );
     assertEquals( binding3.size(), 1 );
     assertBinding( binding3, "user.agent", "ie8,ie9,safari,ie10,gecko1_8" );
   }
@@ -85,22 +84,22 @@ public class PermutationsIOTest
     input.put( permutation3, input3 );
 
     final String output = PermutationsIO.serialize( input );
-    final Map<String, List<BindingProperty>> bindings =
+    final List<PermutationDescriptor> descriptors =
       PermutationsIO.deserialize( new ByteArrayInputStream( output.getBytes( "US-ASCII" ) ) );
 
-    assertEquals( bindings.size(), 3 );
-    final List<BindingProperty> binding1 = ensureBinding( bindings, permutation1 );
+    assertEquals( descriptors.size(), 3 );
+    final List<BindingProperty> binding1 = ensureBinding( descriptors, permutation1 );
     assertEquals( binding1.size(), 3 );
     assertBinding( binding1, key1, value11 );
     assertBinding( binding1, key2, value12 );
     assertBinding( binding1, key3, value13 );
 
-    final List<BindingProperty> binding2 = ensureBinding( bindings, permutation2 );
+    final List<BindingProperty> binding2 = ensureBinding( descriptors, permutation2 );
     assertEquals( binding2.size(), 2 );
     assertBinding( binding2, key1, value21 );
     assertBinding( binding2, key2, value22 );
 
-    final List<BindingProperty> binding3 = ensureBinding( bindings, permutation3 );
+    final List<BindingProperty> binding3 = ensureBinding( descriptors, permutation3 );
     assertEquals( binding3.size(), 1 );
     assertBinding( binding3, key1, value31 );
   }
@@ -123,11 +122,17 @@ public class PermutationsIOTest
     return null;
   }
 
-  private List<BindingProperty> ensureBinding( final Map<String, List<BindingProperty>> bindings,
+  private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> descriptors,
                                                final String permutationName )
   {
-    final List<BindingProperty> binding1 = bindings.get( permutationName );
-    assertNotNull( binding1 );
-    return binding1;
+    for ( final PermutationDescriptor descriptor : descriptors )
+    {
+      if ( descriptor.getPermutationName().equals( permutationName ) )
+      {
+        return descriptor.getBindingProperties();
+      }
+    }
+    fail( "Unable to locate permutation: " + permutationName );
+    return null;
   }
 }

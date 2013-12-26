@@ -9,8 +9,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -35,8 +33,8 @@ public abstract class AbstractManifestServlet
     Pattern.compile( "/([a-zA-Z0-9]+)\\" + Permutation.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
 
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
-  private transient long _permutationDescriptorLastModified = Long.MIN_VALUE;
-  private transient Map<String, List<BindingProperty>> _bindingMap;
+  private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
+  private transient List<PermutationDescriptor> _permutationDescriptors;
 
   protected final void addPropertyProvider( final PropertyProvider propertyProvider )
   {
@@ -200,12 +198,12 @@ public abstract class AbstractManifestServlet
     {
       String selectedPermutation = null;
       int selectedMatchStrength = 0;
-      final Map<String, List<BindingProperty>> map = getBindingMap( baseUrl, moduleName );
-      for ( final Entry<String, List<BindingProperty>> permutationEntry : map.entrySet() )
+      final List<PermutationDescriptor> descriptors = getPermutationDescriptors( baseUrl, moduleName );
+      for ( final PermutationDescriptor permutationEntry : descriptors )
       {
         int matchStrength = 0;
         boolean matched = true;
-        final List<BindingProperty> requiredBindings = permutationEntry.getValue();
+        final List<BindingProperty> requiredBindings = permutationEntry.getBindingProperties();
         for ( final BindingProperty requirement : requiredBindings )
         {
           boolean propertyMatched = false;
@@ -232,7 +230,7 @@ public abstract class AbstractManifestServlet
         }
         if ( matched && matchStrength > selectedMatchStrength )
         {
-          selectedPermutation = permutationEntry.getKey();
+          selectedPermutation = permutationEntry.getPermutationName();
           selectedMatchStrength = matchStrength;
         }
       }
@@ -244,20 +242,20 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  final Map<String, List<BindingProperty>> getBindingMap( @Nonnull final String baseUrl,
-                                                          @Nonnull final String moduleName )
+  final List<PermutationDescriptor> getPermutationDescriptors( @Nonnull final String baseUrl,
+                                                               @Nonnull final String moduleName )
     throws Exception
   {
     final String realPath =
       getServletContext().getRealPath( baseUrl + moduleName + "/" + PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     final File permutationDescriptor = new File( realPath );
     final long lastModified = permutationDescriptor.lastModified();
-    if ( null == _bindingMap || _permutationDescriptorLastModified < lastModified )
+    if ( null == _permutationDescriptors || _permutationsDescriptorLastModified < lastModified )
     {
-      _bindingMap = PermutationsIO.deserialize( new FileInputStream( realPath ) );
-      _permutationDescriptorLastModified = lastModified;
+      _permutationDescriptors = PermutationsIO.deserialize( new FileInputStream( realPath ) );
+      _permutationsDescriptorLastModified = lastModified;
     }
-    return _bindingMap;
+    return _permutationDescriptors;
   }
 
   @Nonnull

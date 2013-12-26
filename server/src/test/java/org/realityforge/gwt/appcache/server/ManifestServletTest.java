@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -243,14 +242,14 @@ public class ManifestServletTest
 
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
 
-    final Map<String, List<BindingProperty>> bindings = servlet.getBindingMap( "/foo/", "myapp" );
-    assertNotNull( bindings );
+    final List<PermutationDescriptor> descriptors = servlet.getPermutationDescriptors( "/foo/", "myapp" );
+    assertNotNull( descriptors );
 
-    assertTrue( bindings == servlet.getBindingMap( "/foo/", "myapp" ) );
+    assertTrue( descriptors == servlet.getPermutationDescriptors( "/foo/", "myapp" ) );
 
     assertTrue( permutations.setLastModified( Long.MAX_VALUE ) );
 
-    assertFalse( bindings == servlet.getBindingMap( "/foo/", "myapp" ) );
+    assertFalse( descriptors == servlet.getPermutationDescriptors( "/foo/", "myapp" ) );
 
     assertTrue( permutations.delete() );
   }
@@ -288,6 +287,28 @@ public class ManifestServletTest
       "   <permutation name=\"Other\">\n" +
       "      <user.agent>ie8,ie9,safari,ie10,gecko1_8</user.agent>\n" +
       "      <screen.size>biggo</screen.size>\n" +
+      "   </permutation>\n" +
+      "</permutations>\n";
+
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
+
+    ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
+  }
+
+  @Test
+  public void getPermutationStrongName_multipleMatchesForSinglePermutation()
+    throws Exception
+  {
+    final String strongPermutation = "C7D408F8EFA266A7F9A31209F8AA7446";
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      "   <permutation name=\"" + strongPermutation + "\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "   </permutation>\n" +
+      "   <permutation name=\"" + strongPermutation + "\">\n" +
+      "      <user.agent>ie9</user.agent>\n" +
       "   </permutation>\n" +
       "</permutations>\n";
 
