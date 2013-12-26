@@ -11,6 +11,12 @@ define 'gwt-appcache' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
+  pom.add_apache2_license
+  pom.add_github_project("realityforge/gwt-appcache")
+  pom.add_developer('realityforge', "Peter Donald")
+  pom.add_developer('dankurka', "Daniel Kurka")
+  pom.provided.concat [:javax_servlet, :gwt_user, :gwt_dev]
+
   desc "GWT AppCache client code"
   define 'client' do
     compile.with :gwt_user, :gwt_dev
