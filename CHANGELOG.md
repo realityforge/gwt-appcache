@@ -1,5 +1,6 @@
 ## 0.6:
 
+* Generate a more complete Maven POM file.
 * Compile against the last release of GWT 2.5.1 rather than the 2.6 RC1.
 * Add javadoc packages to the build process.
 * Update the client library to support the attempt to remove the local
