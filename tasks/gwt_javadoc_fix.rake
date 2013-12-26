@@ -3,7 +3,7 @@ module Buildr
   module DocFix #:nodoc:
     include Extension
     after_define(:doc) do |project|
-      project.doc.classpath.clear
+      project.doc.classpath.delete_if {|f| f.to_s =~ /.*\/com\/google\/gwt\/gwt-user\/.*/}
     end
   end
   class Project #:nodoc:
