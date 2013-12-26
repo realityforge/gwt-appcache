@@ -12,7 +12,7 @@ define 'gwt-appcache' do
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
   define 'client' do
-    compile.with :gwt_user, :gwt_dev, project('client')
+    compile.with :gwt_user, :gwt_dev
 
     test.using :testng
     test.with :mockito
