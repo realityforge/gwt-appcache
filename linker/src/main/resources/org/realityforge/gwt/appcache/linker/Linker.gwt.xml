@@ -11,4 +11,7 @@
   <extend-configuration-property name="appcache_ignorable_permutation_properties" value="canvasElementSupport"/>
   <extend-configuration-property name="appcache_ignorable_permutation_properties" value="videoElementSupport"/>
   <extend-configuration-property name="appcache_ignorable_permutation_properties" value="dragEventSupport"/>
+  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="storageSupport"/>
+  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="touchEventSupport"/>
+  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="geolocationSupport"/>
 </module>
