@@ -1,5 +1,6 @@
 ## 0.6:
 
+* Add javadoc packages to the build process.
 * Update the client library to support the attempt to remove the local
   cache by re-requesting manifest with cookie disabling appcache set.
 * Support disabling the application cache by setting a cookie named

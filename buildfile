@@ -2,6 +2,19 @@ require 'buildr/single_intermediate_layout'
 require 'buildr/git_auto_version'
 require 'buildr/top_level_generate_dir'
 
+# Ugly hack required as the gwt jars cause the javadoc tool heart ache
+module Buildr
+  module DocFix #:nodoc:
+    include Extension
+    after_define(:doc) do |project|
+      project.doc.classpath.clear
+    end
+  end
+  class Project #:nodoc:
+    include DocFix
+  end
+end
+
 desc 'GWT Appcache Linker and server support'
 define 'gwt-appcache' do
   project.group = 'org.realityforge.gwt.appcache'
@@ -19,6 +32,7 @@ define 'gwt-appcache' do
 
     package(:jar).include("#{_(:source, :main, :java)}/*")
     package(:sources)
+    package(:javadoc)
   end
 
   define 'linker' do
@@ -29,6 +43,7 @@ define 'gwt-appcache' do
 
     package(:jar)
     package(:sources)
+    package(:javadoc)
   end
 
   define 'server' do
@@ -39,5 +54,6 @@ define 'gwt-appcache' do
 
     package(:jar)
     package(:sources)
+    package(:javadoc)
   end
 end
