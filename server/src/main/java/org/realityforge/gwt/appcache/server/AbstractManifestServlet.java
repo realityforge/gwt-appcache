@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,9 @@ import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 public abstract class AbstractManifestServlet
   extends HttpServlet
 {
+  static final String DISABLE_MANIFEST_COOKIE_NAME = "appcache_disable";
+  static final String DISABLE_MANIFEST_COOKIE_VALUE = "1";
+
   private static final long serialVersionUID = -2540671294104865306L;
 
   // request url should be something like .../modulename.appcache" within
@@ -43,6 +47,15 @@ public abstract class AbstractManifestServlet
   protected void doGet( final HttpServletRequest request, final HttpServletResponse response )
     throws ServletException, IOException
   {
+    // If the application has sent a cookie to disable the application cache
+    // then return an appropriate  gone response to flush the cache
+    if ( isAppCacheDisabled( request ) )
+    {
+      // Maybe should be HttpServletResponse.SC_NOT_FOUND ?
+      response.sendError( HttpServletResponse.SC_GONE );
+      return;
+    }
+
     final String moduleName = getModuleName( request );
     final String baseUrl = getBaseUrl( request );
     final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
@@ -56,6 +69,23 @@ public abstract class AbstractManifestServlet
     {
       throw new ServletException( "unknown device" );
     }
+  }
+
+  final boolean isAppCacheDisabled( final HttpServletRequest request )
+  {
+    final Cookie[] cookies = request.getCookies();
+    if ( null != cookies )
+    {
+      for ( final Cookie cookie : cookies )
+      {
+        if ( DISABLE_MANIFEST_COOKIE_NAME.equals( cookie.getName() ) &&
+             DISABLE_MANIFEST_COOKIE_VALUE.equals( cookie.getValue() ) )
+        {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   final String loadManifest( final String baseUrl, final String moduleName, final String strongName )

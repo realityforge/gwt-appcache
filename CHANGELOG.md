@@ -1,5 +1,7 @@
 ## 0.6:
 
+* Support disabling the application cache by setting a cookie named
+  "appcache_disable" to "1".
 * If the containing html page does not contain a manifest declaration
   then do not create a ApplicationCache in singleton.
 * Add the file count and total file count fields to the ProgressEvent.

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.testng.annotations.Test;
@@ -68,6 +69,65 @@ public class ManifestServletTest
     servlet.doGet( request, response );
 
     verify( output ).write( manifestContent.getBytes( "US-ASCII" ) );
+  }
+
+  @Test
+  public void doGet_whenDisabled()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "user.agent", "ie9" ) );
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final Cookie[] cookies =
+      {
+        new Cookie( AbstractManifestServlet.DISABLE_MANIFEST_COOKIE_NAME,
+                    AbstractManifestServlet.DISABLE_MANIFEST_COOKIE_VALUE )
+      };
+    when( request.getCookies() ).thenReturn( cookies );
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+
+    servlet.doGet( request, response );
+
+    verify( response ).sendError( HttpServletResponse.SC_GONE );
+  }
+
+  @Test
+  public void isAppCacheDisabled()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    {
+      final HttpServletRequest request = mock( HttpServletRequest.class );
+      when( request.getCookies() ).thenReturn( null );
+      assertEquals( servlet.isAppCacheDisabled( request ), false );
+    }
+
+    {
+      final HttpServletRequest request = mock( HttpServletRequest.class );
+      final Cookie[] cookies = { new Cookie( "X", "y" ), new Cookie( "X1", "y2" ) };
+      when( request.getCookies() ).thenReturn( cookies );
+      assertEquals( servlet.isAppCacheDisabled( request ), false );
+    }
+
+    {
+      final HttpServletRequest request = mock( HttpServletRequest.class );
+      final Cookie[] cookies = { new Cookie( AbstractManifestServlet.DISABLE_MANIFEST_COOKIE_NAME, "someValue" ) };
+      when( request.getCookies() ).thenReturn( cookies );
+      assertEquals( servlet.isAppCacheDisabled( request ), false );
+    }
+
+    {
+      final HttpServletRequest request = mock( HttpServletRequest.class );
+      final Cookie[] cookies =
+        {
+          new Cookie( "X1", "y2" ),
+          new Cookie( AbstractManifestServlet.DISABLE_MANIFEST_COOKIE_NAME, AbstractManifestServlet.DISABLE_MANIFEST_COOKIE_VALUE )
+        };
+      when( request.getCookies() ).thenReturn( cookies );
+      assertEquals( servlet.isAppCacheDisabled( request ), true );
+    }
   }
 
   @Test
