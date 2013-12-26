@@ -2,6 +2,7 @@ package org.realityforge.gwt.appcache.linker;
 
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 @SuppressWarnings( "deprecation" )
 final class TestConfigurationProperty
@@ -18,7 +19,7 @@ final class TestConfigurationProperty
   }
 
   @Override
-  public int compareTo( final TestConfigurationProperty o )
+  public int compareTo( @Nonnull final TestConfigurationProperty o )
   {
     return _name.compareTo( o.getName() );
   }
