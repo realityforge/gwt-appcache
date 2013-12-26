@@ -3,6 +3,7 @@ package org.realityforge.gwt.appcache.linker;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import java.util.List;
 
+@SuppressWarnings( "deprecation" )
 final class TestConfigurationProperty
   implements ConfigurationProperty, Comparable<TestConfigurationProperty>
 {
