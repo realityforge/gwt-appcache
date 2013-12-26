@@ -15,11 +15,11 @@ define 'gwt-appcache' do
   pom.add_github_project("realityforge/gwt-appcache")
   pom.add_developer('realityforge', "Peter Donald")
   pom.add_developer('dankurka', "Daniel Kurka")
-  pom.provided.concat [:javax_servlet, :gwt_user, :gwt_dev]
+  pom.provided.concat [:javax_servlet, :javax_annotation, :gwt_user, :gwt_dev]
 
   desc "GWT AppCache client code"
   define 'client' do
-    compile.with :gwt_user, :gwt_dev
+    compile.with :javax_annotation, :gwt_user
 
     test.using :testng
     test.with :mockito
@@ -31,7 +31,7 @@ define 'gwt-appcache' do
 
   desc "GWT AppCache Linker"
   define 'linker' do
-    compile.with :gwt_user, :gwt_dev, project('server')
+    compile.with :javax_annotation, :gwt_user, :gwt_dev, project('server')
 
     test.using :testng
     test.with :mockito
@@ -43,7 +43,7 @@ define 'gwt-appcache' do
 
   desc "GWT AppCache server code"
   define 'server' do
-    compile.with :javax_servlet, :gwt_user, :gwt_dev
+    compile.with :javax_servlet, :javax_annotation, :gwt_user, :gwt_dev
 
     test.using :testng
     test.with :mockito

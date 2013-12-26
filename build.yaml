@@ -4,6 +4,7 @@ repositories:
 
 artifacts:
   javax_servlet: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:jar:1.0
+  javax_annotation: com.google.code.findbugs:jsr305:jar:2.0.1
   gwt_user: com.google.gwt:gwt-user:jar:2.5.1
   gwt_dev: com.google.gwt:gwt-dev:jar:2.5.1
 
