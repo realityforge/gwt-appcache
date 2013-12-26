@@ -15,8 +15,8 @@ import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -24,6 +24,7 @@ import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.Permutation;
+import org.realityforge.gwt.appcache.server.PermutationDescriptor;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
 
 @LinkerOrder( LinkerOrder.Order.POST )
@@ -269,24 +270,23 @@ public final class AppcacheLinker
     }
   }
 
-  private Map<String, Set<BindingProperty>> collectPermutationSelectors( final LinkerContext context,
-                                                                         final Collection<PermutationArtifact> artifacts )
+  private List<PermutationDescriptor> collectPermutationSelectors( final LinkerContext context,
+                                                                   final Collection<PermutationArtifact> artifacts )
   {
     final Set<String> ignoreConfigs =
       getConfigurationValues( context, IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME );
     return collectPermutationSelectors( artifacts, ignoreConfigs );
   }
 
-  final Map<String, Set<BindingProperty>> collectPermutationSelectors( final Collection<PermutationArtifact> artifacts,
+  final List<PermutationDescriptor> collectPermutationSelectors( final Collection<PermutationArtifact> artifacts,
                                                                        final Set<String> ignoreConfigs )
   {
-    final Map<String, Set<BindingProperty>> permutationBindings = new HashMap<String, Set<BindingProperty>>();
+    final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
     for ( final PermutationArtifact artifact : artifacts )
     {
       final Permutation permutation = artifact.getPermutation();
-      final HashSet<BindingProperty> calculatedBindings = new HashSet<BindingProperty>();
+      final List<BindingProperty> calculatedBindings = new ArrayList<BindingProperty>();
       final HashSet<String> completed = new HashSet<String>();
-      permutationBindings.put( permutation.getPermutationName(), calculatedBindings );
 
       final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
       final Set<BindingProperty> firstBindingProperties = bindings.values().iterator().next();
@@ -303,8 +303,9 @@ public final class AppcacheLinker
           completed.add( key );
         }
       }
+      descriptors.add( new PermutationDescriptor( permutation.getPermutationName(), calculatedBindings ) );
     }
-    return permutationBindings;
+    return descriptors;
   }
 
   final HashSet<String> collectValuesForKey( final Map<Integer, Set<BindingProperty>> bindings, final String key )

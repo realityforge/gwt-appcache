@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -22,6 +23,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.Permutation;
+import org.realityforge.gwt.appcache.server.PermutationDescriptor;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -110,30 +112,41 @@ public class AppcacheLinkerTest
     addPermutation( artifacts, "Z", 0, binding2, new HashSet<String>() );
 
     final HashSet<String> ignoreConfigs = new HashSet<String>();
-    final Map<String, Set<BindingProperty>> values = linker.collectPermutationSelectors( artifacts, ignoreConfigs );
+    final List<PermutationDescriptor> values = linker.collectPermutationSelectors( artifacts, ignoreConfigs );
 
     assertEquals( values.size(), 3 );
 
-    assertTrue( values.containsKey( "X" ) );
-    final Set<BindingProperty> x = values.get( "X" );
+    final List<BindingProperty> x = ensureBinding( values, "X" );
     assertEquals( x.size(), 1 );
     final BindingProperty b_x = x.iterator().next();
     assertEquals( b_x.getName(), "user.agent" );
     assertEquals( b_x.getValue(), "ie8,ie9,ie10" );
 
-    assertTrue( values.containsKey( "Z" ) );
-    final Set<BindingProperty> z = values.get( "Z" );
+    final List<BindingProperty> z = ensureBinding( values, "Z" );
     assertEquals( z.size(), 1 );
     final BindingProperty b_z = z.iterator().next();
     assertEquals( b_z.getName(), "user.agent" );
     assertEquals( b_z.getValue(), "gecko_16" );
 
-    assertTrue( values.containsKey( "Y" ) );
-    final Set<BindingProperty> y = values.get( "Y" );
+    final List<BindingProperty> y = ensureBinding( values, "Y" );
     assertEquals( y.size(), 1 );
     final BindingProperty b_y = y.iterator().next();
     assertEquals( b_y.getName(), "user.agent" );
     assertEquals( b_y.getValue(), "safari" );
+  }
+
+  private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> descriptors,
+                                               final String permutationName )
+  {
+    for ( final PermutationDescriptor descriptor : descriptors )
+    {
+      if ( descriptor.getPermutationName().equals( permutationName ) )
+      {
+        return descriptor.getBindingProperties();
+      }
+    }
+    fail( "Unable to locate permutation: " + permutationName );
+    return null;
   }
 
   private Permutation addPermutation( final ArrayList<PermutationArtifact> artifacts,

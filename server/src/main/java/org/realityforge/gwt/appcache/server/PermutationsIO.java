@@ -4,9 +4,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -87,19 +84,19 @@ public final class PermutationsIO
     descriptors.add( new PermutationDescriptor( strongName, list ) );
   }
 
-  public static String serialize( final Map<String, Set<BindingProperty>> permutationBindings )
+  public static String serialize( final List<PermutationDescriptor> descriptors )
     throws Exception
   {
     final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     final Element permutationsNode = document.createElement( PERMUTATIONS );
     document.appendChild( permutationsNode );
 
-    for ( final Entry<String, Set<BindingProperty>> entry : permutationBindings.entrySet() )
+    for ( final PermutationDescriptor descriptor : descriptors )
     {
       final Element node = document.createElement( PERMUTATION_NODE );
-      node.setAttribute( PERMUTATION_NAME, entry.getKey() );
+      node.setAttribute( PERMUTATION_NAME, descriptor.getPermutationName() );
       permutationsNode.appendChild( node );
-      for ( final BindingProperty b : entry.getValue() )
+      for ( final BindingProperty b : descriptor.getBindingProperties() )
       {
         final Element variable = document.createElement( b.getName() );
         variable.appendChild( document.createTextNode( b.getValue() ) );

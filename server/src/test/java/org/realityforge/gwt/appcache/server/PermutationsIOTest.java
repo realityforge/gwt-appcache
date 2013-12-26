@@ -1,10 +1,8 @@
 package org.realityforge.gwt.appcache.server;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
@@ -67,21 +65,21 @@ public class PermutationsIOTest
     final String value22 = "smallish";
     final String value31 = "ie8,ie9,ie10,gecko1_8";
 
-    final HashMap<String, Set<BindingProperty>> input = new HashMap<String, Set<BindingProperty>>();
-    final HashSet<BindingProperty> input1 = new HashSet<BindingProperty>();
+    final ArrayList<PermutationDescriptor> input = new ArrayList<PermutationDescriptor>();
+    final ArrayList<BindingProperty> input1 = new ArrayList<BindingProperty>();
     input1.add( new BindingProperty( key1, value11 ) );
     input1.add( new BindingProperty( key2, value12 ) );
     input1.add( new BindingProperty( key3, value13 ) );
-    input.put( permutation1, input1 );
+    input.add( new PermutationDescriptor( permutation1, input1 ) );
 
-    final HashSet<BindingProperty> input2 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> input2 = new ArrayList<BindingProperty>();
     input2.add( new BindingProperty( key1, value21 ) );
     input2.add( new BindingProperty( key2, value22 ) );
-    input.put( permutation2, input2 );
+    input.add( new PermutationDescriptor( permutation2, input2 ) );
 
-    final HashSet<BindingProperty> input3 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> input3 = new ArrayList<BindingProperty>();
     input3.add( new BindingProperty( key1, value31 ) );
-    input.put( permutation3, input3 );
+    input.add( new PermutationDescriptor( permutation3, input3 ) );
 
     final String output = PermutationsIO.serialize( input );
     final List<PermutationDescriptor> descriptors =
