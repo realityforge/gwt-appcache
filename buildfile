@@ -3,7 +3,7 @@ require 'buildr/git_auto_version'
 require 'buildr/top_level_generate_dir'
 require 'buildr/gpg'
 
-desc 'GWT Appcache Linker and server support'
+desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
   project.group = 'org.realityforge.gwt.appcache'
   compile.options.source = '1.6'
@@ -12,6 +12,7 @@ define 'gwt-appcache' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
+  desc "GWT AppCache client code"
   define 'client' do
     compile.with :gwt_user, :gwt_dev
 
@@ -23,6 +24,7 @@ define 'gwt-appcache' do
     package(:javadoc)
   end
 
+  desc "GWT AppCache Linker"
   define 'linker' do
     compile.with :gwt_user, :gwt_dev, project('server')
 
@@ -34,6 +36,7 @@ define 'gwt-appcache' do
     package(:javadoc)
   end
 
+  desc "GWT AppCache server code"
   define 'server' do
     compile.with :javax_servlet, :gwt_user, :gwt_dev
 
