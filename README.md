@@ -105,7 +105,7 @@ if ( null != cache )
   } );
 
   // Ask the browser to recheck the cache
-  cache.update();
+  cache.requestUpdate();
 
   ...
 ```
@@ -147,11 +147,6 @@ Publish to maven central
 ------------------------
 
 Publish jars with source, javadocs and poms to maven central.
-
-Catch exceptions in update
---------------------------
-
-Wrap update in exception handler.
 
 Server-side selection
 ---------------------

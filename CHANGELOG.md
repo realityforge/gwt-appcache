@@ -1,5 +1,7 @@
 ## 0.6:
 
+* Rename ApplicationCache.update to requestUpdate and make it return a
+  boolean value indicating whether the browser accepted request.
 * Remove "appcache_ignorable_permutation_properties" configuration property
   and use builtin mechanisms for determining selection properties.
 * Generate a more complete Maven POM file.

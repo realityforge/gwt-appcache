@@ -70,9 +70,21 @@ public abstract class ApplicationCache
 
   public abstract void swapCache();
 
-  public abstract void update();
+  /**
+   * Request that the browser update the application cache.
+   * This may fail if the application is not cached.
+   *
+   * @return false if unable to request update.
+   */
+  public abstract boolean requestUpdate();
 
-  public abstract void removeCache();
+  /**
+   * Attempt to remove the application from the cache.
+   * This is achieved by forcing the server to return a 404 or 410 when updating the manifest.
+   *
+   * @return true if request succeeded.
+   */
+  public abstract boolean removeCache();
 
   @Nonnull
   public final HandlerRegistration addCheckingHandler( @Nonnull CheckingEvent.Handler handler )

@@ -24,12 +24,14 @@ final class TestApplicationCache
   }
 
   @Override
-  public void update()
+  public boolean requestUpdate()
   {
+    return true;
   }
 
   @Override
-  public void removeCache()
+  public boolean removeCache()
   {
+    return true;
   }
 }

@@ -56,10 +56,18 @@ public final class Html5ApplicationCache
   }-*/;
 
   @Override
-  public void update()
+  public boolean requestUpdate()
   {
     enableAppCache();
-    update0();
+    try
+    {
+      update0();
+      return true;
+    }
+    catch ( final Throwable t )
+    {
+      return false;
+    }
   }
 
   private native void update0() /*-{
@@ -71,7 +79,7 @@ public final class Html5ApplicationCache
   }-*/;
 
   @Override
-  public void removeCache()
+  public boolean removeCache()
   {
     Cookies.setCookie( DISABLE_MANIFEST_COOKIE_NAME, DISABLE_MANIFEST_COOKIE_VALUE );
 
@@ -119,7 +127,16 @@ public final class Html5ApplicationCache
         cacheRemovalCleanup( registrations );
       }
     } ) );
-    update0();
+    try
+    {
+      update0();
+      return true;
+    }
+    catch ( final Throwable t )
+    {
+      cacheRemovalCleanup( registrations );
+      return false;
+    }
   }
 
   private void cacheRemovalCleanup( final ArrayList<HandlerRegistration> registrations )
