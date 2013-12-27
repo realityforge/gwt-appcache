@@ -143,11 +143,6 @@ file is returned to the requester.
 TODO:
 =====
 
-Publish to maven central
-------------------------
-
-Publish jars with source, javadocs and poms to maven central.
-
 Server-side selection
 ---------------------
 
