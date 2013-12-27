@@ -148,16 +148,16 @@ Publish to maven central
 
 Publish jars with source, javadocs and poms to maven central.
 
+Catch exceptions in update
+--------------------------
+
+Wrap update in exception handler.
+
 Server-side selection
 ---------------------
 
 Consider doing server-side selection of configuration properties. Deriving browser
 properties from cookies if need be.
-
-Catch exceptions in update
---------------------------
-
-Wrap update in exception handler.
 
 Handle no-cache resources
 -------------------------
