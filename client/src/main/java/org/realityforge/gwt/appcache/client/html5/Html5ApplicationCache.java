@@ -51,7 +51,20 @@ public final class Html5ApplicationCache
   }
 
   @Override
-  public native void swapCache() /*-{
+  public boolean swapCache()
+  {
+    try
+    {
+      swapCache0();
+      return true;
+    }
+    catch ( final Throwable t )
+    {
+      return false;
+    }
+  }
+
+  private native void swapCache0() /*-{
     $wnd.applicationCache.swapCache();
   }-*/;
 

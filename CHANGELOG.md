@@ -1,5 +1,7 @@
 ## 0.6:
 
+* Refactor ApplicationCache.swapCache to return a boolean value indicating
+  whether the browser accepted request.
 * Rename ApplicationCache.update to requestUpdate and make it return a
   boolean value indicating whether the browser accepted request.
 * Remove "appcache_ignorable_permutation_properties" configuration property

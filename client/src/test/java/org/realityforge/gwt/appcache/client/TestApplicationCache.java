@@ -19,8 +19,9 @@ final class TestApplicationCache
   }
 
   @Override
-  public void swapCache()
+  public boolean swapCache()
   {
+    return true;
   }
 
   @Override

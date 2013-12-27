@@ -68,7 +68,13 @@ public abstract class ApplicationCache
   @Nonnull
   public abstract Status getStatus();
 
-  public abstract void swapCache();
+  /**
+   * Request that the browser swap in the new application cache.
+   * This may fail if there is no update or no application cache.
+   *
+   * @return false if unable swap in cache.
+   */
+  public abstract boolean swapCache();
 
   /**
    * Request that the browser update the application cache.
