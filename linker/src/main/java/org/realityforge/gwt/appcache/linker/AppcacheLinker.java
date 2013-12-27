@@ -27,7 +27,7 @@ import org.realityforge.gwt.appcache.server.Permutation;
 import org.realityforge.gwt.appcache.server.PermutationDescriptor;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
 
-@LinkerOrder( LinkerOrder.Order.POST )
+@LinkerOrder(LinkerOrder.Order.POST)
 @Shardable
 public final class AppcacheLinker
   extends AbstractLinker
@@ -169,7 +169,9 @@ public final class AppcacheLinker
    * @param cacheResources  the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
-  final String writeManifest( final TreeLogger logger, @Nonnull final Set<String> staticResources, @Nonnull final Set<String> cacheResources )
+  final String writeManifest( final TreeLogger logger,
+                              @Nonnull final Set<String> staticResources,
+                              @Nonnull final Set<String> cacheResources )
     throws UnableToCompleteException
   {
     final StringBuilder sb = new StringBuilder();
@@ -279,7 +281,7 @@ public final class AppcacheLinker
   }
 
   final List<PermutationDescriptor> collectPermutationSelectors( final Collection<PermutationArtifact> artifacts,
-                                                                       final Set<String> ignoreConfigs )
+                                                                 final Set<String> ignoreConfigs )
   {
     final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
     for ( final PermutationArtifact artifact : artifacts )
