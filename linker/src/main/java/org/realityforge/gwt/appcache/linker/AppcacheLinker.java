@@ -10,15 +10,17 @@ import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.core.ext.linker.EmittedArtifact;
 import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.core.ext.linker.LinkerOrder;
+import com.google.gwt.core.ext.linker.SelectionProperty;
 import com.google.gwt.core.ext.linker.Shardable;
 import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
@@ -33,8 +35,6 @@ public final class AppcacheLinker
   extends AbstractLinker
 {
   public static final String STATIC_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_static_files";
-  public static final String IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME =
-    "appcache_ignorable_permutation_properties";
 
   @Override
   public String getDescription()
@@ -101,7 +101,7 @@ public final class AppcacheLinker
       results.add( emitString( logger, maniFest, filename ) );
     }
 
-    results.add( createPermutationMap( logger, context, permutationArtifacts ) );
+    results.add( createPermutationMap( logger, permutationArtifacts ) );
     return results;
   }
 
@@ -110,7 +110,7 @@ public final class AppcacheLinker
                                         final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
-    final Permutation permutation = calculatePermutation( context, artifacts );
+    final Permutation permutation = calculatePermutation( logger, context, artifacts );
     if ( null == permutation )
     {
       logger.log( Type.ERROR, "Unable to calculate permutation " );
@@ -212,7 +212,7 @@ public final class AppcacheLinker
     {
       if ( path.codePointAt( i ) > 255 )
       {
-        logger.log( TreeLogger.Type.ERROR, "Manifest entry '" + path + "' contains illegal character at index " + i );
+        logger.log( Type.ERROR, "Manifest entry '" + path + "' contains illegal character at index " + i );
         throw new UnableToCompleteException();
       }
       final char ch = path.charAt( i );
@@ -256,13 +256,12 @@ public final class AppcacheLinker
   }
 
   final EmittedArtifact createPermutationMap( final TreeLogger logger,
-                                              final LinkerContext context,
                                               final Collection<PermutationArtifact> artifacts )
     throws UnableToCompleteException
   {
     try
     {
-      final String string = PermutationsIO.serialize( collectPermutationSelectors( context, artifacts ) );
+      final String string = PermutationsIO.serialize( collectPermutationSelectors( logger, artifacts ) );
       return emitString( logger, string, PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     }
     catch ( final Exception e )
@@ -272,16 +271,8 @@ public final class AppcacheLinker
     }
   }
 
-  private List<PermutationDescriptor> collectPermutationSelectors( final LinkerContext context,
-                                                                   final Collection<PermutationArtifact> artifacts )
-  {
-    final Set<String> ignoreConfigs =
-      getConfigurationValues( context, IGNORE_CONFIGURATIONS_CONFIGURATION_PROPERTY_NAME );
-    return collectPermutationSelectors( artifacts, ignoreConfigs );
-  }
-
-  final List<PermutationDescriptor> collectPermutationSelectors( final Collection<PermutationArtifact> artifacts,
-                                                                 final Set<String> ignoreConfigs )
+  final List<PermutationDescriptor> collectPermutationSelectors( final TreeLogger logger,
+                                                                 final Collection<PermutationArtifact> artifacts )
   {
     final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
     for ( final PermutationArtifact artifact : artifacts )
@@ -295,7 +286,7 @@ public final class AppcacheLinker
       for ( final BindingProperty p : firstBindingProperties )
       {
         final String key = p.getName();
-        if ( !ignoreConfigs.contains( key ) && !completed.contains( key ) )
+        if ( !completed.contains( key ) )
         {
           final HashSet<String> values = collectValuesForKey( bindings, key );
           if ( 1 == bindings.size() || values.size() > 1 )
@@ -305,8 +296,17 @@ public final class AppcacheLinker
           completed.add( key );
         }
       }
+      Collections.sort( calculatedBindings, new Comparator<BindingProperty>()
+      {
+        @Override
+        public int compare( final BindingProperty o1, final BindingProperty o2 )
+        {
+          return o2.getComponents().length - o1.getComponents().length;
+        }
+      } );
       descriptors.add( new PermutationDescriptor( permutation.getPermutationName(), calculatedBindings ) );
     }
+    logger.log( Type.DEBUG, "Permutation map created with " + descriptors.size() + " descriptors." );
     return descriptors;
   }
 
@@ -343,10 +343,13 @@ public final class AppcacheLinker
   /**
    * Return the permutation for a single link step.
    */
-  final Permutation calculatePermutation( final LinkerContext context, final ArtifactSet artifacts )
+  final Permutation calculatePermutation( final TreeLogger logger,
+                                          final LinkerContext context,
+                                          final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
     Permutation permutation = null;
+
     for ( final SelectionInformation result : artifacts.find( SelectionInformation.class ) )
     {
       final String strongName = result.getStrongName();
@@ -368,10 +371,23 @@ public final class AppcacheLinker
       }
       final Set<BindingProperty> list = new HashSet<BindingProperty>();
       bindings.put( softPermutationId, list );
-      for ( final Entry<String, String> entry : result.getPropMap().entrySet() )
+      for ( final SelectionProperty property : context.getProperties() )
       {
-        list.add( new BindingProperty( entry.getKey(), entry.getValue() ) );
+        if ( !property.isDerived() )
+        {
+          final String name = property.getName();
+          final String value = result.getPropMap().get( name );
+          if ( null != value )
+          {
+            list.add( new BindingProperty( name, value ) );
+          }
+        }
       }
+    }
+    if ( null != permutation )
+    {
+      logger.log( Type.DEBUG, "Calculated Permutation: " + permutation.getPermutationName() +
+                              " Properties: " + permutation.getBindingProperties() );
     }
     return permutation;
   }

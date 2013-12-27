@@ -133,11 +133,7 @@ permutations. Typically these include values of properties such as "user.agent".
 If the compiler is using soft permutations then it is possible that multiple
 deferred-binding properties will be served using a single permutation, in which
 case the descriptor will have comma separate values in the permutations.xml for
-that permutation. It is possible to explicitly ignore specific deferred-binding
-properties by extending the gwt property "appcache_ignorable_permutation_properties".
-This is useful for when runtime detection is used to test for a feature regardless.
-This is configuration actually defaults to including some html5 features such as
-"audioElementSupport".
+that permutation.
 
 The manifest servlet is then responsible for reading the permutations.xml and
 inspecting the incoming request and generating properties that enable it to select

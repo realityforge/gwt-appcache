@@ -8,6 +8,7 @@ import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.core.ext.linker.EmittedArtifact;
 import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
+import com.google.gwt.core.ext.linker.SelectionProperty;
 import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
 import java.io.IOException;
@@ -63,16 +64,16 @@ public class AppcacheLinkerTest
     final AppcacheLinker linker = new AppcacheLinker();
     final TreeMap<Integer, Set<BindingProperty>> bindings = new TreeMap<Integer, Set<BindingProperty>>();
     final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
-    binding0.add( new BindingProperty( "a", "z1" ) );
-    binding0.add( new BindingProperty( "b", "z2" ) );
+    bp( binding0, "a", "z1" );
+    bp( binding0, "b", "z2" );
     bindings.put( 0, binding0 );
     final HashSet<String> values0 = linker.collectValuesForKey( bindings, "a" );
     assertEquals( values0.size(), 1 );
     assertTrue( values0.contains( "z1" ) );
 
     final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
-    binding1.add( new BindingProperty( "a", "w1" ) );
-    binding1.add( new BindingProperty( "b", "w2" ) );
+    bp( binding1, "a", "w1" );
+    bp( binding1, "b", "w2" );
     bindings.put( 1, binding1 );
 
     final HashSet<String> values1 = linker.collectValuesForKey( bindings, "a" );
@@ -88,51 +89,61 @@ public class AppcacheLinkerTest
 
     final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
     final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
-    binding0.add( new BindingProperty( "user.agent", "ie8" ) );
-    binding0.add( new BindingProperty( "some.key", "blah" ) );
-    binding0.add( new BindingProperty( "other.key", "blee" ) );
+    bp( binding0, "user.agent", "ie8" );
+    bp( binding0, "some.key", "blah" );
+    bp( binding0, "other.key", "blee" );
     final Permutation permutation = addPermutation( artifacts, "X", 0, binding0, new HashSet<String>() );
     final HashSet<BindingProperty> binding01 = new HashSet<BindingProperty>();
-    binding01.add( new BindingProperty( "user.agent", "ie9" ) );
-    binding01.add( new BindingProperty( "some.key", "blah" ) );
-    binding01.add( new BindingProperty( "other.key", "blee" ) );
+    bp( binding01, "user.agent", "ie9" );
+    bp( binding01, "some.key", "blah" );
+    bp( binding01, "other.key", "blee" );
     addSoftPermutation( permutation, 1, binding01, new HashSet<String>() );
     final HashSet<BindingProperty> binding02 = new HashSet<BindingProperty>();
-    binding02.add( new BindingProperty( "user.agent", "ie10" ) );
-    binding02.add( new BindingProperty( "some.key", "blah" ) );
-    binding02.add( new BindingProperty( "other.key", "blee" ) );
+    bp( binding02, "user.agent", "ie10" );
+    bp( binding02, "some.key", "blah" );
+    bp( binding02, "other.key", "blee" );
     addSoftPermutation( permutation, 2, binding02, new HashSet<String>() );
 
     final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
-    binding1.add( new BindingProperty( "user.agent", "safari" ) );
+    bp( binding1, "user.agent", "safari" );
     addPermutation( artifacts, "Y", 0, binding1, new HashSet<String>() );
 
     final HashSet<BindingProperty> binding2 = new HashSet<BindingProperty>();
-    binding2.add( new BindingProperty( "user.agent", "gecko_16" ) );
+    bp( binding2, "user.agent", "gecko_16" );
     addPermutation( artifacts, "Z", 0, binding2, new HashSet<String>() );
 
-    final HashSet<String> ignoreConfigs = new HashSet<String>();
-    final List<PermutationDescriptor> values = linker.collectPermutationSelectors( artifacts, ignoreConfigs );
+    final List<PermutationDescriptor> values = linker.collectPermutationSelectors( TreeLogger.NULL, artifacts );
 
     assertEquals( values.size(), 3 );
 
-    final List<BindingProperty> x = ensureBinding( values, "X" );
-    assertEquals( x.size(), 1 );
-    final BindingProperty b_x = x.iterator().next();
-    assertEquals( b_x.getName(), "user.agent" );
-    assertEquals( b_x.getValue(), "ie8,ie9,ie10" );
+    final List<BindingProperty> x = ensureBinding( values, "X", 1 );
+    assertProperty( x.get( 0 ), "user.agent", "ie8,ie9,ie10" );
 
-    final List<BindingProperty> z = ensureBinding( values, "Z" );
-    assertEquals( z.size(), 1 );
-    final BindingProperty b_z = z.iterator().next();
-    assertEquals( b_z.getName(), "user.agent" );
-    assertEquals( b_z.getValue(), "gecko_16" );
+    final List<BindingProperty> z = ensureBinding( values, "Z", 1 );
+    assertProperty( z.get( 0 ), "user.agent", "gecko_16" );
 
-    final List<BindingProperty> y = ensureBinding( values, "Y" );
-    assertEquals( y.size(), 1 );
-    final BindingProperty b_y = y.iterator().next();
-    assertEquals( b_y.getName(), "user.agent" );
-    assertEquals( b_y.getValue(), "safari" );
+    final List<BindingProperty> y = ensureBinding( values, "Y", 1 );
+    assertProperty( y.get( 0 ), "user.agent", "safari" );
+  }
+
+  private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> values,
+                                               final String permutationName,
+                                               final int propertyCount )
+  {
+    final List<BindingProperty> properties = ensureBinding( values, permutationName );
+    assertEquals( properties.size(), propertyCount );
+    return properties;
+  }
+
+  private void assertProperty( final BindingProperty property, final String key, final String value )
+  {
+    assertEquals( property.getName(), key );
+    assertEquals( property.getValue(), value );
+  }
+
+  private void bp( final HashSet<BindingProperty> properties, final String key, final String value )
+  {
+    properties.add( new BindingProperty( key, value ) );
   }
 
   private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> descriptors,
@@ -150,10 +161,10 @@ public class AppcacheLinkerTest
   }
 
   private Permutation addPermutation( final ArrayList<PermutationArtifact> artifacts,
-                               final String permutationName,
-                               final int permutationIndex,
-                               final HashSet<BindingProperty> bindings,
-                               final HashSet<String> files )
+                                      final String permutationName,
+                                      final int permutationIndex,
+                                      final HashSet<BindingProperty> bindings,
+                                      final HashSet<String> files )
   {
     final Permutation permutation = new Permutation( permutationName );
     addSoftPermutation( permutation, permutationIndex, bindings, files );
@@ -215,15 +226,25 @@ public class AppcacheLinkerTest
     final TreeMap<String, String> configs2 = new TreeMap<String, String>();
     configs2.put( "user.agent", "ie9" );
     configs2.put( "screen.size", "large" );
+    configs2.put( "geolocationSupport", "maybe" );
     artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
     final TreeMap<String, String> configs3 = new TreeMap<String, String>();
     configs3.put( "user.agent", "ie9" );
     configs3.put( "screen.size", "small" );
+    configs3.put( "geolocationSupport", "maybe" );
     artifacts1.add( new SelectionInformation( "S2", 1, configs3 ) );
 
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
-    final Permutation permutation = linker.calculatePermutation( linkerContext, artifacts1 );
+
+    final TreeSet<SelectionProperty> properties = new TreeSet<SelectionProperty>();
+    properties.add( new TestSelectionProperty( "user.agent", false ) );
+    properties.add( new TestSelectionProperty( "screen.size", false ) );
+    properties.add( new TestSelectionProperty( "geolocationSupport", true ) );
+
+    when( linkerContext.getProperties() ).thenReturn( properties );
+
+    final Permutation permutation = linker.calculatePermutation( TreeLogger.NULL, linkerContext, artifacts1 );
 
     assertEquals( permutation.getPermutationName(), "S2" );
     final Set<String> files = permutation.getPermutationFiles();
@@ -267,7 +288,7 @@ public class AppcacheLinkerTest
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
 
     {
-      final ArtifactSet artifactSet = linker.perPermutationLink( null, linkerContext, artifacts1 );
+      final ArtifactSet artifactSet = linker.perPermutationLink( TreeLogger.NULL, linkerContext, artifacts1 );
       final SortedSet<PermutationArtifact> permutationArtifacts = artifactSet.find( PermutationArtifact.class );
       assertEquals( permutationArtifacts.size(), 1 );
       final PermutationArtifact permutationArtifact = permutationArtifacts.iterator().next();
@@ -278,7 +299,7 @@ public class AppcacheLinkerTest
     }
 
     {
-      final ArtifactSet artifactSet = linker.link( null, linkerContext, artifacts1, true );
+      final ArtifactSet artifactSet = linker.link( TreeLogger.NULL, linkerContext, artifacts1, true );
       final SortedSet<PermutationArtifact> permutationArtifacts = artifactSet.find( PermutationArtifact.class );
       assertEquals( permutationArtifacts.size(), 1 );
       final PermutationArtifact permutationArtifact = permutationArtifacts.iterator().next();
@@ -299,31 +320,31 @@ public class AppcacheLinkerTest
 
     artifacts1.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
     final HashSet<BindingProperty> configs2 = new HashSet<BindingProperty>();
-    configs2.add( new BindingProperty( "user.agent", "ie9" ) );
+    bp( configs2, "user.agent", "ie9" );
     permutation.getBindingProperties().put( 0, configs2 );
 
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
 
-    final EmittedArtifact artifacts = linker.createPermutationMap( null, linkerContext, artifacts1 );
+    final EmittedArtifact artifacts = linker.createPermutationMap( TreeLogger.NULL, artifacts1 );
     assertEquals( artifacts.getVisibility(), Visibility.Public );
     assertEquals( artifacts.getPartialPath(), "permutations.xml" );
     assertTrue( ( artifacts.getLastModified() - System.currentTimeMillis() < 1000L ) );
     final String content = toContents( artifacts );
     assertEquals( content, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations>\n" +
-                          "<permutation name=\"X\">\n" +
-                          "<user.agent>ie9</user.agent>\n" +
-                          "</permutation>\n" +
-                          "</permutations>\n" );
+                           "<permutation name=\"X\">\n" +
+                           "<user.agent>ie9</user.agent>\n" +
+                           "</permutation>\n" +
+                           "</permutations>\n" );
   }
 
   private String toContents( final EmittedArtifact artifacts )
     throws UnableToCompleteException, IOException
   {
     final InputStream contents = artifacts.getContents( TreeLogger.NULL );
-    final StringBuilder sb = new StringBuilder(  );
+    final StringBuilder sb = new StringBuilder();
     int ch;
-    while(-1 != (ch=contents.read()))
+    while ( -1 != ( ch = contents.read() ) )
     {
       sb.append( (char) ch );
     }

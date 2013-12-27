@@ -3,15 +3,4 @@
 
   <!-- Define the property that identifies additional static files that be included in the build -->
   <define-configuration-property name="appcache_static_files" is-multi-valued="true"/>
-
-  <!-- Define the property that controls which permutation selection properties are ignorable -->
-  <define-configuration-property name="appcache_ignorable_permutation_properties" is-multi-valued="true"/>
-
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="audioElementSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="canvasElementSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="videoElementSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="dragEventSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="storageSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="touchEventSupport"/>
-  <extend-configuration-property name="appcache_ignorable_permutation_properties" value="geolocationSupport"/>
 </module>
