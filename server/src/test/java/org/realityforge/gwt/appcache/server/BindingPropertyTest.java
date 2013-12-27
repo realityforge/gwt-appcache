@@ -13,6 +13,7 @@ public class BindingPropertyTest
     final BindingProperty property = new BindingProperty( key, value );
     assertEquals( property.getName(), key );
     assertEquals( property.getValue(), value );
+    assertEquals( property.getComponents().length, 1 );
     assertTrue( property.matches( value ) );
     assertFalse( property.matches( "XXX" + value + "XXX" ) );
   }
@@ -25,6 +26,7 @@ public class BindingPropertyTest
     final BindingProperty property = new BindingProperty( key, value );
     assertEquals( property.getName(), key );
     assertEquals( property.getValue(), value );
+    assertEquals( property.getComponents().length, 3 );
     assertTrue( property.matches( "1" ) );
     assertTrue( property.matches( "2" ) );
     assertTrue( property.matches( "3" ) );

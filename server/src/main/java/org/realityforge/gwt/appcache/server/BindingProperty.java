@@ -27,6 +27,12 @@ public final class BindingProperty
     return _value;
   }
 
+  @Nonnull
+  public String[] getComponents()
+  {
+    return _components;
+  }
+
   public boolean matches( @Nonnull final String value )
   {
     for ( final String component : _components )
