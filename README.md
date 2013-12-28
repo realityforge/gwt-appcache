@@ -108,6 +108,10 @@ This should be sufficient to get your application using the appcache. If you
 load the application in a modern browser you should see it making use of the
 cache in the console.
 
+A very simple example of this code is available in the
+[gwt-appcache-example](https://github.com/realityforge/gwt-appcache-example)
+project.
+
 How does it work?
 =================
 
