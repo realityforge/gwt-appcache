@@ -15,7 +15,7 @@ define 'gwt-appcache' do
   pom.add_github_project("realityforge/gwt-appcache")
   pom.add_developer('realityforge', "Peter Donald")
   pom.add_developer('dankurka', "Daniel Kurka")
-  pom.provided.concat [:javax_servlet, :javax_annotation, :gwt_user, :gwt_dev]
+  pom.provided_dependencies.concat [:javax_servlet, :javax_annotation, :gwt_user, :gwt_dev]
 
   desc "GWT AppCache client code"
   define 'client' do
