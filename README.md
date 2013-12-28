@@ -154,12 +154,12 @@ mode.
 Appendix
 --------
 
-* "A Beginner's Guide to Using the Application Cache":http://www.html5rocks.com/en/tutorials/appcache/beginner/
-* "Appcache Facts":http://appcachefacts.info/
+* [A Beginner's Guide to Using the Application Cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/)
+* [Appcache Facts](http://appcachefacts.info/)
 
 Credit
 ------
 
 This library began as a enhancement of similar functionality in the
-"MGWT":https://github.com/dankurka/mgwt project by Daniel Kurka. All
+[MGWT](https://github.com/dankurka/mgwt) project by Daniel Kurka. All
 credit goes to Daniel for the initial code and idea.
