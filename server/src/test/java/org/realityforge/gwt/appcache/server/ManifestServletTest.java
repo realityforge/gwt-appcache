@@ -71,6 +71,28 @@ public class ManifestServletTest
   }
 
   @Test
+  public void doGet_notFound()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "user.agent", "ie9" ) );
+
+    final String permutationContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations></permutations>\n";
+
+    final File permutations = createFile( "permutations", "xml", permutationContent );
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
+    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.getAbsolutePath() );
+
+    servlet.doGet( request, response );
+
+    verify( response ).sendError( HttpServletResponse.SC_NOT_FOUND );
+  }
+
+  @Test
   public void doGet_whenDisabled()
     throws Exception
   {
