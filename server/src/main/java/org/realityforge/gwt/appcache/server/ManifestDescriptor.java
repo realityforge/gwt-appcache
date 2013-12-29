@@ -45,7 +45,7 @@ public final class ManifestDescriptor
     final int cacheMode = 1;
     final int networkMode = 2;
     int mode = 0;
-    for( int i = 1; i < lines.length; i++ )
+    for ( int i = 1; i < lines.length; i++ )
     {
       final String line = lines[ i ].trim();
       if ( line.startsWith( "#" ) || 0 == line.length() )
@@ -113,13 +113,13 @@ public final class ManifestDescriptor
     sb.append( "NETWORK:\n" );
     for ( final String resource : _networkResources )
     {
-      if( CATCH_ALL.equals( resource ))
+      if ( CATCH_ALL.equals( resource ) )
       {
         sb.append( CATCH_ALL ).append( "\n" );
       }
       else
       {
-      sb.append( urlEncode( resource ) ).append( "\n" );
+        sb.append( urlEncode( resource ) ).append( "\n" );
       }
     }
 
