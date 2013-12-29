@@ -19,6 +19,21 @@ public class BindingPropertyTest
   }
 
   @Test
+  public void equals()
+  {
+    final String key = "MyKey";
+    final String value = "MyValue";
+    final BindingProperty property1 = new BindingProperty( key, value );
+    final BindingProperty property2 = new BindingProperty( key, value );
+    final BindingProperty property3 = new BindingProperty( key, value + "X" );
+    final BindingProperty property4 = new BindingProperty( key + "X", value );
+    assertTrue( property1.equals( property1 ) );
+    assertTrue( property1.equals( property2 ) );
+    assertFalse( property1.equals( property3 ) );
+    assertFalse( property1.equals( property4 ) );
+  }
+
+  @Test
   public void testMultiValued()
   {
     final String key = "MyKey";

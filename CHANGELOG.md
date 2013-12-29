@@ -1,4 +1,5 @@
 ## 0.7:
+* Implement equals() and hashcode() on BindingProperty
 * Add a utility method AbstractManifestServlet.loadAndMergeManifests that loads
   and merges the cache files for multiple permutations. This is useful when it
   is not possible to determine the exact permutation required for a client on
