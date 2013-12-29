@@ -251,6 +251,38 @@ public class ManifestServletTest
   }
 
   @Test
+  public void loadAndMergeManifests()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final String manifest1 = "CACHE MANIFEST\n\nCACHE:\n1\n2\n\n\nNETWORK:\nA\nB\n";
+    final String manifest2 = "CACHE MANIFEST\n\nCACHE:\n1\n3\n\n\nNETWORK:\nA\nC\n";
+
+    final File manifestFile1 = createFile( "manifest", "appcache", manifest1 );
+    final File manifestFile2 = createFile( "manifest", "appcache", manifest2 );
+
+    when( servlet.getServletContext().getRealPath( "/foo/myapp/m1.appcache" ) ).
+      thenReturn( manifestFile1.getAbsolutePath() );
+
+    when( servlet.getServletContext().getRealPath( "/foo/myapp/m2.appcache" ) ).
+      thenReturn( manifestFile2.getAbsolutePath() );
+
+    final String manifest = servlet.loadAndMergeManifests( "/foo/", "myapp", "m1", "m2" );
+    final ManifestDescriptor result = ManifestDescriptor.parse( manifest );
+    final List<String> cachedResources = result.getCachedResources();
+    assertEquals( cachedResources.size(), 3 );
+    assertTrue( cachedResources.contains( "1" ) );
+    assertTrue( cachedResources.contains( "2" ) );
+    assertTrue( cachedResources.contains( "3" ) );
+    final List<String> networkResources = result.getNetworkResources();
+    assertEquals( networkResources.size(), 3 );
+    assertTrue( networkResources.contains( "A" ) );
+    assertTrue( networkResources.contains( "B" ) );
+    assertTrue( networkResources.contains( "C" ) );
+  }
+
+  @Test
   public void calculateBindingPropertiesForClient()
     throws Exception
   {

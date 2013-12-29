@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -98,6 +99,29 @@ public abstract class AbstractManifestServlet
       }
     }
     return false;
+  }
+
+  /**
+   * Utility method that loads and merges the cache files for multiple permutations.
+   * This is useful when it is not possible to determine the exact permutation required
+   * for a client on the server. This defers the decision to the client but may result in
+   * extra files being downloaded.
+   */
+  protected final String loadAndMergeManifests( final String baseUrl,
+                                                final String moduleName,
+                                                final String... permutationNames )
+    throws ServletException
+  {
+    final ManifestDescriptor descriptor = new ManifestDescriptor();
+    for ( final String permutationName : permutationNames )
+    {
+      final String manifest = loadManifest( baseUrl, moduleName, permutationName );
+      final ManifestDescriptor other = ManifestDescriptor.parse( manifest );
+      descriptor.merge( other );
+    }
+    Collections.sort( descriptor.getCachedResources() );
+    Collections.sort( descriptor.getNetworkResources() );
+    return descriptor.toString();
   }
 
   protected final String loadManifest( final String baseUrl, final String moduleName, final String strongName )

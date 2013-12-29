@@ -1,4 +1,9 @@
 ## 0.7:
+* Add a utility method AbstractManifestServlet.loadAndMergeManifests that loads
+  and merges the cache files for multiple permutations. This is useful when it
+  is not possible to determine the exact permutation required for a client on
+  the server. This defers the decision to the client but may result in extra
+  files being downloaded.
 * Extract a ManifestDescriptor class to make managing manifests easier.
 * Add a template method AbstractManifestServlet.handleUnmatchedRequest to
   allow sub-classes the opportunity to intercept and handle the scenario
