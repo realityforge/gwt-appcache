@@ -63,10 +63,24 @@ public abstract class AbstractManifestServlet
       final String manifest = loadManifest( baseUrl, moduleName, strongName );
       serveStringManifest( response, manifest );
     }
-    else
+    else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
     {
       response.sendError( HttpServletResponse.SC_NOT_FOUND );
     }
+  }
+
+  /**
+   * Sub-classes can override this method to perform handle the inability to find a matching permutation. In which
+   * case the method should return true if the response has been handled.
+   */
+  protected boolean handleUnmatchedRequest( final HttpServletRequest request,
+                                            final HttpServletResponse response,
+                                            final String moduleName,
+                                            final String baseUrl,
+                                            final List<BindingProperty> computedBindings )
+    throws ServletException, IOException
+  {
+    return false;
   }
 
   protected boolean isAppCacheDisabled( final HttpServletRequest request )

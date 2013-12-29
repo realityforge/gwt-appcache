@@ -22,6 +22,30 @@ public class ManifestServletTest
     extends AbstractManifestServlet
   {
     private ServletContext _servletContext;
+    private boolean _unmatchedHandlerResponse;
+    private boolean _unmatchedHandlerCalled;
+
+    void setUnmatchedHandlerResponse( final boolean unmatchedHandlerResponse )
+    {
+      _unmatchedHandlerResponse = unmatchedHandlerResponse;
+    }
+
+    boolean hasUnmatchedHandlerBeenCalled()
+    {
+      return _unmatchedHandlerCalled;
+    }
+
+    @Override
+    protected boolean handleUnmatchedRequest( final HttpServletRequest request,
+                                              final HttpServletResponse response,
+                                              final String moduleName,
+                                              final String baseUrl,
+                                              final List<BindingProperty> computedBindings )
+      throws ServletException, IOException
+    {
+      _unmatchedHandlerCalled = true;
+      return _unmatchedHandlerResponse;
+    }
 
     @Override
     public ServletContext getServletContext()
@@ -90,6 +114,32 @@ public class ManifestServletTest
     servlet.doGet( request, response );
 
     verify( response ).sendError( HttpServletResponse.SC_NOT_FOUND );
+    assertTrue( servlet.hasUnmatchedHandlerBeenCalled() );
+  }
+
+  @Test
+  public void doGet_unmatchedHandlerResponds()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "user.agent", "ie9" ) );
+
+    final String permutationContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations></permutations>\n";
+
+    final File permutations = createFile( "permutations", "xml", permutationContent );
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
+    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.getAbsolutePath() );
+
+    servlet.setUnmatchedHandlerResponse( true );
+
+    servlet.doGet( request, response );
+
+    verify( response, never() ).sendError( HttpServletResponse.SC_NOT_FOUND );
+    assertTrue( servlet.hasUnmatchedHandlerBeenCalled() );
   }
 
   @Test

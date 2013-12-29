@@ -1,4 +1,7 @@
 ## 0.7:
+* Add a template method AbstractManifestServlet.handleUnmatchedRequest to
+  allow sub-classes the opportunity to intercept and handle the scenario
+  where a permutation could not be matched.
 * In AbstractManifestServlet, return a 404 response if unable to determine
   the appropriate manifest to serve rather than a 500.
 * Promote several methods in AbstractManifestServlet from package access to
