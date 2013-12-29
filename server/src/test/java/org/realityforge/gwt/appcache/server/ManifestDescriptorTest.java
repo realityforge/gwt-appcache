@@ -1,10 +1,52 @@
 package org.realityforge.gwt.appcache.server;
 
+import java.util.List;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class ManifestDescriptorTest
 {
+   @Test
+  public void parse()
+    throws Exception
+  {
+    final String manifest =
+      "CACHE MANIFEST\n" +
+      "# Unique id #1388291771388.0.1896967523302424\n" +
+      "\n" +
+      "CACHE:\n" +
+      "# Static app files\n" +
+      "index.html\n" +
+      "./\n" +
+      "\n" +
+      "# GWT compiled files\n" +
+      "example/7AA66459135045C9848EE97F9163D226.cache.js\n" +
+      "example/example.nocache.js\n" +
+      "example/bonsai%20tree.jpg\n" +
+      "example/clear.cache.gif\n" +
+      "\n" +
+      "\n" +
+      "# All other resources require the client to be online.\n" +
+      "NETWORK:\n" +
+      "some/backend%20service.json\n" +
+      "*\n";
+    final ManifestDescriptor descriptor = ManifestDescriptor.parse( manifest );
+
+    final List<String> networkResources = descriptor.getNetworkResources();
+    assertEquals( networkResources.size(), 2 );
+    assertTrue( networkResources.contains( "*" ) );
+    assertTrue( networkResources.contains( "some/backend service.json" ) );
+
+    final List<String> cachedResources = descriptor.getCachedResources();
+    assertEquals( cachedResources.size(), 6 );
+    assertTrue( cachedResources.contains( "index.html" ) );
+    assertTrue( cachedResources.contains( "./" ) );
+    assertTrue( cachedResources.contains( "example/7AA66459135045C9848EE97F9163D226.cache.js" ) );
+    assertTrue( cachedResources.contains( "example/example.nocache.js" ) );
+    assertTrue( cachedResources.contains( "example/bonsai tree.jpg" ) );
+    assertTrue( cachedResources.contains( "example/clear.cache.gif" ) );
+  }
+
   @Test
   public void writeManifest()
     throws Exception
