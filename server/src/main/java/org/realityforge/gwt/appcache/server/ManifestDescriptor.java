@@ -27,6 +27,24 @@ public final class ManifestDescriptor
     return _networkResources;
   }
 
+  public void merge( @Nonnull final ManifestDescriptor other )
+  {
+    for ( final String resource : other.getCachedResources() )
+    {
+      if ( !_cachedResources.contains( resource ) )
+      {
+        _cachedResources.add( resource );
+      }
+    }
+    for ( final String resource : other.getNetworkResources() )
+    {
+      if ( !_networkResources.contains( resource ) )
+      {
+        _networkResources.add( resource );
+      }
+    }
+  }
+
   @Override
   public String toString()
   {

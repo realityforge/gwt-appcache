@@ -7,6 +7,39 @@ import static org.testng.Assert.*;
 public class ManifestDescriptorTest
 {
   @Test
+  public void merge()
+    throws Exception
+  {
+    final ManifestDescriptor descriptor1 = new ManifestDescriptor();
+    descriptor1.getCachedResources().add( "1" );
+    descriptor1.getCachedResources().add( "2" );
+    descriptor1.getNetworkResources().add( "A" );
+    descriptor1.getNetworkResources().add( "B" );
+
+    final ManifestDescriptor descriptor2 = new ManifestDescriptor();
+    descriptor2.getCachedResources().add( "1" );
+    descriptor2.getCachedResources().add( "3" );
+    descriptor2.getNetworkResources().add( "A" );
+    descriptor2.getNetworkResources().add( "C" );
+
+    descriptor1.merge( descriptor2 );
+
+    assertEquals( descriptor2.getCachedResources().size(), 2 );
+    assertEquals( descriptor2.getCachedResources().size(), 2 );
+
+    final List<String> cachedResources = descriptor1.getCachedResources();
+    assertEquals( cachedResources.size(), 3 );
+    assertTrue( cachedResources.contains( "1" ) );
+    assertTrue( cachedResources.contains( "2" ) );
+    assertTrue( cachedResources.contains( "3" ) );
+    final List<String> networkResources = descriptor1.getNetworkResources();
+    assertEquals( networkResources.size(), 3 );
+    assertTrue( networkResources.contains( "A" ) );
+    assertTrue( networkResources.contains( "B" ) );
+    assertTrue( networkResources.contains( "C" ) );
+  }
+
+  @Test
   public void parse()
     throws Exception
   {
