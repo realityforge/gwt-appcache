@@ -69,7 +69,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  final boolean isAppCacheDisabled( final HttpServletRequest request )
+  protected boolean isAppCacheDisabled( final HttpServletRequest request )
   {
     final Cookie[] cookies = request.getCookies();
     if ( null != cookies )
@@ -86,7 +86,7 @@ public abstract class AbstractManifestServlet
     return false;
   }
 
-  final String loadManifest( final String baseUrl, final String moduleName, final String strongName )
+  protected final String loadManifest( final String baseUrl, final String moduleName, final String strongName )
     throws ServletException
   {
     final String filePath = baseUrl + moduleName + "/" + strongName + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
@@ -157,7 +157,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  final void serveStringManifest( final HttpServletResponse response, final String manifest )
+  protected final void serveStringManifest( final HttpServletResponse response, final String manifest )
     throws ServletException
   {
     configureForNoCaching( response );
@@ -189,9 +189,9 @@ public abstract class AbstractManifestServlet
     response.setHeader( "Pragma", "no-cache" );
   }
 
-  final String getPermutationStrongName( @Nonnull final String baseUrl,
-                                         @Nonnull final String moduleName,
-                                         @Nonnull final List<BindingProperty> computedBindings )
+  protected final String getPermutationStrongName( @Nonnull final String baseUrl,
+                                                   @Nonnull final String moduleName,
+                                                   @Nonnull final List<BindingProperty> computedBindings )
     throws ServletException
   {
     try
