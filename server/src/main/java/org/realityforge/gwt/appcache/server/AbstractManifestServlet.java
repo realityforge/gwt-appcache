@@ -65,7 +65,7 @@ public abstract class AbstractManifestServlet
     }
     else
     {
-      throw new ServletException( "unknown device" );
+      response.sendError( HttpServletResponse.SC_NOT_FOUND );
     }
   }
 

@@ -1,3 +1,7 @@
+## 0.7:
+* Return a 404 response if unable to determine the appropriate manifest to
+  serve rather than a 500.
+
 ## 0.6:
 
 * Refactor ApplicationCache.swapCache to return a boolean value indicating
