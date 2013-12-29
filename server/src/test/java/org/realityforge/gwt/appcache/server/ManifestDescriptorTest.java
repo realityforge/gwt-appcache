@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 
 public class ManifestDescriptorTest
 {
-   @Test
+  @Test
   public void parse()
     throws Exception
   {
