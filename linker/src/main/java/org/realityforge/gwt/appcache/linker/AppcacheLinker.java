@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
+import org.realityforge.gwt.appcache.server.ManifestDescriptor;
 import org.realityforge.gwt.appcache.server.Permutation;
 import org.realityforge.gwt.appcache.server.PermutationDescriptor;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
@@ -174,67 +174,20 @@ public final class AppcacheLinker
                               @Nonnull final Set<String> cacheResources )
     throws UnableToCompleteException
   {
-    final StringBuilder sb = new StringBuilder();
-    sb.append( "CACHE MANIFEST\n" );
-    //build something unique so that the manifest file changes on recompile
-    sb.append( "# Unique id #" ).
-      append( ( new Date() ).getTime() ).
-      append( "." ).
-      append( Math.random() ).
-      append( "\n" );
-    sb.append( "\n" );
-    sb.append( "CACHE:\n" );
-    sb.append( "# Static app files\n" );
-    for ( final String resource : staticResources )
+    final ManifestDescriptor descriptor = new ManifestDescriptor();
+    descriptor.getCachedResources().addAll( staticResources );
+    descriptor.getCachedResources().addAll( cacheResources );
+    Collections.sort( descriptor.getCachedResources() );
+    descriptor.getNetworkResources().add( "*" );
+    try
     {
-      sb.append( urlEncode( logger, resource ) ).append( "\n" );
+      return descriptor.toString();
     }
-
-    sb.append( "\n# GWT compiled files\n" );
-    for ( final String resource : cacheResources )
+    catch ( final Exception e )
     {
-      sb.append( urlEncode( logger, resource ) ).append( "\n" );
+      logger.log( Type.ERROR, "Error generating manifest: " + e, e );
+      throw new UnableToCompleteException();
     }
-
-    sb.append( "\n\n" );
-    sb.append( "# All other resources require the client to be online.\n" );
-    sb.append( "NETWORK:\n" );
-    sb.append( "*\n" );
-    return sb.toString();
-  }
-
-  private String urlEncode( final TreeLogger logger, final String path )
-    throws UnableToCompleteException
-  {
-    final int length = path.length();
-    final StringBuilder sb = new StringBuilder( length );
-    for ( int i = 0; i != length; ++i )
-    {
-      if ( path.codePointAt( i ) > 255 )
-      {
-        logger.log( Type.ERROR, "Manifest entry '" + path + "' contains illegal character at index " + i );
-        throw new UnableToCompleteException();
-      }
-      final char ch = path.charAt( i );
-      if ( ( ch >= '0' && ch <= '9' ) ||
-           ( ch >= 'A' && ch <= 'Z' ) ||
-           ( ch >= 'a' && ch < 'z' ) ||
-           '.' == ch ||
-           '-' == ch ||
-           '_' == ch )
-      {
-        sb.append( ch );
-      }
-      else if ( '/' == ch || '\\' == ch )
-      {
-        sb.append( '/' );
-      }
-      else
-      {
-        sb.append( '%' ).append( Integer.toHexString( ch ).toUpperCase() );
-      }
-    }
-    return sb.toString();
   }
 
   final Set<String> getConfigurationValues( final LinkerContext context, final String propertyName )

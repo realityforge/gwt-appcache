@@ -1,4 +1,5 @@
 ## 0.7:
+* Extract a ManifestDescriptor class to make managing manifests easier.
 * Add a template method AbstractManifestServlet.handleUnmatchedRequest to
   allow sub-classes the opportunity to intercept and handle the scenario
   where a permutation could not be matched.
