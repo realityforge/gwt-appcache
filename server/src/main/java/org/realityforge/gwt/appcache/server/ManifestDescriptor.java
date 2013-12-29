@@ -62,7 +62,7 @@ public final class ManifestDescriptor
     final ManifestDescriptor descriptor = new ManifestDescriptor();
     final int cacheMode = 1;
     final int networkMode = 2;
-    int mode = 0;
+    int mode = cacheMode;
     for ( int i = 1; i < lines.length; i++ )
     {
       final String line = lines[ i ].trim();
@@ -79,17 +79,13 @@ public final class ManifestDescriptor
       {
         mode = networkMode;
       }
-      else if ( cacheMode == mode )
-      {
-        descriptor.getCachedResources().add( urlDecode( line ) );
-      }
       else if ( networkMode == mode )
       {
         descriptor.getNetworkResources().add( urlDecode( line ) );
       }
-      else
+      else //if ( cacheMode == mode )
       {
-        throw new IllegalStateException( "Unexpected line " + i + ": " + line );
+        descriptor.getCachedResources().add( urlDecode( line ) );
       }
     }
     return descriptor;
