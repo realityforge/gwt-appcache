@@ -1,6 +1,6 @@
 ## 0.7:
-* Return a 404 response if unable to determine the appropriate manifest to
-  serve rather than a 500.
+* In AbstractManifestServlet, return a 404 response if unable to determine
+  the appropriate manifest to serve rather than a 500.
 * Promote several methods in AbstractManifestServlet from package access to
   protected access to make sub-classing easier.
 
