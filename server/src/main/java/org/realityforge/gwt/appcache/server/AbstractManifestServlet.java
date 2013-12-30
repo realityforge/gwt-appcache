@@ -223,7 +223,7 @@ public abstract class AbstractManifestServlet
     response.setDateHeader( "Expires", 0 );
     // HTTP 1.1 (disable caching of any kind)
     // HTTP 1.1 'pre-check=0, post-check=0' => (Internet Explorer should always check)
-    response.setHeader( "Cache-control", "no-cache, no-store, must-revalidate, pre-check=0, post-check=0" );
+    response.setHeader( "Cache-control", "no-cache, must-revalidate, pre-check=0, post-check=0" );
     response.setHeader( "Pragma", "no-cache" );
   }
 

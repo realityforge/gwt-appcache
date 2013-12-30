@@ -1,4 +1,6 @@
 ## 0.7:
+* Remove no-store from Cache-control http header when returning manifest file
+  to ensure Firefox can use the manifest file.
 * Declare the character set in the content type of the manifest file to ensure
   file names are correctly decoded.
 * Use the ProgressEvent.lengthComputable value to determine whether the browser
