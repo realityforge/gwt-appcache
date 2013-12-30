@@ -41,6 +41,7 @@ public final class Html5ApplicationCache
   {
     super( eventBus );
     registerListeners0();
+    enableAppCache();
   }
 
   @Nonnull

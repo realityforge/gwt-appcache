@@ -1,3 +1,7 @@
+## 0.8:
+* Clear the 'appcache_disable' cookie when instance of Html5ApplicationCache is
+  initially created.
+
 ## 0.7:
 * Remove no-store from Cache-control http header when returning manifest file
   to ensure Firefox can use the manifest file.
