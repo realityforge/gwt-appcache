@@ -1,4 +1,6 @@
 ## 0.7:
+* Use the ProgressEvent.lengthComputable value to determine whether the browser
+  has supplied the loaded and total fields on the event.
 * Implement equals() and hashcode() on BindingProperty
 * Add a utility method AbstractManifestServlet.loadAndMergeManifests that loads
   and merges the cache files for multiple permutations. This is useful when it

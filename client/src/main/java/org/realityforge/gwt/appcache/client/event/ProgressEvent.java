@@ -50,6 +50,11 @@ public class ProgressEvent
     _total = total;
   }
 
+  public boolean isLengthComputable()
+  {
+    return 0 != _total;
+  }
+
   public int getLoaded()
   {
     return _loaded;
