@@ -174,6 +174,7 @@ Appendix
 
 * [A Beginner's Guide to Using the Application Cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/)
 * [Appcache Facts](http://appcachefacts.info/)
+* [Offline Web Application Standard](http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html)
 
 Credit
 ------
