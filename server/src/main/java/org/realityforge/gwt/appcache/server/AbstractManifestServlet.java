@@ -200,7 +200,7 @@ public abstract class AbstractManifestServlet
   {
     configureForNoCaching( response );
 
-    response.setContentType( "text/cache-manifest" );
+    response.setContentType( "text/cache-manifest; charset=utf-8" );
     try
     {
       final byte[] data = manifest.getBytes( "UTF-8" );

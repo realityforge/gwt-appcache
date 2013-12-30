@@ -1,4 +1,6 @@
 ## 0.7:
+* Declare the character set in the content type of the manifest file to ensure
+  file names are correctly decoded.
 * Use the ProgressEvent.lengthComputable value to determine whether the browser
   has supplied the loaded and total fields on the event.
 * Implement equals() and hashcode() on BindingProperty
