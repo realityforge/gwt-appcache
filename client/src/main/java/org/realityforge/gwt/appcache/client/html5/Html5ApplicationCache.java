@@ -44,6 +44,11 @@ public final class Html5ApplicationCache
     enableAppCache();
   }
 
+  @Override
+  public final native void abort() /*-{
+    $wnd.applicationCache.abort();
+  }-*/;
+
   @Nonnull
   @Override
   public Status getStatus()

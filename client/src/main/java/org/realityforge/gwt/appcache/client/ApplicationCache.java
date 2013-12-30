@@ -69,6 +69,12 @@ public abstract class ApplicationCache
   public abstract Status getStatus();
 
   /**
+   * Cancels the application cache download process.
+   * The call is ignored if no download in progress.
+   */
+  public abstract void abort();
+
+  /**
    * Request that the browser swap in the new application cache.
    * This may fail if there is no update or no application cache.
    *

@@ -19,6 +19,11 @@ final class TestApplicationCache
   }
 
   @Override
+  public void abort()
+  {
+  }
+
+  @Override
   public boolean swapCache()
   {
     return true;

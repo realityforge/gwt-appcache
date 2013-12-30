@@ -1,4 +1,5 @@
 ## 0.8:
+* Implement the ApplicationCache.abort() method for the sake of completeness.
 * Clear the 'appcache_disable' cookie when instance of Html5ApplicationCache is
   initially created.
 
