@@ -227,9 +227,9 @@ public class ManifestServletTest
     verify( response ).setDateHeader( eq( "Date" ), anyLong() );
     verify( response ).setDateHeader( eq( "Last-Modified" ), anyLong() );
     verify( response ).setDateHeader( "Expires", 0 );
-    verify( response ).setHeader( "Cache-control", "no-cache, no-store, must-revalidate, pre-check=0, post-check=0" );
+    verify( response ).setHeader( "Cache-control", "no-cache, must-revalidate, pre-check=0, post-check=0" );
     verify( response ).setHeader( "Pragma", "no-cache" );
-    verify( response ).setContentType( "text/cache-manifest" );
+    verify( response ).setContentType( "text/cache-manifest; charset=utf-8" );
 
     verify( output ).write( "DD".getBytes( "US-ASCII" ) );
   }
