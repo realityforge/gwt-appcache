@@ -152,6 +152,14 @@ Cache Manifests in Servlet
 Consider support caching of manifests rather than reading them from the file system
 every time. The cache would be cleared when the permutations.xml is reloaded.
 
+ApplicationCache.removeCache() for Safari
+-----------------------------------------
+
+The removeCache() method does not work under Safari as Safari does not sent
+cookies down with request for manifest. Maybe attempt alternative mechanisms
+such as manifest url via Document.get().getDocumentElement().setAttribute( "manifest", ... );
+and adding a query parameter on to it?
+
 Handle no-cache resources
 -------------------------
 
