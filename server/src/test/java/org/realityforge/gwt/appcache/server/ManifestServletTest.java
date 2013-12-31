@@ -346,7 +346,7 @@ public class ManifestServletTest
 
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
 
-    final List<PermutationDescriptor> descriptors = servlet.getPermutationDescriptors( "/foo/", "myapp" );
+    final List<SelectionDescriptor> descriptors = servlet.getPermutationDescriptors( "/foo/", "myapp" );
     assertNotNull( descriptors );
 
     assertTrue( descriptors == servlet.getPermutationDescriptors( "/foo/", "myapp" ) );

@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.ManifestDescriptor;
 import org.realityforge.gwt.appcache.server.Permutation;
-import org.realityforge.gwt.appcache.server.PermutationDescriptor;
+import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
 
 @LinkerOrder(LinkerOrder.Order.POST)
@@ -224,10 +224,10 @@ public final class AppcacheLinker
     }
   }
 
-  final List<PermutationDescriptor> collectPermutationSelectors( final TreeLogger logger,
+  final List<SelectionDescriptor> collectPermutationSelectors( final TreeLogger logger,
                                                                  final Collection<PermutationArtifact> artifacts )
   {
-    final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
+    final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
     for ( final PermutationArtifact artifact : artifacts )
     {
       final Permutation permutation = artifact.getPermutation();
@@ -257,7 +257,7 @@ public final class AppcacheLinker
           return o2.getComponents().length - o1.getComponents().length;
         }
       } );
-      descriptors.add( new PermutationDescriptor( permutation.getPermutationName(), calculatedBindings ) );
+      descriptors.add( new SelectionDescriptor( permutation.getPermutationName(), calculatedBindings ) );
     }
     logger.log( Type.DEBUG, "Permutation map created with " + descriptors.size() + " descriptors." );
     return descriptors;

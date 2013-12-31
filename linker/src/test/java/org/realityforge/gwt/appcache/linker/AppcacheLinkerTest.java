@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.Permutation;
-import org.realityforge.gwt.appcache.server.PermutationDescriptor;
+import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -112,7 +112,7 @@ public class AppcacheLinkerTest
     bp( binding2, "user.agent", "gecko_16" );
     addPermutation( artifacts, "Z", 0, binding2, new HashSet<String>() );
 
-    final List<PermutationDescriptor> values = linker.collectPermutationSelectors( TreeLogger.NULL, artifacts );
+    final List<SelectionDescriptor> values = linker.collectPermutationSelectors( TreeLogger.NULL, artifacts );
 
     assertEquals( values.size(), 3 );
 
@@ -126,7 +126,7 @@ public class AppcacheLinkerTest
     assertProperty( y.get( 0 ), "user.agent", "safari" );
   }
 
-  private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> values,
+  private List<BindingProperty> ensureBinding( final List<SelectionDescriptor> values,
                                                final String permutationName,
                                                final int propertyCount )
   {
@@ -146,10 +146,10 @@ public class AppcacheLinkerTest
     properties.add( new BindingProperty( key, value ) );
   }
 
-  private List<BindingProperty> ensureBinding( final List<PermutationDescriptor> descriptors,
+  private List<BindingProperty> ensureBinding( final List<SelectionDescriptor> descriptors,
                                                final String permutationName )
   {
-    for ( final PermutationDescriptor descriptor : descriptors )
+    for ( final SelectionDescriptor descriptor : descriptors )
     {
       if ( descriptor.getPermutationName().equals( permutationName ) )
       {

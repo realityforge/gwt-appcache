@@ -35,7 +35,7 @@ public abstract class AbstractManifestServlet
 
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
   private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
-  private transient List<PermutationDescriptor> _permutationDescriptors;
+  private transient List<SelectionDescriptor> _selectionDescriptors;
 
   protected final void addPropertyProvider( final PropertyProvider propertyProvider )
   {
@@ -236,8 +236,8 @@ public abstract class AbstractManifestServlet
     {
       String selectedPermutation = null;
       int selectedMatchStrength = 0;
-      final List<PermutationDescriptor> descriptors = getPermutationDescriptors( baseUrl, moduleName );
-      for ( final PermutationDescriptor permutationEntry : descriptors )
+      final List<SelectionDescriptor> descriptors = getPermutationDescriptors( baseUrl, moduleName );
+      for ( final SelectionDescriptor permutationEntry : descriptors )
       {
         int matchStrength = 0;
         boolean matched = true;
@@ -280,7 +280,7 @@ public abstract class AbstractManifestServlet
     }
   }
 
-  final List<PermutationDescriptor> getPermutationDescriptors( @Nonnull final String baseUrl,
+  final List<SelectionDescriptor> getPermutationDescriptors( @Nonnull final String baseUrl,
                                                                @Nonnull final String moduleName )
     throws Exception
   {
@@ -288,12 +288,12 @@ public abstract class AbstractManifestServlet
       getServletContext().getRealPath( baseUrl + moduleName + "/" + PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
     final File permutationDescriptor = new File( realPath );
     final long lastModified = permutationDescriptor.lastModified();
-    if ( null == _permutationDescriptors || _permutationsDescriptorLastModified < lastModified )
+    if ( null == _selectionDescriptors || _permutationsDescriptorLastModified < lastModified )
     {
-      _permutationDescriptors = PermutationsIO.deserialize( new FileInputStream( realPath ) );
+      _selectionDescriptors = PermutationsIO.deserialize( new FileInputStream( realPath ) );
       _permutationsDescriptorLastModified = lastModified;
     }
-    return _permutationDescriptors;
+    return _selectionDescriptors;
   }
 
   @Nonnull

@@ -26,10 +26,10 @@ public final class PermutationsIO
   {
   }
 
-  public static List<PermutationDescriptor> deserialize( final InputStream stream )
+  public static List<SelectionDescriptor> deserialize( final InputStream stream )
     throws Exception
   {
-    final List<PermutationDescriptor> descriptors = new ArrayList<PermutationDescriptor>();
+    final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
 
     final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( stream );
     final Element permutationsNode = document.getDocumentElement();
@@ -55,7 +55,7 @@ public final class PermutationsIO
     return descriptors;
   }
 
-  private static void handlePermutation( final List<PermutationDescriptor> descriptors, final Element permutationNode )
+  private static void handlePermutation( final List<SelectionDescriptor> descriptors, final Element permutationNode )
     throws Exception
   {
     final String strongName = permutationNode.getAttribute( PERMUTATION_NAME );
@@ -81,17 +81,17 @@ public final class PermutationsIO
       final String varValue = childNodes.item( 0 ).getNodeValue();
       list.add( new BindingProperty( varKey, varValue ) );
     }
-    descriptors.add( new PermutationDescriptor( strongName, list ) );
+    descriptors.add( new SelectionDescriptor( strongName, list ) );
   }
 
-  public static String serialize( final List<PermutationDescriptor> descriptors )
+  public static String serialize( final List<SelectionDescriptor> descriptors )
     throws Exception
   {
     final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     final Element permutationsNode = document.createElement( PERMUTATIONS );
     document.appendChild( permutationsNode );
 
-    for ( final PermutationDescriptor descriptor : descriptors )
+    for ( final SelectionDescriptor descriptor : descriptors )
     {
       final Element node = document.createElement( PERMUTATION_NODE );
       node.setAttribute( PERMUTATION_NAME, descriptor.getPermutationName() );
