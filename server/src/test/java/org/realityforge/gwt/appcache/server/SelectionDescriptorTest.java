@@ -25,7 +25,7 @@ public class SelectionDescriptorTest
   }
 
   @Test
-  public void equals()
+  public void equalsAndHashcode()
   {
     final String permutationName1 = "P1";
     final String permutationName2 = "P2";
@@ -88,5 +88,35 @@ public class SelectionDescriptorTest
     assertFalse( descriptor5.equals( descriptor3 ) );
     assertFalse( descriptor5.equals( descriptor4 ) );
     assertTrue( descriptor5.equals( descriptor5 ) );
+
+    assertEquals( descriptor1.hashCode(), descriptor1.hashCode() );
+    assertEquals( descriptor1.hashCode(), descriptor2.hashCode() );
+    assertNotEquals( descriptor1.hashCode(), descriptor3.hashCode() );
+    assertNotEquals( descriptor1.hashCode(), descriptor4.hashCode() );
+    assertNotEquals( descriptor1.hashCode(), descriptor5.hashCode() );
+
+    assertEquals( descriptor2.hashCode(), descriptor1.hashCode() );
+    assertEquals( descriptor2.hashCode(), descriptor2.hashCode() );
+    assertNotEquals( descriptor2.hashCode(), descriptor3.hashCode() );
+    assertNotEquals( descriptor2.hashCode(), descriptor4.hashCode() );
+    assertNotEquals( descriptor2.hashCode(), descriptor5.hashCode() );
+
+    assertNotEquals( descriptor3.hashCode(), descriptor1.hashCode() );
+    assertNotEquals( descriptor3.hashCode(), descriptor2.hashCode() );
+    assertEquals( descriptor3.hashCode(), descriptor3.hashCode() );
+    assertNotEquals( descriptor3.hashCode(), descriptor4.hashCode() );
+    assertNotEquals( descriptor3.hashCode(), descriptor5.hashCode() );
+
+    assertNotEquals( descriptor4.hashCode(), descriptor1.hashCode() );
+    assertNotEquals( descriptor4.hashCode(), descriptor2.hashCode() );
+    assertNotEquals( descriptor4.hashCode(), descriptor3.hashCode() );
+    assertEquals( descriptor4.hashCode(), descriptor4.hashCode() );
+    assertNotEquals( descriptor4.hashCode(), descriptor5.hashCode() );
+
+    assertNotEquals( descriptor5.hashCode(), descriptor1.hashCode() );
+    assertNotEquals( descriptor5.hashCode(), descriptor2.hashCode() );
+    assertNotEquals( descriptor5.hashCode(), descriptor3.hashCode() );
+    assertNotEquals( descriptor5.hashCode(), descriptor4.hashCode() );
+    assertEquals( descriptor5.hashCode(), descriptor5.hashCode() );
   }
 }
