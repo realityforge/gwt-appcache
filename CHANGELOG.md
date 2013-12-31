@@ -1,8 +1,6 @@
 ## 0.8:
-* Support multiple selector properties when matching strong and weak
-  permutations.
-* Rename PermutationDescriptor to SelectionDescriptor to reflect actual
-  semantics.
+* Support multiple selector properties when matching strong and weak permutations.
+* Rename PermutationDescriptor to SelectionDescriptor to reflect actual semantics.
 * Implement the ApplicationCache.abort() method for the sake of completeness.
 * Clear the 'appcache_disable' cookie when instance of Html5ApplicationCache is
   initially created.
