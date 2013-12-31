@@ -160,15 +160,6 @@ cookies down with request for manifest. Maybe attempt alternative mechanisms
 such as manifest url via Document.get().getDocumentElement().setAttribute( "manifest", ... );
 and adding a query parameter on to it?
 
-Handle no-cache resources
--------------------------
-
-If a resources such as '/myapp.nocache.js' is present and an existing filter marks
-it as not to be cached (or more specifically 'no-store'), then Firefox will attempt
-to re-download that file even if offline. We need to verify and address this behaviour.
-It may be that we are able to replace '/myapp.nocache.js' with '/myapp.js' in offline
-mode.
-
 Appendix
 --------
 
