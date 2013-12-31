@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -62,19 +61,19 @@ public class AppcacheLinkerTest
   public void collectValuesForKey()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final TreeMap<Integer, Set<BindingProperty>> bindings = new TreeMap<Integer, Set<BindingProperty>>();
-    final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
+    final ArrayList<SelectionDescriptor> bindings = new ArrayList<SelectionDescriptor>();
+    final ArrayList<BindingProperty> binding0 = new ArrayList<BindingProperty>();
     bp( binding0, "a", "z1" );
     bp( binding0, "b", "z2" );
-    bindings.put( 0, binding0 );
+    bindings.add( new SelectionDescriptor( "X", binding0 ) );
     final HashSet<String> values0 = linker.collectValuesForKey( bindings, "a" );
     assertEquals( values0.size(), 1 );
     assertTrue( values0.contains( "z1" ) );
 
-    final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> binding1 = new ArrayList<BindingProperty>();
     bp( binding1, "a", "w1" );
     bp( binding1, "b", "w2" );
-    bindings.put( 1, binding1 );
+    bindings.add( new SelectionDescriptor( "X", binding1 ) );
 
     final HashSet<String> values1 = linker.collectValuesForKey( bindings, "a" );
     assertEquals( values1.size(), 2 );
@@ -88,29 +87,29 @@ public class AppcacheLinkerTest
     final AppcacheLinker linker = new AppcacheLinker();
 
     final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
-    final HashSet<BindingProperty> binding0 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> binding0 = new ArrayList<BindingProperty>();
     bp( binding0, "user.agent", "ie8" );
     bp( binding0, "some.key", "blah" );
     bp( binding0, "other.key", "blee" );
-    final Permutation permutation = addPermutation( artifacts, "X", 0, binding0, new HashSet<String>() );
-    final HashSet<BindingProperty> binding01 = new HashSet<BindingProperty>();
+    final Permutation permutation = addPermutation( artifacts, "X", binding0, new HashSet<String>() );
+    final ArrayList<BindingProperty> binding01 = new ArrayList<BindingProperty>();
     bp( binding01, "user.agent", "ie9" );
     bp( binding01, "some.key", "blah" );
     bp( binding01, "other.key", "blee" );
-    addSoftPermutation( permutation, 1, binding01, new HashSet<String>() );
-    final HashSet<BindingProperty> binding02 = new HashSet<BindingProperty>();
+    addSoftPermutation( permutation, binding01, new HashSet<String>() );
+    final ArrayList<BindingProperty> binding02 = new ArrayList<BindingProperty>();
     bp( binding02, "user.agent", "ie10" );
     bp( binding02, "some.key", "blah" );
     bp( binding02, "other.key", "blee" );
-    addSoftPermutation( permutation, 2, binding02, new HashSet<String>() );
+    addSoftPermutation( permutation, binding02, new HashSet<String>() );
 
-    final HashSet<BindingProperty> binding1 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> binding1 = new ArrayList<BindingProperty>();
     bp( binding1, "user.agent", "safari" );
-    addPermutation( artifacts, "Y", 0, binding1, new HashSet<String>() );
+    addPermutation( artifacts, "Y", binding1, new HashSet<String>() );
 
-    final HashSet<BindingProperty> binding2 = new HashSet<BindingProperty>();
+    final ArrayList<BindingProperty> binding2 = new ArrayList<BindingProperty>();
     bp( binding2, "user.agent", "gecko_16" );
-    addPermutation( artifacts, "Z", 0, binding2, new HashSet<String>() );
+    addPermutation( artifacts, "Z", binding2, new HashSet<String>() );
 
     final List<SelectionDescriptor> values = linker.collectPermutationSelectors( TreeLogger.NULL, artifacts );
 
@@ -141,7 +140,7 @@ public class AppcacheLinkerTest
     assertEquals( property.getValue(), value );
   }
 
-  private void bp( final HashSet<BindingProperty> properties, final String key, final String value )
+  private void bp( final List<BindingProperty> properties, final String key, final String value )
   {
     properties.add( new BindingProperty( key, value ) );
   }
@@ -162,21 +161,20 @@ public class AppcacheLinkerTest
 
   private Permutation addPermutation( final ArrayList<PermutationArtifact> artifacts,
                                       final String permutationName,
-                                      final int permutationIndex,
-                                      final HashSet<BindingProperty> bindings,
+                                      final List<BindingProperty> bindings,
                                       final HashSet<String> files )
   {
     final Permutation permutation = new Permutation( permutationName );
-    addSoftPermutation( permutation, permutationIndex, bindings, files );
+    addSoftPermutation( permutation, bindings, files );
     artifacts.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
     return permutation;
   }
 
   private void addSoftPermutation( final Permutation permutation,
-                                   final int permutationIndex,
-                                   final HashSet<BindingProperty> bindings, final HashSet<String> files )
+                                   final List<BindingProperty> bindings,
+                                   final HashSet<String> files )
   {
-    permutation.getBindingProperties().put( permutationIndex, bindings );
+    permutation.getSelectors().add( new SelectionDescriptor( permutation.getPermutationName(), bindings ) );
     permutation.getPermutationFiles().addAll( files );
   }
 
@@ -187,10 +185,10 @@ public class AppcacheLinkerTest
     final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
     final HashSet<String> files1 = new HashSet<String>();
     files1.add( "File1.txt" );
-    addPermutation( artifacts, "X", 0, new HashSet<BindingProperty>(), files1 );
+    addPermutation( artifacts, "X", new ArrayList<BindingProperty>(), files1 );
     final HashSet<String> files2 = new HashSet<String>();
     files2.add( "File2.txt" );
-    addPermutation( artifacts, "X", 0, new HashSet<BindingProperty>(), files2 );
+    addPermutation( artifacts, "X", new ArrayList<BindingProperty>(), files2 );
     final Set<String> files = linker.getAllPermutationFiles( artifacts );
     assertEquals( files.size(), 2 );
     assertTrue( files.contains( "File1.txt" ) );
@@ -251,9 +249,10 @@ public class AppcacheLinkerTest
     assertEquals( files.size(), 1 );
     assertTrue( files.contains( "myapp/file1.txt" ) );
 
-    final Map<Integer, Set<BindingProperty>> softPermutations = permutation.getBindingProperties();
+    final List<SelectionDescriptor> softPermutations = permutation.getSelectors();
     assertEquals( softPermutations.size(), 2 );
-    final Set<BindingProperty> bp0 = softPermutations.get( 0 );
+    final SelectionDescriptor s0 = softPermutations.get( 0 );
+    final List<BindingProperty> bp0 = s0.getBindingProperties();
     final BindingProperty property01 = findProperty( "user.agent", bp0 );
     assertNotNull( property01 );
     assertEquals( property01.getValue(), "ie9" );
@@ -262,7 +261,8 @@ public class AppcacheLinkerTest
     assertNotNull( property02 );
     assertEquals( property02.getValue(), "large" );
 
-    final Set<BindingProperty> bp1 = softPermutations.get( 1 );
+    final SelectionDescriptor s1 = softPermutations.get( 1 );
+    final List<BindingProperty> bp1 = s1.getBindingProperties();
     final BindingProperty property11 = findProperty( "user.agent", bp1 );
     assertNotNull( property11 );
     assertEquals( property11.getValue(), "ie9" );
@@ -295,7 +295,7 @@ public class AppcacheLinkerTest
       final Permutation permutation = permutationArtifact.getPermutation();
       assertEquals( permutation.getPermutationName(), "S2" );
       assertTrue( permutation.getPermutationFiles().contains( "myapp/file1.txt" ) );
-      assertEquals( permutation.getBindingProperties().size(), 1 );
+      assertEquals( permutation.getSelectors().size(), 1 );
     }
 
     {
@@ -306,7 +306,7 @@ public class AppcacheLinkerTest
       final Permutation permutation = permutationArtifact.getPermutation();
       assertEquals( permutation.getPermutationName(), "S2" );
       assertTrue( permutation.getPermutationFiles().contains( "myapp/file1.txt" ) );
-      assertEquals( permutation.getBindingProperties().size(), 1 );
+      assertEquals( permutation.getSelectors().size(), 1 );
     }
   }
 
@@ -319,9 +319,9 @@ public class AppcacheLinkerTest
     final Permutation permutation = new Permutation( "X" );
 
     artifacts1.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
-    final HashSet<BindingProperty> configs2 = new HashSet<BindingProperty>();
+    final List<BindingProperty> configs2 = new ArrayList<BindingProperty>();
     bp( configs2, "user.agent", "ie9" );
-    permutation.getBindingProperties().put( 0, configs2 );
+    permutation.getSelectors().add( new SelectionDescriptor( "X", configs2 ) );
 
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
@@ -351,7 +351,7 @@ public class AppcacheLinkerTest
     return sb.toString();
   }
 
-  private BindingProperty findProperty( final String key, final Set<BindingProperty> bindingProperties )
+  private BindingProperty findProperty( final String key, final List<BindingProperty> bindingProperties )
   {
     for ( final BindingProperty p : bindingProperties )
     {

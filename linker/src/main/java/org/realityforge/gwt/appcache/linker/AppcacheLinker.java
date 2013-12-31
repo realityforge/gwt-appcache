@@ -19,15 +19,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.ManifestDescriptor;
 import org.realityforge.gwt.appcache.server.Permutation;
-import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
+import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 
 @LinkerOrder(LinkerOrder.Order.POST)
 @Shardable
@@ -234,15 +233,15 @@ public final class AppcacheLinker
       final List<BindingProperty> calculatedBindings = new ArrayList<BindingProperty>();
       final HashSet<String> completed = new HashSet<String>();
 
-      final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
-      final Set<BindingProperty> firstBindingProperties = bindings.values().iterator().next();
-      for ( final BindingProperty p : firstBindingProperties )
+      final List<SelectionDescriptor> selectors = permutation.getSelectors();
+      final SelectionDescriptor firstSelector = selectors.iterator().next();
+      for ( final BindingProperty p : firstSelector.getBindingProperties() )
       {
         final String key = p.getName();
         if ( !completed.contains( key ) )
         {
-          final HashSet<String> values = collectValuesForKey( bindings, key );
-          if ( 1 == bindings.size() || values.size() > 1 )
+          final HashSet<String> values = collectValuesForKey( selectors, key );
+          if ( 1 == selectors.size() || values.size() > 1 )
           {
             calculatedBindings.add( new BindingProperty( key, joinValues( values ) ) );
           }
@@ -263,12 +262,12 @@ public final class AppcacheLinker
     return descriptors;
   }
 
-  final HashSet<String> collectValuesForKey( final Map<Integer, Set<BindingProperty>> bindings, final String key )
+  final HashSet<String> collectValuesForKey( final List<SelectionDescriptor> selectors, final String key )
   {
     final HashSet<String> values = new HashSet<String>();
-    for ( final Set<BindingProperty> properties : bindings.values() )
+    for ( final SelectionDescriptor selector : selectors )
     {
-      for ( final BindingProperty property : properties )
+      for ( final BindingProperty property : selector.getBindingProperties() )
       {
         if ( property.getName().equals( key ) )
         {
@@ -316,14 +315,7 @@ public final class AppcacheLinker
         final Set<String> artifactsForCompilation = getArtifactsForCompilation( context, artifacts );
         permutation.getPermutationFiles().addAll( artifactsForCompilation );
       }
-      final Map<Integer, Set<BindingProperty>> bindings = permutation.getBindingProperties();
-      final int softPermutationId = result.getSoftPermutationId();
-      if ( bindings.containsKey( softPermutationId ) )
-      {
-        throw new UnableToCompleteException();
-      }
-      final Set<BindingProperty> list = new HashSet<BindingProperty>();
-      bindings.put( softPermutationId, list );
+      final List<BindingProperty> list = new ArrayList<BindingProperty>();
       for ( final SelectionProperty property : context.getProperties() )
       {
         if ( !property.isDerived() )
@@ -336,11 +328,17 @@ public final class AppcacheLinker
           }
         }
       }
+      final SelectionDescriptor selection = new SelectionDescriptor( strongName, list );
+      final List<SelectionDescriptor> selectors = permutation.getSelectors();
+      if ( !selectors.contains( selection ) )
+      {
+        selectors.add( selection );
+      }
     }
     if ( null != permutation )
     {
       logger.log( Type.DEBUG, "Calculated Permutation: " + permutation.getPermutationName() +
-                              " Properties: " + permutation.getBindingProperties() );
+                              " Selectors: " + permutation.getSelectors() );
     }
     return permutation;
   }

@@ -1,15 +1,15 @@
 package org.realityforge.gwt.appcache.server;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 public class Permutation
 {
   public static final String PERMUTATION_MANIFEST_FILE_ENDING = ".appcache";
   private final String _permutationName;
-  private final Map<Integer, Set<BindingProperty>> _bindingProperties = new HashMap<Integer, Set<BindingProperty>>();
+  private final List<SelectionDescriptor> _selectors = new ArrayList<SelectionDescriptor>();
   private final HashSet<String> _permutationFiles = new HashSet<String>();
 
   public Permutation( final String permutationName )
@@ -43,8 +43,8 @@ public class Permutation
     return _permutationFiles;
   }
 
-  public Map<Integer, Set<BindingProperty>> getBindingProperties()
+  public List<SelectionDescriptor> getSelectors()
   {
-    return _bindingProperties;
+    return _selectors;
   }
 }
