@@ -47,4 +47,23 @@ public class BindingPropertyTest
     assertTrue( property.matches( "3" ) );
     assertFalse( property.matches( "X" ) );
   }
+
+  @Test
+  public void compareTo()
+  {
+    final BindingProperty property1 = new BindingProperty( "a", "1" );
+    final BindingProperty property2 = new BindingProperty( "a", "2" );
+    final BindingProperty property3 = new BindingProperty( "b", "1" );
+    assertEquals( property1.compareTo( property1 ), 0 );
+    assertEquals( property1.compareTo( property2 ), -1 );
+    assertEquals( property1.compareTo( property3 ), -1 );
+
+    assertEquals( property2.compareTo( property1 ), +1 );
+    assertEquals( property2.compareTo( property2 ), 0 );
+    assertEquals( property2.compareTo( property3 ), -1 );
+
+    assertEquals( property3.compareTo( property1 ), 1 );
+    assertEquals( property3.compareTo( property2 ), 1 );
+    assertEquals( property3.compareTo( property3 ), 0 );
+  }
 }

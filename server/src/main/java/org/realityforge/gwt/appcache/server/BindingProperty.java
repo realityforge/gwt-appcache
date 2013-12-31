@@ -3,6 +3,7 @@ package org.realityforge.gwt.appcache.server;
 import javax.annotation.Nonnull;
 
 public final class BindingProperty
+  implements Comparable<BindingProperty>
 {
   private final String _name;
   private final String _value;
@@ -43,6 +44,20 @@ public final class BindingProperty
       }
     }
     return false;
+  }
+
+  @Override
+  public int compareTo( @Nonnull final BindingProperty that )
+  {
+    final int result = _name.compareTo( that._name );
+    if ( 0 != result )
+    {
+      return result;
+    }
+    else
+    {
+      return _value.compareTo( that._value );
+    }
   }
 
   @Override
