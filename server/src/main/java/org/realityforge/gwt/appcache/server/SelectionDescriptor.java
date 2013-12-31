@@ -1,5 +1,6 @@
 package org.realityforge.gwt.appcache.server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,7 +16,10 @@ public final class SelectionDescriptor
   public SelectionDescriptor( final String permutationName, final List<BindingProperty> bindingProperties )
   {
     _permutationName = permutationName;
-    _bindingProperties = Collections.unmodifiableList( bindingProperties );
+    final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>( bindingProperties.size() );
+    properties.addAll( bindingProperties );
+    Collections.sort( properties );
+    _bindingProperties = Collections.unmodifiableList( properties );
   }
 
   public String getPermutationName()
