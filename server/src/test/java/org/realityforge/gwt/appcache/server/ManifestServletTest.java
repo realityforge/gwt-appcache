@@ -372,7 +372,7 @@ public class ManifestServletTest
       "</permutations>\n";
 
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
-    computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
+    bp( computedBindings, "user.agent", "ie9" );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
   }
@@ -395,7 +395,7 @@ public class ManifestServletTest
       "</permutations>\n";
 
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
-    computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
+    bp( computedBindings, "user.agent", "ie9" );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
   }
@@ -417,7 +417,7 @@ public class ManifestServletTest
       "</permutations>\n";
 
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
-    computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
+    bp( computedBindings, "user.agent", "ie9" );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
   }
@@ -445,9 +445,9 @@ public class ManifestServletTest
       "</permutations>\n";
 
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
-    computedBindings.add( new BindingProperty( "user.agent", "ie9" ) );
-    computedBindings.add( new BindingProperty( "screen.size", "biggo" ) );
-    computedBindings.add( new BindingProperty( "color.depth", "much" ) );
+    bp( computedBindings, "user.agent", "ie9" );
+    bp( computedBindings, "screen.size", "biggo" );
+    bp( computedBindings, "color.depth", "much" );
 
     ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
   }
@@ -477,5 +477,10 @@ public class ManifestServletTest
     outputStream.write( content.getBytes() );
     outputStream.close();
     return permutations;
+  }
+
+  private void bp( final ArrayList<BindingProperty> properties, final String key, final String value )
+  {
+    properties.add( new BindingProperty( key, value ) );
   }
 }
