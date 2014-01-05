@@ -1,3 +1,6 @@
+## 0.9:
+* Change PermutationsIO.deserialize() to return an unmodifiable list.
+
 ## 0.8:
 * Support multiple selector properties when matching strong and weak permutations.
 * Rename PermutationDescriptor to SelectionDescriptor to reflect actual semantics.

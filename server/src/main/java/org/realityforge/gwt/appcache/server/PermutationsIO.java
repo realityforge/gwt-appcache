@@ -3,6 +3,7 @@ package org.realityforge.gwt.appcache.server;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -52,7 +53,7 @@ public final class PermutationsIO
       final Element permutationNode = (Element) node;
       handlePermutation( descriptors, permutationNode );
     }
-    return descriptors;
+    return Collections.unmodifiableList( descriptors );
   }
 
   private static void handlePermutation( final List<SelectionDescriptor> descriptors, final Element permutationNode )
