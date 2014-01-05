@@ -302,6 +302,162 @@ public class ManifestServletTest
   }
 
   @Test
+  public void reduceToMatchingDescriptors_withSingleMatch()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      descriptors.add( new SelectionDescriptor( "P1", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie8" );
+      descriptors.add( new SelectionDescriptor( "P2", properties ) );
+    }
+
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    bp( computedBindings, "user.agent", "ie9" );
+
+    servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
+
+    assertEquals( computedBindings.size(), 0 );
+
+    assertEquals( descriptors.size(), 1 );
+    assertTrue( isPermutationPresent( descriptors, "P1" ) );
+  }
+
+  @Test
+  public void reduceToMatchingDescriptors_withNoMatch()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      descriptors.add( new SelectionDescriptor( "P1", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie8" );
+      descriptors.add( new SelectionDescriptor( "P2", properties ) );
+    }
+
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    bp( computedBindings, "user.agent", "ie10" );
+
+    servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
+
+    assertEquals( computedBindings.size(), 0 );
+    assertEquals( descriptors.size(), 0 );
+  }
+
+  @Test
+  public void reduceToMatchingDescriptors_withPartialMatch()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      bp( properties, "screen.size", "large" );
+      descriptors.add( new SelectionDescriptor( "P1", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      bp( properties, "screen.size", "small" );
+      descriptors.add( new SelectionDescriptor( "P2", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie10" );
+      bp( properties, "screen.size", "large" );
+      descriptors.add( new SelectionDescriptor( "P3", properties ) );
+    }
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie10" );
+      bp( properties, "screen.size", "small" );
+      descriptors.add( new SelectionDescriptor( "P4", properties ) );
+    }
+
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    bp( computedBindings, "user.agent", "ie10" );
+
+    servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
+
+    assertEquals( computedBindings.size(), 0 );
+
+    assertEquals( descriptors.size(), 2 );
+    assertTrue( isPermutationPresent( descriptors, "P3" ) );
+    assertTrue( isPermutationPresent( descriptors, "P4" ) );
+  }
+
+  @Test
+  public void reduceToMatchingDescriptors_withIncompleteMatch()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      bp( properties, "screen.size", "large" );
+      descriptors.add( new SelectionDescriptor( "P1", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie9" );
+      bp( properties, "screen.size", "small" );
+      descriptors.add( new SelectionDescriptor( "P2", properties ) );
+    }
+
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie10" );
+      bp( properties, "screen.size", "large" );
+      descriptors.add( new SelectionDescriptor( "P3", properties ) );
+    }
+    {
+      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      bp( properties, "user.agent", "ie10" );
+      bp( properties, "screen.size", "small" );
+      descriptors.add( new SelectionDescriptor( "P4", properties ) );
+    }
+
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    bp( computedBindings, "user.agent", "ie10" );
+    bp( computedBindings, "os.name", "ms" );
+
+    servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
+
+    assertEquals( computedBindings.size(), 1 );
+    assertTrue( isPropertyPresent( computedBindings, "os.name" ) );
+
+    assertEquals( descriptors.size(), 2 );
+    assertTrue( isPermutationPresent( descriptors, "P3" ) );
+    assertTrue( isPermutationPresent( descriptors, "P4" ) );
+  }
+
+  @Test
   public void getModuleName()
     throws Exception
   {
@@ -483,5 +639,29 @@ public class ManifestServletTest
   private void bp( final ArrayList<BindingProperty> properties, final String key, final String value )
   {
     properties.add( new BindingProperty( key, value ) );
+  }
+
+  private boolean isPermutationPresent( final ArrayList<SelectionDescriptor> descriptors, final String permutationName )
+  {
+    for ( final SelectionDescriptor descriptor : descriptors )
+    {
+      if ( descriptor.getPermutationName().equals( permutationName ) )
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isPropertyPresent( final ArrayList<BindingProperty> properties, final String propertyName )
+  {
+    for ( final BindingProperty property : properties )
+    {
+      if ( property.getName().equals( propertyName ) )
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }

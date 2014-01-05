@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -225,6 +226,81 @@ public abstract class AbstractManifestServlet
     // HTTP 1.1 'pre-check=0, post-check=0' => (Internet Explorer should always check)
     response.setHeader( "Cache-control", "no-cache, must-revalidate, pre-check=0, post-check=0" );
     response.setHeader( "Pragma", "no-cache" );
+  }
+
+  /**
+   * This method will restrict the list of descriptors so that it only contains selections valid for specified
+   * bindings. Bindings will be removed from the list as they are matched. Unmatched bindings will remain in the
+   * bindings list after the method completes.
+   */
+  protected final void reduceToMatchingDescriptors( @Nonnull final List<BindingProperty> bindings,
+                                                    @Nonnull final List<SelectionDescriptor> descriptors )
+  {
+    final Iterator<BindingProperty> iterator = bindings.iterator();
+    while ( iterator.hasNext() )
+    {
+      final BindingProperty property = iterator.next();
+
+      // Do any selectors match?
+      boolean matched = false;
+      for ( final SelectionDescriptor selection : descriptors )
+      {
+        final BindingProperty candidate =
+          findMatchingBindingProperty( selection.getBindingProperties(), property );
+        if ( null != candidate )
+        {
+          matched = true;
+          break;
+        }
+      }
+      if ( matched )
+      {
+        // if so we can remove binding property from candidates list
+        iterator.remove();
+
+        // and now remove any selections that don't match
+        final Iterator<SelectionDescriptor> selections = descriptors.iterator();
+        while ( selections.hasNext() )
+        {
+          final SelectionDescriptor selection = selections.next();
+          if ( null == findSatisfiesBindingProperty( selection.getBindingProperties(), property ) )
+          {
+            selections.remove();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Return the binding property in the bindings list that matches specified requirement.
+   */
+  private BindingProperty findMatchingBindingProperty( final List<BindingProperty> bindings,
+                                                       final BindingProperty requirement )
+  {
+    for ( final BindingProperty candidate : bindings )
+    {
+      if ( requirement.getName().equals( candidate.getName() ) )
+      {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Return the binding property in the bindings list that satisfies specified requirement. Satisfies means that
+   * the property name matches and the value matches.
+   */
+  private BindingProperty findSatisfiesBindingProperty( final List<BindingProperty> bindings,
+                                                        final BindingProperty requirement )
+  {
+    final BindingProperty property = findMatchingBindingProperty( bindings, requirement );
+    if ( null != property && requirement.matches( property.getValue() ) )
+    {
+      return property;
+    }
+    return null;
   }
 
   protected final String getPermutationStrongName( @Nonnull final String baseUrl,
