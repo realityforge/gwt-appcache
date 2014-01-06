@@ -458,7 +458,7 @@ public class ManifestServletTest
   }
 
   @Test
-  public void selectPermutations()
+  public void selectPermutations_withClientSidePropertiesPresent()
     throws Exception
   {
     final String permutationContent =
