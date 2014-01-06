@@ -59,7 +59,6 @@ public class ManifestDescriptorTest
       "example/clear.cache.gif\n" +
       "\n" +
       "\n" +
-      "# All other resources require the client to be online.\n" +
       "NETWORK:\n" +
       "some/backend%20service.json\n" +
       "*\n";

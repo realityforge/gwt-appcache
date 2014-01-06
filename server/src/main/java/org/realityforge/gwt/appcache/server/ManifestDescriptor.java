@@ -123,7 +123,6 @@ public final class ManifestDescriptor
     }
 
     sb.append( "\n\n" );
-    sb.append( "# All other resources require the client to be online.\n" );
     sb.append( "NETWORK:\n" );
     for ( final String resource : _networkResources )
     {
