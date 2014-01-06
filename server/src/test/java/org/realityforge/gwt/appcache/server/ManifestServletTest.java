@@ -540,7 +540,7 @@ public class ManifestServletTest
     assertEquals( servlet.getModuleName( mock ), "myapp" );
   }
 
-  @Test(expectedExceptions = ServletException.class)
+  @Test( expectedExceptions = ServletException.class )
   public void getModuleName_missingMapping()
     throws Exception
   {
@@ -551,7 +551,7 @@ public class ManifestServletTest
     servlet.getModuleName( mock );
   }
 
-  @Test(expectedExceptions = ServletException.class)
+  @Test( expectedExceptions = ServletException.class )
   public void getModuleName_badMapping()
     throws Exception
   {
