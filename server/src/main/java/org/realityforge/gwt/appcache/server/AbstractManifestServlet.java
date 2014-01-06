@@ -77,10 +77,12 @@ public abstract class AbstractManifestServlet
     final String moduleName = getModuleName( request );
     final String baseUrl = getBaseUrl( request );
     final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
-    final String strongName = getPermutationStrongName( baseUrl, moduleName, computedBindings );
-    if ( null != strongName )
+    final String[] permutations = selectPermutations( baseUrl, moduleName, computedBindings );
+    if ( null != permutations )
     {
-      final String manifest = loadManifest( baseUrl, moduleName, strongName );
+      final String manifest = 1 == permutations.length ?
+                              loadManifest( baseUrl, moduleName, permutations[ 0 ] ) :
+                              loadAndMergeManifests( baseUrl, moduleName, permutations );
       serveStringManifest( response, manifest );
     }
     else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
@@ -388,59 +390,6 @@ public abstract class AbstractManifestServlet
   private boolean canMergeManifestForSelectionProperty( final String propertyName )
   {
     return _clientSideSelectionProperties.contains( propertyName );
-  }
-
-  protected final String getPermutationStrongName( @Nonnull final String baseUrl,
-                                                   @Nonnull final String moduleName,
-                                                   @Nonnull final List<BindingProperty> computedBindings )
-    throws ServletException
-  {
-    try
-    {
-      String selectedPermutation = null;
-      int selectedMatchStrength = 0;
-      final List<SelectionDescriptor> descriptors = getPermutationDescriptors( baseUrl, moduleName );
-      for ( final SelectionDescriptor permutationEntry : descriptors )
-      {
-        int matchStrength = 0;
-        boolean matched = true;
-        final List<BindingProperty> requiredBindings = permutationEntry.getBindingProperties();
-        for ( final BindingProperty requirement : requiredBindings )
-        {
-          boolean propertyMatched = false;
-          for ( final BindingProperty candidate : computedBindings )
-          {
-            if ( requirement.getName().equals( candidate.getName() ) )
-            {
-              if ( requirement.matches( candidate.getValue() ) )
-              {
-                propertyMatched = true;
-                break;
-              }
-            }
-          }
-          if ( !propertyMatched )
-          {
-            matched = false;
-            break;
-          }
-          else
-          {
-            matchStrength = requiredBindings.size();
-          }
-        }
-        if ( matched && matchStrength > selectedMatchStrength )
-        {
-          selectedPermutation = permutationEntry.getPermutationName();
-          selectedMatchStrength = matchStrength;
-        }
-      }
-      return selectedPermutation;
-    }
-    catch ( final Exception e )
-    {
-      throw new ServletException( "can not read permutation information", e );
-    }
   }
 
   final List<SelectionDescriptor> getPermutationDescriptors( @Nonnull final String baseUrl,

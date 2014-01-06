@@ -95,6 +95,64 @@ public class ManifestServletTest
   }
 
   @Test
+  public void doGet_matchedMultiplePermutations()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    servlet.addPropertyProvider( new TestPropertyProvider( "user.agent", "ie8" ) );
+    servlet.addClientSideSelectionProperty( "screen.size" );
+
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      "   <permutation name=\"P1\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "      <screen.size>big</screen.size>\n" +
+      "   </permutation>\n" +
+      "   <permutation name=\"P2\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "      <screen.size>small</screen.size>\n" +
+      "   </permutation>\n" +
+      "</permutations>\n";
+
+    final File permutations = createFile( "permutations", "xml", permutationContent );
+    final String manifest1Content = "CACHE MANIFEST\n\nCACHE:\n1\n2\n\n\nNETWORK:\nA\nB\n";
+    final String manifest2Content = "CACHE MANIFEST\n\nCACHE:\n1\n3\n\n\nNETWORK:\nA\nC\n";
+    final File manifest1 = createFile( "manifest", "appcache", manifest1Content );
+    final File manifest2 = createFile( "manifest", "appcache", manifest2Content );
+
+    final HttpServletRequest request = mock( HttpServletRequest.class );
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
+    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.getAbsolutePath() );
+    when( servlet.getServletContext().getRealPath( "/fgis/P1.appcache" ) ).
+      thenReturn( manifest1.getAbsolutePath() );
+    when( servlet.getServletContext().getRealPath( "/fgis/P2.appcache" ) ).
+      thenReturn( manifest2.getAbsolutePath() );
+
+    final ServletOutputStream output = mock( ServletOutputStream.class );
+    when( response.getOutputStream() ).thenReturn( output );
+
+    servlet.doGet( request, response );
+
+    final String manifestContent =
+      "CACHE MANIFEST\n" +
+      "\n" +
+      "CACHE:\n" +
+      "1\n" +
+      "2\n" +
+      "3\n" +
+      "\n" +
+      "\n" +
+      "NETWORK:\n" +
+      "A\n" +
+      "B\n" +
+      "C\n";
+    verify( output ).write( manifestContent.getBytes( "US-ASCII" ) );
+  }
+
+  @Test
   public void doGet_notFound()
     throws Exception
   {
