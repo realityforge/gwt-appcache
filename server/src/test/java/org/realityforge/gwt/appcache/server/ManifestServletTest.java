@@ -482,7 +482,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-      final String[] clientSideProperties = { "screen.size" };
+    final String[] clientSideProperties = { "screen.size" };
 
     // Complete match
     {
