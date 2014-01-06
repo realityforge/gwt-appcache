@@ -458,6 +458,78 @@ public class ManifestServletTest
   }
 
   @Test
+  public void selectPermutations()
+    throws Exception
+  {
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      "   <permutation name=\"P1\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "      <screen.size>big</screen.size>\n" +
+      "   </permutation>\n" +
+      "   <permutation name=\"P2\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "      <screen.size>small</screen.size>\n" +
+      "   </permutation>\n" +
+      "   <permutation name=\"P3\">\n" +
+      "      <user.agent>ie8</user.agent>\n" +
+      "      <screen.size>medium</screen.size>\n" +
+      "   </permutation>\n" +
+      "   <permutation name=\"P4\">\n" +
+      "      <user.agent>ie9</user.agent>\n" +
+      "      <screen.size>medium</screen.size>\n" +
+      "   </permutation>\n" +
+      "</permutations>\n";
+
+      final String[] clientSideProperties = { "screen.size" };
+
+    // Complete match
+    {
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      bp( computedBindings, "user.agent", "ie8" );
+      bp( computedBindings, "screen.size", "big" );
+      ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, "P1" );
+    }
+
+    // Partial match
+    {
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      bp( computedBindings, "user.agent", "ie8" );
+      ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, "P1", "P2", "P3" );
+    }
+
+    // No match
+    {
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      bp( computedBindings, "user.agent", "ie9" );
+      bp( computedBindings, "screen.size", "big" );
+      ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, (String[]) null );
+    }
+  }
+
+  private void ensurePermutationsSelected( final String permutationContent,
+                                           final String[] clientSideProperties,
+                                           final List<BindingProperty> computedBindings,
+                                           final String... expected )
+    throws IOException, ServletException
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+    for ( final String property : clientSideProperties )
+    {
+      servlet.addClientSideSelectionProperty( property );
+    }
+
+    final ServletContext servletContext = servlet.getServletContext();
+    final File permutations = createFile( "permutations", "xml", permutationContent );
+    when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
+
+    final String[] selected = servlet.selectPermutations( "/foo/", "myapp", computedBindings );
+
+    assertEquals( selected, expected );
+  }
+
+  @Test
   public void getModuleName()
     throws Exception
   {

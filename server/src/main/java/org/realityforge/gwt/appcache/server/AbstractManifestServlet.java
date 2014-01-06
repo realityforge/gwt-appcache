@@ -21,6 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
+/**
+ * Base class for servlet the does server-side permutation selection and serves the correct appcache manifest.
+ *
+ * The servlet calls a chain of PropertyProvider instances to derive properties that are used to select the
+ * appropriate manifest at runtime. Sometimes, certain properties can not be determined definitively except on
+ * client-side and thus the servlet may need to serve up a manifest that merges appcache manifests for multiple
+ * permutations so that the selection can occur on the client-side.
+ */
 public abstract class AbstractManifestServlet
   extends HttpServlet
 {
@@ -35,12 +43,22 @@ public abstract class AbstractManifestServlet
     Pattern.compile( "/([a-zA-Z0-9]+)\\" + Permutation.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
 
   private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
+  private transient ArrayList<String> _clientSideSelectionProperties = new ArrayList<String>();
   private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
   private transient List<SelectionDescriptor> _selectionDescriptors;
 
   protected final void addPropertyProvider( final PropertyProvider propertyProvider )
   {
     _providers.add( propertyProvider );
+  }
+
+  /**
+   * Specify that a property with the specified name may need to be ultimately determined on the
+   * client-side.
+   */
+  protected final void addClientSideSelectionProperty( final String propertyName )
+  {
+    _clientSideSelectionProperties.add( propertyName );
   }
 
   @Override
@@ -301,6 +319,72 @@ public abstract class AbstractManifestServlet
       return property;
     }
     return null;
+  }
+
+  protected final String[] selectPermutations( @Nonnull final String baseUrl,
+                                               @Nonnull final String moduleName,
+                                               @Nonnull final List<BindingProperty> computedBindings )
+    throws ServletException
+  {
+    try
+    {
+      final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+      descriptors.addAll( getPermutationDescriptors( baseUrl, moduleName ) );
+      final List<BindingProperty> bindings = new ArrayList<BindingProperty>();
+      bindings.addAll( computedBindings );
+      reduceToMatchingDescriptors( bindings, descriptors );
+      if ( 0 == bindings.size() )
+      {
+        if ( 1 == descriptors.size() )
+        {
+          return new String[]{ descriptors.get( 0 ).getPermutationName() };
+        }
+        else
+        {
+          final ArrayList<String> permutations = new ArrayList<String>();
+          for ( final SelectionDescriptor descriptor : descriptors )
+          {
+            for ( final BindingProperty property : descriptor.getBindingProperties() )
+            {
+              // This is one of the bindings that we could not reduce on 
+              if ( null == findMatchingBindingProperty( computedBindings, property ) )
+              {
+                if ( !canMergeManifestForSelectionProperty( property.getName() ) )
+                {
+                  return null;
+                }
+                else
+                {
+                  permutations.add( descriptor.getPermutationName() );
+                }
+              }
+            }
+          }
+          if ( 0 == permutations.size() )
+          {
+            return null;
+          }
+          else
+          {
+            return permutations.toArray( new String[ permutations.size() ] );
+          }
+        }
+      }
+      return null;
+    }
+    catch ( final Exception e )
+    {
+      throw new ServletException( "can not read permutation information", e );
+    }
+  }
+
+  /**
+   * Return true if specified property may be determined client-side and manifests should be merged to
+   * allow client-side selection.
+   */
+  private boolean canMergeManifestForSelectionProperty( final String propertyName )
+  {
+    return _clientSideSelectionProperties.contains( propertyName );
   }
 
   protected final String getPermutationStrongName( @Nonnull final String baseUrl,
