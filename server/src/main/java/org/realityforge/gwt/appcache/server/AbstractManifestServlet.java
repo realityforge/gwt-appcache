@@ -344,18 +344,21 @@ public abstract class AbstractManifestServlet
           final ArrayList<String> permutations = new ArrayList<String>();
           for ( final SelectionDescriptor descriptor : descriptors )
           {
-            for ( final BindingProperty property : descriptor.getBindingProperties() )
+            if ( descriptor.getBindingProperties().size() == computedBindings.size() )
             {
-              // This is one of the bindings that we could not reduce on 
-              if ( null == findMatchingBindingProperty( computedBindings, property ) )
+              permutations.add( descriptor.getPermutationName() );
+            }
+            else
+            {
+              for ( final BindingProperty property : descriptor.getBindingProperties() )
               {
-                if ( !canMergeManifestForSelectionProperty( property.getName() ) )
+                // This is one of the bindings that we could not reduce on
+                if ( null == findMatchingBindingProperty( computedBindings, property ) )
                 {
-                  return null;
-                }
-                else
-                {
-                  permutations.add( descriptor.getPermutationName() );
+                  if ( canMergeManifestForSelectionProperty( property.getName() ) )
+                  {
+                    permutations.add( descriptor.getPermutationName() );
+                  }
                 }
               }
             }
