@@ -323,6 +323,14 @@ public abstract class AbstractManifestServlet
     return null;
   }
 
+  /**
+   * Return an array of permutation names that are selected based on supplied properties.
+   *
+   * The array may be null if no permutation could be found. It may be a single value if
+   * the bindings uniquely identify a permutation or it may be multiple values if client side
+   * properties are not specified and the server side properties do not uniquely identify a
+   * permutation.
+   */
   protected final String[] selectPermutations( @Nonnull final String baseUrl,
                                                @Nonnull final String moduleName,
                                                @Nonnull final List<BindingProperty> computedBindings )
