@@ -314,7 +314,7 @@ public abstract class AbstractManifestServlet
                                                         final BindingProperty requirement )
   {
     final BindingProperty property = findMatchingBindingProperty( bindings, requirement );
-    if ( null != property && requirement.matches( property.getValue() ) )
+    if ( null != property && property.matches( requirement.getValue() ) )
     {
       return property;
     }
