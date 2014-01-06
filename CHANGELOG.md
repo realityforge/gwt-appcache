@@ -1,4 +1,8 @@
 ## 0.9:
+* Support the notion of client-side selection properties in AbstractManifestServlet.
+  If one of these properties is not defined on the server-side then a merged
+  manifest that covers all of the permutations that are matched is sent to the
+  client and selection occurs on the client-side.
 * Change PermutationsIO.deserialize() to return an unmodifiable list.
 
 ## 0.8:
