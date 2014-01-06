@@ -603,7 +603,7 @@ public class ManifestServletTest
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     bp( computedBindings, "user.agent", "ie9" );
 
-    ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
+    ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
   }
 
   @Test
@@ -626,7 +626,7 @@ public class ManifestServletTest
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     bp( computedBindings, "user.agent", "ie9" );
 
-    ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
+    ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
   }
 
   @Test
@@ -648,7 +648,7 @@ public class ManifestServletTest
     final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
     bp( computedBindings, "user.agent", "ie9" );
 
-    ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
+    ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
   }
 
   @Test
@@ -678,24 +678,9 @@ public class ManifestServletTest
     bp( computedBindings, "screen.size", "biggo" );
     bp( computedBindings, "color.depth", "much" );
 
-    ensureStrongPermutationReturned( permutationContent, computedBindings, strongPermutation );
+    ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
   }
 
-  private void ensureStrongPermutationReturned( final String permutationContent,
-                                                final List<BindingProperty> computedBindings,
-                                                final String expected )
-    throws IOException, ServletException
-  {
-    final TestManifestServlet servlet = new TestManifestServlet();
-
-    final ServletContext servletContext = servlet.getServletContext();
-    final File permutations = createFile( "permutations", "xml", permutationContent );
-    when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
-
-    final String permutationStrongName = servlet.getPermutationStrongName( "/foo/", "myapp", computedBindings );
-
-    assertEquals( permutationStrongName, expected );
-  }
 
   private File createFile( final String prefix, final String extension, final String content )
     throws IOException
