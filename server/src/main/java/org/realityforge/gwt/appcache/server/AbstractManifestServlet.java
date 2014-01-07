@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -46,10 +49,37 @@ public abstract class AbstractManifestServlet
   private transient ArrayList<String> _clientSideSelectionProperties = new ArrayList<String>();
   private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
   private transient List<SelectionDescriptor> _selectionDescriptors;
+  private transient Map<String,String> _cache;
+  private transient boolean _enableCache;
+
+  protected AbstractManifestServlet()
+  {
+    enableCache();
+  }
 
   protected final void addPropertyProvider( final PropertyProvider propertyProvider )
   {
     _providers.add( propertyProvider );
+  }
+
+  protected final boolean isCacheEnabled()
+  {
+    return _enableCache;
+  }
+
+  protected final void enableCache()
+  {
+    if( null == _cache )
+    {
+      _cache = new HashMap<String, String>();
+    }
+    _enableCache = true;
+  }
+
+  protected final void disableCache()
+  {
+    _enableCache = false;
+    _cache = null;
   }
 
   /**
@@ -133,6 +163,16 @@ public abstract class AbstractManifestServlet
                                                 final String... permutationNames )
     throws ServletException
   {
+    final String cacheKey = toCacheKey( baseUrl, moduleName, permutationNames );
+    if( isCacheEnabled() )
+    {
+      final String manifest = _cache.get( cacheKey );
+      if( null != manifest )
+      {
+        return manifest;
+      }
+    }
+
     final ManifestDescriptor descriptor = new ManifestDescriptor();
     for ( final String permutationName : permutationNames )
     {
@@ -142,16 +182,53 @@ public abstract class AbstractManifestServlet
     }
     Collections.sort( descriptor.getCachedResources() );
     Collections.sort( descriptor.getNetworkResources() );
-    return descriptor.toString();
+    final String manifest = descriptor.toString();
+    if ( isCacheEnabled() )
+    {
+      _cache.put( cacheKey, manifest );
+    }
+    return manifest;
+  }
+
+  private String toCacheKey( final String baseUrl, final String moduleName, final String[] permutationNames )
+  {
+    Arrays.sort( permutationNames );
+    final StringBuilder sb = new StringBuilder();
+    sb.append( baseUrl );
+    sb.append( moduleName );
+    sb.append( "/" );
+    for ( int i = 0; i < permutationNames.length; i++ )
+    {
+      if ( 0 != i )
+      {
+        sb.append( ',' );
+      }
+      sb.append( permutationNames[ i ] );
+    }
+    return sb.toString();
   }
 
   protected final String loadManifest( final String baseUrl, final String moduleName, final String strongName )
     throws ServletException
   {
-    final String filePath = baseUrl + moduleName + "/" + strongName + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
+    final String cacheKey = baseUrl + moduleName + "/" + strongName;
+    final String filePath = cacheKey + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
+    if( isCacheEnabled() )
+    {
+      final String manifest = _cache.get( cacheKey );
+      if( null != manifest )
+      {
+        return manifest;
+      }
+    }
     final String realPath = getServletContext().getRealPath( filePath );
     assert null != realPath;
-    return readFile( new File( realPath ) );
+    final String manifest = readFile( new File( realPath ) );
+    if ( isCacheEnabled() )
+    {
+      _cache.put( cacheKey, manifest );
+    }
+    return manifest;
   }
 
   final String getBaseUrl( final HttpServletRequest request )
@@ -412,6 +489,10 @@ public abstract class AbstractManifestServlet
     {
       _selectionDescriptors = PermutationsIO.deserialize( new FileInputStream( realPath ) );
       _permutationsDescriptorLastModified = lastModified;
+      if( null != _cache )
+      {
+        _cache.clear();
+      }
     }
     return _selectionDescriptors;
   }

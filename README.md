@@ -146,12 +146,6 @@ Server-side selection
 Consider doing server-side selection of configuration properties. Deriving browser
 properties from cookies if need be.
 
-Cache Manifests in Servlet
---------------------------
-
-Consider support caching of manifests rather than reading them from the file system
-every time. The cache would be cleared when the permutations.xml is reloaded.
-
 ApplicationCache.removeCache() for Safari
 -----------------------------------------
 

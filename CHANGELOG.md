@@ -1,4 +1,6 @@
 ## 0.9:
+* Cache manifests rather than re-reading them from the filesystem and clear cache
+  when permutations.xml is reloaded.
 * Use deferred binding to control support for appcache capability.
 * Reduce the set of module dependencies declared in the Appcache.gwt.xml file
   to the minimal set.

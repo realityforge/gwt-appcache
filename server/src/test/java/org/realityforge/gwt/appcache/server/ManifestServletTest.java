@@ -293,6 +293,7 @@ public class ManifestServletTest
     verify( output ).write( "DD".getBytes( "US-ASCII" ) );
   }
 
+  @SuppressWarnings( "StringEquality" )
   @Test
   public void loadManifest()
     throws Exception
@@ -307,8 +308,22 @@ public class ManifestServletTest
 
     final String manifest = servlet.loadManifest( "/foo/", "myapp", "12345" );
     assertEquals( manifest, expectedManifest );
+
+    final String manifest2 = servlet.loadManifest( "/foo/", "myapp", "12345" );
+    assertTrue( manifest2 == manifest );
+
+    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/12345.appcache" );
+
+    servlet.disableCache();
+
+    final String manifest3 = servlet.loadManifest( "/foo/", "myapp", "12345" );
+    assertTrue( manifest3 != manifest );
+    assertEquals( manifest3, manifest );
+
+    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/12345.appcache" );
   }
 
+  @SuppressWarnings( "StringEquality" )
   @Test
   public void loadAndMergeManifests()
     throws Exception
@@ -339,6 +354,19 @@ public class ManifestServletTest
     assertTrue( networkResources.contains( "A" ) );
     assertTrue( networkResources.contains( "B" ) );
     assertTrue( networkResources.contains( "C" ) );
+
+    final String manifestResult2 = servlet.loadAndMergeManifests( "/foo/", "myapp", "m1", "m2" );
+    assertTrue( manifestResult2 == manifest );
+
+    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/m2.appcache" );
+
+    servlet.disableCache();
+
+    final String manifestResult3 = servlet.loadAndMergeManifests( "/foo/", "myapp", "m1", "m2" );
+    assertTrue( manifestResult3 != manifest );
+    assertEquals( manifestResult3, manifest );
+
+    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/m2.appcache" );
   }
 
   @Test
@@ -620,6 +648,7 @@ public class ManifestServletTest
     servlet.getModuleName( mock );
   }
 
+  @SuppressWarnings( "StringEquality" )
   @Test
   public void getBindingMap()
     throws Exception
@@ -629,18 +658,32 @@ public class ManifestServletTest
     final ServletContext servletContext = servlet.getServletContext();
     final String permutationContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations></permutations>\n";
     final File permutations = createFile( "permutations", "xml", permutationContent );
+    final File manifestFile = createFile( "manifest", "appcache", "XXXX\n" );
+        when( servlet.getServletContext().getRealPath( "/foo/myapp/12345.appcache" ) ).
+      thenReturn( manifestFile.getAbsolutePath() );
+
+
     assertTrue( permutations.setLastModified( 0 ) );
 
     when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
 
     final List<SelectionDescriptor> descriptors = servlet.getPermutationDescriptors( "/foo/", "myapp" );
     assertNotNull( descriptors );
+    final String manifest = servlet.loadManifest( "/foo/", "myapp", "12345" );
 
     assertTrue( descriptors == servlet.getPermutationDescriptors( "/foo/", "myapp" ) );
+
+    final String manifest2 = servlet.loadManifest( "/foo/", "myapp", "12345" );
+    assertTrue( manifest2 == manifest );
+    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/12345.appcache" );
 
     assertTrue( permutations.setLastModified( Long.MAX_VALUE ) );
 
     assertFalse( descriptors == servlet.getPermutationDescriptors( "/foo/", "myapp" ) );
+
+    final String manifest3 = servlet.loadManifest( "/foo/", "myapp", "12345" );
+    assertTrue( manifest3 != manifest );
+    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/12345.appcache" );
 
     assertTrue( permutations.delete() );
   }
