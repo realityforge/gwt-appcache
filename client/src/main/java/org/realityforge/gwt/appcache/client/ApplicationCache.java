@@ -146,41 +146,65 @@ public abstract class ApplicationCache
     return _eventBus.addHandler( UpdateReadyEvent.getType(), handler );
   }
 
+  /**
+   * Fire a Checking event.
+   */
   protected final void onChecking()
   {
     _eventBus.fireEventFromSource( new CheckingEvent(), this );
   }
 
+  /**
+   * Fire an Error event.
+   */
   protected final void onError()
   {
     _eventBus.fireEventFromSource( new ErrorEvent(), this );
   }
 
+  /**
+   * Fire a NoUpdate event.
+   */
   protected final void onNoUpdate()
   {
     _eventBus.fireEventFromSource( new NoUpdateEvent(), this );
   }
 
+  /**
+   * Fire a Downloading event.
+   */
   protected final void onDownloading()
   {
     _eventBus.fireEventFromSource( new DownloadingEvent(), this );
   }
 
+  /**
+   * Fire a Progress event.
+   */
   protected final void onProgress( final int loaded, final int total )
   {
     _eventBus.fireEventFromSource( new ProgressEvent( loaded, total ), this );
   }
 
+  /**
+   * Fire a UpdateReady event.
+   */
   protected final void onUpdateReady()
   {
     _eventBus.fireEventFromSource( new UpdateReadyEvent(), this );
   }
 
+  /**
+   * Fire an Obsolete event.
+   */
   protected final void onCached()
   {
     _eventBus.fireEventFromSource( new CachedEvent(), this );
   }
 
+  /**
+   * Fire an Obsolete event.
+   */
   protected final void onObsolete()
   {
     _eventBus.fireEventFromSource( new ObsoleteEvent(), this );
