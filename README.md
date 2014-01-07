@@ -140,12 +140,6 @@ file is returned to the requester.
 TODO:
 =====
 
-Server-side selection
----------------------
-
-Consider doing server-side selection of configuration properties. Deriving browser
-properties from cookies if need be.
-
 ApplicationCache.removeCache() for Safari
 -----------------------------------------
 
