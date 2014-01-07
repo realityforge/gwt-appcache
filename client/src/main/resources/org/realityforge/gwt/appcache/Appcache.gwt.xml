@@ -3,5 +3,25 @@
   <inherits name='com.google.gwt.core.Core'/>
   <inherits name='com.google.gwt.dom.DOM'/>
 
+  <!-- Define the appcache support property -->
+  <define-property name="appcacheSupport" values="maybe,no"/>
+
+  <!-- Set the default to maybe -->
+  <set-property name="appcacheSupport" value="maybe"/>
+
+  <!-- Older browsers do not support Storage -->
+  <set-property name="appcacheSupport" value="no">
+    <any>
+      <when-property-is name="user.agent" value="ie6"/>
+      <when-property-is name="user.agent" value="ie7"/>
+      <when-property-is name="user.agent" value="ie8"/>
+    </any>
+  </set-property>
+
+  <replace-with class="org.realityforge.gwt.appcache.client.ApplicationCache.NoSupportDetector">
+    <when-type-is class="org.realityforge.gwt.appcache.client.ApplicationCache.SupportDetector"/>
+    <when-property-is name="storageSupport" value="no"/>
+  </replace-with>
+
   <source path="client"/>
 </module>

@@ -1,4 +1,5 @@
 ## 0.9:
+* Use deferred binding to control support for appcache capability.
 * Reduce the set of module dependencies declared in the Appcache.gwt.xml file
   to the minimal set.
 * Support the notion of client-side selection properties in AbstractManifestServlet.

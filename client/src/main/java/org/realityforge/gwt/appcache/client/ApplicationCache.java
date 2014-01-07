@@ -27,6 +27,7 @@ public abstract class ApplicationCache
   }
 
   private static ApplicationCache g_cache;
+  private static SupportDetector g_supportDetector;
 
   private final EventBus _eventBus;
 
@@ -34,7 +35,7 @@ public abstract class ApplicationCache
   {
     if ( null == g_cache )
     {
-      if ( GWT.isClient() && Html5ApplicationCache.isSupported() && Html5ApplicationCache.hasManifest() )
+      if ( GWT.isClient() && getSupportDetector().isSupported() && getSupportDetector().hasManifest() )
       {
         register( new Html5ApplicationCache() );
       }
@@ -208,5 +209,50 @@ public abstract class ApplicationCache
   protected final void onObsolete()
   {
     _eventBus.fireEventFromSource( new ObsoleteEvent(), this );
+  }
+
+  /**
+   * Detector for browser support of Appcache.
+   */
+  private static class SupportDetector
+  {
+    public boolean isSupported()
+    {
+      return Html5ApplicationCache.isSupported();
+    }
+
+    public boolean hasManifest()
+    {
+      return Html5ApplicationCache.hasManifest();
+    }
+  }
+
+  /**
+   * Detector for browsers that do not support Appcache.
+   */
+  @SuppressWarnings( "unused" )
+  private static class NoSupportDetector
+    extends SupportDetector
+  {
+    @Override
+    public boolean isSupported()
+    {
+      return false;
+    }
+
+    @Override
+    public boolean hasManifest()
+    {
+      return false;
+    }
+  }
+
+  private static SupportDetector getSupportDetector()
+  {
+    if ( null == g_supportDetector )
+    {
+      g_supportDetector = com.google.gwt.core.shared.GWT.create( SupportDetector.class );
+    }
+    return g_supportDetector;
   }
 }
