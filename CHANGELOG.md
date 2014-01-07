@@ -1,4 +1,6 @@
 ## 0.9:
+* Reduce the set of module dependencies declared in the Appcache.gwt.xml file
+  to the minimal set.
 * Support the notion of client-side selection properties in AbstractManifestServlet.
   If one of these properties is not defined on the server-side then a merged
   manifest that covers all of the permutations that are matched is sent to the
