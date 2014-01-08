@@ -31,7 +31,7 @@ public abstract class ApplicationCache
 
   private final EventBus _eventBus;
 
-  public static ApplicationCache get()
+  public static ApplicationCache getApplicationCacheIfSupported()
   {
     if ( null == g_cache )
     {

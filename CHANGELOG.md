@@ -1,3 +1,7 @@
+## 1.0:
+* Rename ApplicationCache.get to ApplicationCache.getApplicationCacheIfSupported
+  for consistency with other frameworks.
+
 ## 0.9:
 * Cache manifests rather than re-reading them from the filesystem and clear cache
   when permutations.xml is reloaded.

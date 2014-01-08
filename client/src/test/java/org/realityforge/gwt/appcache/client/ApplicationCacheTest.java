@@ -20,12 +20,12 @@ public class ApplicationCacheTest
   @Test
   public void registryTest()
   {
-    assertNull( ApplicationCache.get() );
+    assertNull( ApplicationCache.getApplicationCacheIfSupported() );
     ApplicationCache.register( new TestApplicationCache( new SimpleEventBus() ) );
-    assertNotNull( ApplicationCache.get() );
-    final ApplicationCache applicationCache = ApplicationCache.get();
+    assertNotNull( ApplicationCache.getApplicationCacheIfSupported() );
+    final ApplicationCache applicationCache = ApplicationCache.getApplicationCacheIfSupported();
     assertTrue( ApplicationCache.deregister( applicationCache ) );
-    assertNull( ApplicationCache.get() );
+    assertNull( ApplicationCache.getApplicationCacheIfSupported() );
     assertFalse( ApplicationCache.deregister( applicationCache ) );
   }
 
