@@ -144,9 +144,9 @@ ApplicationCache.removeCache() for Safari
 -----------------------------------------
 
 The removeCache() method does not work under Safari as Safari does not sent
-cookies down with request for manifest. Maybe attempt alternative mechanisms
-such as manifest url via Document.get().getDocumentElement().setAttribute( "manifest", ... );
-and adding a query parameter on to it?
+cookies down with request for manifest. No browser supports changing the manifest
+attribute on the document thus limiting the ability to support this feature in
+Safari.
 
 Appendix
 --------
