@@ -21,19 +21,19 @@ The simplest way to appcache enable a GWT application is to;
 <dependency>
    <groupId>org.realityforge.gwt.appcache</groupId>
    <artifactId>gwt-appcache-client</artifactId>
-   <version>0.8</version>
+   <version>0.9</version>
    <scope>provided</scope>
 </dependency>
 <dependency>
    <groupId>org.realityforge.gwt.appcache</groupId>
    <artifactId>gwt-appcache-linker</artifactId>
-   <version>0.8</version>
+   <version>0.9</version>
    <scope>provided</scope>
 </dependency>
 <dependency>
    <groupId>org.realityforge.gwt.appcache</groupId>
    <artifactId>gwt-appcache-server</artifactId>
-   <version>0.8</version>
+   <version>0.9</version>
 </dependency>
 ```
 
