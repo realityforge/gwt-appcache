@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Gwt-appcache : GWT AppCache Support Library" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Gwt-appcache</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/realityforge/gwt-appcache">View on GitHub</a>
+
+          <h1 id="project_title">Gwt-appcache</h1>
+          <h2 id="project_tagline">GWT AppCache Support Library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/realityforge/gwt-appcache/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/realityforge/gwt-appcache/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="gwt-appcache" class="anchor" href="#gwt-appcache"><span class="octicon octicon-link"></span></a>gwt-appcache</h1>
+
+<p><a href="http://travis-ci.org/realityforge/gwt-appcache"><img src="https://secure.travis-ci.org/realityforge/gwt-appcache.png?branch=master" alt="Build Status"></a></p>
+
+<p>The HTML5 Appcache specification is one mechanism for enabling offline
+HTML5 applications. This library provides a simple way to generate the
+required cache manifests and serve for each separate permutation. The
+library also supports the browser side aspect of appcache
+specification. The appendix section includes further references for
+the appcache spec.</p>
+
+<h1>
+<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick Start</h1>
+
+<p>The simplest way to appcache enable a GWT application is to;</p>
+
+<ul>
+<li>add the following dependencies into the build system. i.e.</li>
+</ul><div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-client<span class="nt">&lt;/artifactId&gt;</span>
+   <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-linker<span class="nt">&lt;/artifactId&gt;</span>
+   <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-server<span class="nt">&lt;/artifactId&gt;</span>
+   <span class="nt">&lt;version&gt;</span>0.9<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<ul>
+<li>add the following snippet into the .gwt.xml file.</li>
+</ul><div class="highlight highlight-xml"><pre><span class="nt">&lt;module</span> <span class="na">rename-to=</span><span class="s">'myapp'</span><span class="nt">&gt;</span>
+  ...
+
+  <span class="c">&lt;!-- Enable the client-side library --&gt;</span>
+  <span class="nt">&lt;inherits</span> <span class="na">name=</span><span class="s">"org.realityforge.gwt.appcache.Appcache"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- Enable the linker --&gt;</span>
+  <span class="nt">&lt;inherits</span> <span class="na">name=</span><span class="s">"org.realityforge.gwt.appcache.linker.Linker"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- enable the linker that generates the manifest --&gt;</span>
+  <span class="nt">&lt;add-linker</span> <span class="na">name=</span><span class="s">"appcache"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- configure all the static files not managed by the GWT compiler --&gt;</span>
+  <span class="nt">&lt;extend-configuration-property</span> <span class="na">name=</span><span class="s">"appcache_static_files"</span> <span class="na">value=</span><span class="s">"./"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;extend-configuration-property</span> <span class="na">name=</span><span class="s">"appcache_static_files"</span> <span class="na">value=</span><span class="s">"index.html"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/module&gt;</span>
+</pre></div>
+
+<ul>
+<li>configure html that launches the application to look for the manifest.</li>
+</ul><div class="highlight highlight-xml"><pre><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">manifest=</span><span class="s">"myapp.appcache"</span><span class="nt">&gt;</span>
+   ...
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+<ul>
+<li>declare the servlet that serves the manifest.</li>
+</ul><div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
+  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
+<span class="o">{</span>
+  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<ul>
+<li>interact with the application from within the browser.</li>
+</ul><div class="highlight highlight-java"><pre><span class="kd">final</span> <span class="n">ApplicationCache</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ApplicationCache</span><span class="o">.</span><span class="na">getApplicationCacheIfSupported</span><span class="o">();</span>
+<span class="k">if</span> <span class="o">(</span> <span class="kc">null</span> <span class="o">!=</span> <span class="n">cache</span> <span class="o">)</span>
+<span class="o">{</span>
+  <span class="n">cache</span><span class="o">.</span><span class="na">addUpdateReadyHandler</span><span class="o">(</span> <span class="k">new</span> <span class="n">UpdateReadyEvent</span><span class="o">.</span><span class="na">Handler</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdateReadyEvent</span><span class="o">(</span> <span class="nd">@Nonnull</span> <span class="kd">final</span> <span class="n">UpdateReadyEvent</span> <span class="n">event</span> <span class="o">)</span>
+    <span class="o">{</span>
+      <span class="c1">//Force a cache update if new version is available</span>
+      <span class="n">cache</span><span class="o">.</span><span class="na">swapCache</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span> <span class="o">);</span>
+
+  <span class="c1">// Ask the browser to recheck the cache</span>
+  <span class="n">cache</span><span class="o">.</span><span class="na">requestUpdate</span><span class="o">();</span>
+
+  <span class="o">...</span>
+</pre></div>
+
+<p>This should be sufficient to get your application using the appcache. If you
+load the application in a modern browser you should see it making use of the
+cache in the console.</p>
+
+<p>A very simple example of this code is available in the
+<a href="https://github.com/realityforge/gwt-appcache-example">gwt-appcache-example</a>
+project.</p>
+
+<h1>
+<a name="how-does-it-work" class="anchor" href="#how-does-it-work"><span class="octicon octicon-link"></span></a>How does it work?</h1>
+
+<p>For every permutation generated by the GWT compiler, a separate manifest file
+is generated. The manifest includes almost all public resources generated by
+GWT with the exception of some used during debugging and development (i.e.
+myapp.devmode.js and compilation-mappings.txt). The manifest also includes
+any additional files declared using the "appcache_static_files" configuration
+setting.</p>
+
+<p>After the GWT compiler has generated all the different permutations, a single
+xml descriptor permutations.xml is generated that lists all the permutations
+and the  deferred-binding properties that were used to uniquely identify the
+permutations. Typically these include values of properties such as "user.agent".</p>
+
+<p>If the compiler is using soft permutations then it is possible that multiple
+deferred-binding properties will be served using a single permutation, in which
+case the descriptor will have comma separate values in the permutations.xml for
+that permutation.</p>
+
+<p>The manifest servlet is then responsible for reading the permutations.xml and
+inspecting the incoming request and generating properties that enable it to select
+the correct permutation and thus the correct manifest file. The selected manifest
+file is returned to the requester.</p>
+
+<h2>
+<a name="appendix" class="anchor" href="#appendix"><span class="octicon octicon-link"></span></a>Appendix</h2>
+
+<ul>
+<li><a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">A Beginner's Guide to Using the Application Cache</a></li>
+<li><a href="http://appcachefacts.info/">Appcache Facts</a></li>
+<li><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html">Offline Web Application Standard</a></li>
+</ul><h2>
+<a name="credit" class="anchor" href="#credit"><span class="octicon octicon-link"></span></a>Credit</h2>
+
+<p>This library began as a enhancement of similar functionality in the
+<a href="https://github.com/dankurka/mgwt">MGWT</a> project by Daniel Kurka. All
+credit goes to Daniel for the initial code and idea.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Gwt-appcache maintained by <a href="https://github.com/realityforge">realityforge</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-41755265-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
