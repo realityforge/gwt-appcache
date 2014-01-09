@@ -95,6 +95,13 @@ public abstract class ApplicationCache
    * Attempt to remove the application from the cache.
    * This is achieved by forcing the server to return a 404 or 410 when updating the manifest.
    *
+   * <p>Even if the request succeeded, there is no guarantee that the application will
+   * be removed from the cache. The server may not obey the directive or may not be
+   * reachable. The current implementation attempts to reload the manifest and pass cookies
+   * back to the server so that the server returns a "410 GONE" response. However some versions
+   * of Safari do not seem to pass the cookie and thus removeCache will not result in the
+   * application cache being removed.</p>
+   *
    * @return true if request succeeded.
    */
   public abstract boolean removeCache();
