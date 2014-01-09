@@ -137,17 +137,6 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
-TODO:
-=====
-
-ApplicationCache.removeCache() for Safari
------------------------------------------
-
-The removeCache() method does not work under Safari as Safari does not sent
-cookies down with request for manifest. No browser supports changing the manifest
-attribute on the document thus limiting the ability to support this feature in
-Safari.
-
 Appendix
 --------
 
