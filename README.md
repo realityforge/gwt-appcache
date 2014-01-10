@@ -263,7 +263,7 @@ public class ManifestServlet
 This will mean that the client ultimately caches extra data that may not be used
 by the client. This may be acceptable for small applications but a better approach
 is to detect the pixel density and set a cookie prior to navigating to the page
-that host the application. The server can then attempt to determine the value of
+that hosts the application. The server can then attempt to determine the value of
 the configuration property using the cookie name like;
 
 
