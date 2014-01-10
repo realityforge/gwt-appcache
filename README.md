@@ -224,6 +224,90 @@ configuration properties to select a permutation. In some cases, the selection
 property can only be determined on the client. This scenario is more complex and
 requires a combination of cookies and dynamic host pages to address.
 
+How To: Define a new client-side selection Configuration
+========================================================
+
+Sometimes configuration properties can only be determined on the client. A good
+example is the device pixel density that can be determined by inspecting the
+"window.devicePixelRatio" property in the browser.
+
+```xml
+<define-property name="pixel.density" values="high, low"/>
+  <property-provider name="pixel.density"><![CDATA[
+  {
+  if(window.devicePixelRatio >= 2) { return 'high'; }
+  return 'low';
+  }
+]]></property-provider>
+```
+
+The gwt-appcache library can defer the selection of the property to the client-side
+by merging the manifests of the high and low density permutations and returning
+the merged manifest to the client. This is done by marking the "pixel.density"
+ property as client-side via;
+
+```java
+@WebServlet( urlPatterns = { "/myapp.manifest" } )
+public class ManifestServlet
+  extends AbstractManifestServlet
+{
+  public ManifestServlet()
+  {
+    addPropertyProvider( new UserAgentPropertyProvider() );
+    ...
+    addClientSideSelectionProperty( "pixel.density" );
+  }
+}
+```
+
+This will mean that the client ultimately caches extra data that may not be used
+by the client. This may be acceptable for small applications but a better approach
+is to detect the pixel density and set a cookie prior to navigating to the page
+that host the application. The server can then attempt to determine the value of
+the configuration property using the cookie name like;
+
+
+```java
+public class PixelDensityPropertyProvider
+  implements PropertyProvider
+{
+  @Override
+  public String getPropertyName() { return "pixel.density"; }
+
+  @Override
+  public String getPropertyValue( HttpServletRequest request )
+  {
+    final Cookie[] cookies = request.getCookies();
+    if ( null != cookies )
+    {
+      for ( final Cookie cookie : cookies )
+      {
+        if ( "pixel.density".equals( cookie.getName() ) )
+        {
+          return cookie.getValue();
+        }
+      }
+    }
+    return null;
+  }
+}
+```
+
+```java
+@WebServlet( urlPatterns = { "/myapp.manifest" } )
+public class ManifestServlet
+  extends AbstractManifestServlet
+{
+  public ManifestServlet()
+  {
+    addPropertyProvider( new UserAgentPropertyProvider() );
+    addPropertyProvider( new PixelDensityPropertyProvider() );
+    ...
+    addClientSideSelectionProperty( "pixel.density" );
+  }
+}
+```
+
 Appendix
 --------
 
