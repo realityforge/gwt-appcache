@@ -137,6 +137,11 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
+How To: Support per-language permutations
+=========================================
+
+TODO
+
 How To: Define a new Selection Configuration
 ============================================
 
@@ -307,6 +312,29 @@ public class ManifestServlet
   }
 }
 ```
+
+How To: Integrate into existing framework
+=========================================
+
+The gwt-appcache library was designed to be easy to integrate into any other
+gwt framework. A good example is the wonderful [MGWT](https://github.com/dankurka/mgwt)
+library from which this project was initially derived. MGWT selects the permutation
+based on the following configuration properties;
+
+* mgwt.os - iphone, iphone retina, ipad, ipad_retina, android, android_tablet, blackberry etc.
+* mobile.user.agent - mobilesafari vs not_mobile.
+* user.agent - A standard gwt configuration property.
+* phonegap.env - Always no for web applications.
+
+It is important to the MGWT framework to distinguish between retina and non-retina versions of
+iphone and ipad. The retina versions inspect the window.devicePixelRatio browser property
+similarly to the above pixel.density example. Rather than making this a separate configuration
+property, MGWT conflates this with operating system. As a result it uses a custom strategy to
+merge the multiple permutations manifests as can be observed at [Html5ManifestServletBase](https://github.com/realityforge/mgwt/blob/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/Html5ManifestServletBase.java#L16-L63).
+MGWT also defines several [property providers](https://github.com/realityforge/mgwt/tree/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/propertyprovider).
+There is a [pull request](https://github.com/dankurka/mgwt/pull/37) where you can look at the
+work required to re-integrate the functionality back into the MGWT framework. This is a good
+example of complex integration of gwt-appcache.
 
 Appendix
 --------
