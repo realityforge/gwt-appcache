@@ -137,8 +137,8 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
-How To: Define new Selection Configuration
-==========================================
+How To: Define a new Selection Configuration
+============================================
 
 Sometimes it is useful to define a new configuration property in the gwt module
 descriptors that will define new permutations. A fairly typical example would
