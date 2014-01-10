@@ -129,7 +129,7 @@ permutations. Typically these include values of properties such as "user.agent".
 
 If the compiler is using soft permutations then it is possible that multiple
 deferred-binding properties will be served using a single permutation, in which
-case the descriptor will have comma separate values in the permutations.xml for
+case the descriptor will have comma separated values in the permutations.xml for
 that permutation.
 
 The manifest servlet is then responsible for reading the permutations.xml and
