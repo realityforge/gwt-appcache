@@ -137,11 +137,6 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
-How To: Support per-language permutations
-=========================================
-
-TODO
-
 How To: Define a new Selection Configuration
 ============================================
 
