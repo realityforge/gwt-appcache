@@ -164,6 +164,196 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.</p>
 
+<h1>
+<a name="how-to-support-per-language-permutations" class="anchor" href="#how-to-support-per-language-permutations"><span class="octicon octicon-link"></span></a>How To: Support per-language permutations</h1>
+
+<p>TODO</p>
+
+<h1>
+<a name="how-to-define-a-new-selection-configuration" class="anchor" href="#how-to-define-a-new-selection-configuration"><span class="octicon octicon-link"></span></a>How To: Define a new Selection Configuration</h1>
+
+<p>Sometimes it is useful to define a new configuration property in the gwt module
+descriptors that will define new permutations. A fairly typical example would
+be to define a configuration property that defines different view modalities.
+i.e. Is the device phone-like, tablet-like or a desktop. This would driven the
+ui and workflow in the application.</p>
+
+<p>Step 1 is to define the configuration in the gwt module descriptor. i.e.</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;define-property</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">values=</span><span class="s">"phone, tablet, desktop"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property-provider</span> <span class="na">name=</span><span class="s">"ui.modality"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">  {</span>
+<span class="cp">    var ua = window.navigator.userAgent.toLowerCase();</span>
+<span class="cp">    if ( ua.indexOf('android') != -1 ) { return 'phone'; }</span>
+<span class="cp">    if ( ua.indexOf('iphone') != -1 ) { return 'phone'; }</span>
+<span class="cp">    if ( ua.indexOf('ipad') != -1 ) { return 'tablet'; }</span>
+<span class="cp">    return 'desktop';</span>
+<span class="cp">  }</span>
+<span class="cp">]]&gt;</span><span class="nt">&lt;/property-provider&gt;</span>
+</pre></div>
+
+<p>Step 2 is to use the new configuration property to control the deferred binding
+rules in gwt modules. For example, the following could be added to a .gwt.xml
+module file;</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.DesktopInjectorWrapper"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"desktop"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/replace-with&gt;</span>
+
+<span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.TableInjectorWrapper"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"tablet"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/replace-with&gt;</span>
+
+<span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.PhoneInjectorWrapper"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"phone"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/replace-with&gt;</span>
+</pre></div>
+
+<p>Step 3 is to define a property provider for your new configuration property and
+add it to the manifest servlet. i.e.</p>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UIModalityPropertyProvider</span>
+  <span class="kd">implements</span> <span class="n">PropertyProvider</span>
+<span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyValue</span><span class="o">(</span> <span class="kd">final</span> <span class="n">HttpServletRequest</span> <span class="n">request</span> <span class="o">)</span>
+  <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">String</span> <span class="n">ua</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span> <span class="s">"User-Agent"</span> <span class="o">).</span><span class="na">toLowerCase</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"android"</span> <span class="o">)</span> <span class="o">||</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"phone"</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"phone"</span><span class="o">;</span> <span class="o">}</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"ipad"</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"tablet"</span><span class="o">;</span> <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"desktop"</span><span class="o">;</span> <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyName</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="k">return</span> <span class="s">"ui.modality"</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
+  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
+<span class="o">{</span>
+  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UIModalityPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>This example demonstrates a simple mechanism for supporting server-side derivable
+configuration properties to select a permutation. In some cases, the selection
+property can only be determined on the client. This scenario is more complex and
+requires a combination of cookies and dynamic host pages to address.</p>
+
+<h1>
+<a name="how-to-define-a-new-client-side-selection-configuration" class="anchor" href="#how-to-define-a-new-client-side-selection-configuration"><span class="octicon octicon-link"></span></a>How To: Define a new client-side selection Configuration</h1>
+
+<p>Sometimes configuration properties can only be determined on the client. A good
+example is the device pixel density that can be determined by inspecting the
+"window.devicePixelRatio" property in the browser.</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;define-property</span> <span class="na">name=</span><span class="s">"pixel.density"</span> <span class="na">values=</span><span class="s">"high, low"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property-provider</span> <span class="na">name=</span><span class="s">"pixel.density"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">  {</span>
+<span class="cp">  if(window.devicePixelRatio &gt;= 2) { return 'high'; }</span>
+<span class="cp">  return 'low';</span>
+<span class="cp">  }</span>
+<span class="cp">]]&gt;</span><span class="nt">&lt;/property-provider&gt;</span>
+</pre></div>
+
+<p>The gwt-appcache library can defer the selection of the property to the client-side
+by merging the manifests of the high and low density permutations and returning
+the merged manifest to the client. This is done by marking the "pixel.density"
+ property as client-side via;</p>
+
+<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
+  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
+<span class="o">{</span>
+  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+    <span class="o">...</span>
+    <span class="n">addClientSideSelectionProperty</span><span class="o">(</span> <span class="s">"pixel.density"</span> <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>This will mean that the client ultimately caches extra data that may not be used
+by the client. This may be acceptable for small applications but a better approach
+is to detect the pixel density and set a cookie prior to navigating to the page
+that host the application. The server can then attempt to determine the value of
+the configuration property using the cookie name like;</p>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PixelDensityPropertyProvider</span>
+  <span class="kd">implements</span> <span class="n">PropertyProvider</span>
+<span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"pixel.density"</span><span class="o">;</span> <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyValue</span><span class="o">(</span> <span class="n">HttpServletRequest</span> <span class="n">request</span> <span class="o">)</span>
+  <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">Cookie</span><span class="o">[]</span> <span class="n">cookies</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getCookies</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="kc">null</span> <span class="o">!=</span> <span class="n">cookies</span> <span class="o">)</span>
+    <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span> <span class="kd">final</span> <span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">cookies</span> <span class="o">)</span>
+      <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="s">"pixel.density"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">)</span> <span class="o">)</span>
+        <span class="o">{</span>
+          <span class="k">return</span> <span class="n">cookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
+  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
+<span class="o">{</span>
+  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
+  <span class="o">{</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">PixelDensityPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
+    <span class="o">...</span>
+    <span class="n">addClientSideSelectionProperty</span><span class="o">(</span> <span class="s">"pixel.density"</span> <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h1>
+<a name="how-to-integrate-into-existing-framework" class="anchor" href="#how-to-integrate-into-existing-framework"><span class="octicon octicon-link"></span></a>How To: Integrate into existing framework</h1>
+
+<p>The gwt-appcache library was designed to be easy to integrate into any other
+gwt framework. A good example is the wonderful <a href="https://github.com/dankurka/mgwt">MGWT</a>
+library from which this project was initially derived. MGWT selects the permutation
+based on the following configuration properties;</p>
+
+<ul>
+<li>mgwt.os - iphone, iphone retina, ipad, ipad_retina, android, android_tablet, blackberry etc.</li>
+<li>mobile.user.agent - mobilesafari vs not_mobile.</li>
+<li>user.agent - A standard gwt configuration property.</li>
+<li>phonegap.env - Always no for web applications.</li>
+</ul><p>It is important to the MGWT framework to distinguish between retina and non-retina versions of
+iphone and ipad. The retina versions inspect the window.devicePixelRatio browser property
+similarly to the above pixel.density example. Rather than making this a separate configuration
+property, MGWT conflates this with operating system. As a result it uses a custom strategy to
+merge the multiple permutations manifests as can be observed at <a href="https://github.com/realityforge/mgwt/blob/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/Html5ManifestServletBase.java#L16-L63">Html5ManifestServletBase</a>.
+MGWT also defines several <a href="https://github.com/realityforge/mgwt/tree/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/propertyprovider">property providers</a>.
+There is a <a href="https://github.com/dankurka/mgwt/pull/37">pull request</a> where you can look at the
+work required to re-integrate the functionality back into the MGWT framework. This is a good
+example of complex integration of gwt-appcache.</p>
+
 <h2>
 <a name="appendix" class="anchor" href="#appendix"><span class="octicon octicon-link"></span></a>Appendix</h2>
 
