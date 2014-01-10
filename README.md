@@ -143,7 +143,7 @@ How To: Define a new Selection Configuration
 Sometimes it is useful to define a new configuration property in the gwt module
 descriptors that will define new permutations. A fairly typical example would
 be to define a configuration property that defines different view modalities.
-i.e. Is the device phone-like, tablet-like or a desktop. This would driven the
+i.e. Is the device phone-like, tablet-like or a desktop. This would drive the
 ui and workflow in the application.
 
 Step 1 is to define the configuration in the gwt module descriptor. i.e.
