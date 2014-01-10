@@ -137,6 +137,93 @@ inspecting the incoming request and generating properties that enable it to sele
 the correct permutation and thus the correct manifest file. The selected manifest
 file is returned to the requester.
 
+How To: Define new Selection Configuration
+==========================================
+
+Sometimes it is useful to define a new configuration property in the gwt module
+descriptors that will define new permutations. A fairly typical example would
+be to define a configuration property that defines different view modalities.
+i.e. Is the device phone-like, tablet-like or a desktop. This would driven the
+ui and workflow in the application.
+
+Step 1 is to define the configuration in the gwt module descriptor. i.e.
+
+```xml
+<define-property name="ui.modality" values="phone, tablet, desktop"/>
+  <property-provider name="ui.modality"><![CDATA[
+  {
+    var ua = window.navigator.userAgent.toLowerCase();
+    if ( ua.indexOf('android') != -1 ) { return 'phone'; }
+    if ( ua.indexOf('iphone') != -1 ) { return 'phone'; }
+    if ( ua.indexOf('ipad') != -1 ) { return 'tablet'; }
+    return 'desktop';
+  }
+]]></property-provider>
+```
+
+Step 2 is to use the new configuration property to control the deferred binding
+rules in gwt modules. For example, the following could be added to a .gwt.xml
+module file;
+
+```xml
+<replace-with class="com.biz.client.gin.DesktopInjectorWrapper">
+  <when-type-is class="com.biz.client.gin.InjectorWrapper"/>
+  <when-property-is name="ui.modality" value="desktop"/>
+</replace-with>
+
+<replace-with class="com.biz.client.gin.TableInjectorWrapper">
+  <when-type-is class="com.biz.client.gin.InjectorWrapper"/>
+  <when-property-is name="ui.modality" value="tablet"/>
+</replace-with>
+
+<replace-with class="com.biz.client.gin.PhoneInjectorWrapper">
+  <when-type-is class="com.biz.client.gin.InjectorWrapper"/>
+  <when-property-is name="ui.modality" value="phone"/>
+</replace-with>
+```
+
+Step 3 is to define a property provider for your new configuration property and
+add it to the manifest servlet. i.e.
+
+```java
+public class UIModalityPropertyProvider
+  implements PropertyProvider
+{
+  @Override
+  public String getPropertyValue( final HttpServletRequest request )
+  {
+    final String ua = request.getHeader( "User-Agent" ).toLowerCase();
+    if ( ua.contains( "android" ) || ua.contains( "phone" ) ) { return "phone"; }
+    else if ( ua.contains( "ipad" ) ) { return "tablet"; }
+    else { return "desktop"; }
+  }
+
+  @Override
+  public String getPropertyName()
+  {
+    return "ui.modality";
+  }
+}
+```
+
+```java
+@WebServlet( urlPatterns = { "/myapp.manifest" } )
+public class ManifestServlet
+  extends AbstractManifestServlet
+{
+  public ManifestServlet()
+  {
+    addPropertyProvider( new UIModalityPropertyProvider() );
+    addPropertyProvider( new UserAgentPropertyProvider() );
+  }
+}
+```
+
+This example demonstrates a simple mechanism for supporting server-side derivable
+configuration properties to select a permutation. In some cases, the selection
+property can only be determined on the client. This scenario is more complex and
+requires a combination of cookies and dynamic host pages to address.
+
 Appendix
 --------
 
