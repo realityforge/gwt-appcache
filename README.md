@@ -3,12 +3,12 @@ gwt-appcache
 
 [![Build Status](https://secure.travis-ci.org/realityforge/gwt-appcache.png?branch=master)](http://travis-ci.org/realityforge/gwt-appcache)
 
-The HTML5 Appcache specification is one mechanism for enabling offline
+The HTML5 Appcache specification is a mechanism for enabling offline
 HTML5 applications. This library provides a simple way to generate the
-required cache manifests and serve for each separate permutation. The
-library also supports the browser side aspect of appcache
-specification. The appendix section includes further references for
-the appcache spec.
+required cache manifests and serve a separate manifest for each separate
+permutation. The library also provides support for the browser side aspects
+of the appcache specification. See the appendix section includes further
+references concerning the appcache spec.
 
 Quick Start
 -----------
