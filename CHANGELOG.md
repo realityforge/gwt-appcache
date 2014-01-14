@@ -1,3 +1,9 @@
+## 1.0.1:
+* The deferred binding rule for disabling the appcache was tied to the storageSupport
+  configuration property rather than the appcacheSupport configuration property. This
+  has been fixed. This may have resulted in the code bloat with some older browser
+  permutations.
+
 ## 1.0:
 * Rename ApplicationCache.get to ApplicationCache.getApplicationCacheIfSupported
   for consistency with other frameworks.

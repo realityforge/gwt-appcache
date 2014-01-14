@@ -20,7 +20,7 @@
 
   <replace-with class="org.realityforge.gwt.appcache.client.ApplicationCache.NoSupportDetector">
     <when-type-is class="org.realityforge.gwt.appcache.client.ApplicationCache.SupportDetector"/>
-    <when-property-is name="storageSupport" value="no"/>
+    <when-property-is name="appcacheSupport" value="no"/>
   </replace-with>
 
   <source path="client"/>
