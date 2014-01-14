@@ -171,7 +171,7 @@ module file;
   <when-property-is name="ui.modality" value="desktop"/>
 </replace-with>
 
-<replace-with class="com.biz.client.gin.TableInjectorWrapper">
+<replace-with class="com.biz.client.gin.TabletInjectorWrapper">
   <when-type-is class="com.biz.client.gin.InjectorWrapper"/>
   <when-property-is name="ui.modality" value="tablet"/>
 </replace-with>
