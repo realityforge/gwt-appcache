@@ -1,3 +1,6 @@
+## 1.0.2:
+* Fix off by one error when encoding urls in manifest.
+
 ## 1.0.1:
 * The deferred binding rule for disabling the appcache was tied to the storageSupport
   configuration property rather than the appcacheSupport configuration property. This
