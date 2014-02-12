@@ -1,3 +1,7 @@
+## 1.0.3:
+* Create a LocalePropertyProvider.
+* Import property providers and customized servlet compatible with MGWT framework.
+
 ## 1.0.2:
 * Fix off by one error when encoding urls in manifest.
 
