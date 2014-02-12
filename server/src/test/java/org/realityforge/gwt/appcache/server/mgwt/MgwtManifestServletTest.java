@@ -36,6 +36,11 @@ public class MgwtManifestServletTest
     {
       addPropertyProvider( propertyProvider );
     }
+
+    protected final void addClientSideSelectionPropertyForTest( final String propertyName )
+    {
+      addClientSideSelectionProperty( propertyName );
+    }
   }
 
   @Test
@@ -83,6 +88,125 @@ public class MgwtManifestServletTest
 
     setupManifestFile( servlet, permutation1 );
     setupManifestFile( servlet, permutation2 );
+
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    final ServletOutputStream output = mock( ServletOutputStream.class );
+    when( response.getOutputStream() ).thenReturn( output );
+
+    performRequest( servlet, response );
+
+    final String combinedManifest =
+      "CACHE MANIFEST\n" +
+      "\n" +
+      "CACHE:\n" +
+      permutation1 + ".txt\n" +
+      permutation2 + ".txt\n" +
+      "\n" +
+      "\n" +
+      "NETWORK:\n";
+    verify( output ).write( combinedManifest.getBytes( "US-ASCII" ) );
+  }
+
+  @Test
+  public void serve_withMergeOfRetinaAndNonRetinaAndSoftLanguagePermutation()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    //iphone english
+    final String permutation1 = "A";
+    //iphone retina english
+    final String permutation2 = "B";
+    //iphone german
+    final String permutation3 = "C";
+    //iphone retina german
+    final String permutation4 = "D";
+
+    final String userAgent = "safari";
+    final String mobileUserAgent = "mobilesafari";
+
+    setProperties( servlet, userAgent, mobileUserAgent, MgwtOsPropertyProvider.iPhone_undefined.getValue() );
+
+    final String iPhone = MgwtOsPropertyProvider.iPhone.getValue();
+    final String retina = MgwtOsPropertyProvider.retina.getValue();
+    servlet.addClientSideSelectionPropertyForTest( "locale" );
+
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      singlePermutationBlock( permutation1, userAgent, mobileUserAgent, iPhone, "en" ) +
+      singlePermutationBlock( permutation2, userAgent, mobileUserAgent, retina, "en" ) +
+      singlePermutationBlock( permutation3, userAgent, mobileUserAgent, iPhone, "de" ) +
+      singlePermutationBlock( permutation4, userAgent, mobileUserAgent, retina, "de" ) +
+      "</permutations>\n";
+
+    createPermutationsXML( servlet, permutationContent );
+
+    setupManifestFile( servlet, permutation1 );
+    setupManifestFile( servlet, permutation2 );
+    setupManifestFile( servlet, permutation3 );
+    setupManifestFile( servlet, permutation4 );
+
+    final HttpServletResponse response = mock( HttpServletResponse.class );
+    final ServletOutputStream output = mock( ServletOutputStream.class );
+    when( response.getOutputStream() ).thenReturn( output );
+
+    performRequest( servlet, response );
+
+    final String combinedManifest =
+      "CACHE MANIFEST\n" +
+      "\n" +
+      "CACHE:\n" +
+      permutation1 + ".txt\n" +
+      permutation2 + ".txt\n" +
+      permutation3 + ".txt\n" +
+      permutation4 + ".txt\n" +
+      "\n" +
+      "\n" +
+      "NETWORK:\n";
+    verify( output ).write( combinedManifest.getBytes( "US-ASCII" ) );
+  }
+
+  @Test
+  public void serve_withMergeOfRetinaAndNonRetinaWithLanguageSelected()
+    throws Exception
+  {
+    final TestManifestServlet servlet = new TestManifestServlet();
+
+    //iphone english
+    final String permutation1 = "A";
+    //iphone retina english
+    final String permutation2 = "B";
+    //iphone german
+    final String permutation3 = "C";
+    //iphone retina german
+    final String permutation4 = "D";
+
+    final String userAgent = "safari";
+    final String mobileUserAgent = "mobilesafari";
+
+    setProperties( servlet, userAgent, mobileUserAgent, MgwtOsPropertyProvider.iPhone_undefined.getValue() );
+    servlet.addPropertyProviderForTest( new TestPropertyProvider( "locale", "en" ) );
+    servlet.addClientSideSelectionPropertyForTest( "locale" );
+
+    final String iPhone = MgwtOsPropertyProvider.iPhone.getValue();
+    final String retina = MgwtOsPropertyProvider.retina.getValue();
+
+    final String permutationContent =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+      "<permutations>\n" +
+      singlePermutationBlock( permutation1, userAgent, mobileUserAgent, iPhone, "en" ) +
+      singlePermutationBlock( permutation2, userAgent, mobileUserAgent, retina, "en" ) +
+      singlePermutationBlock( permutation3, userAgent, mobileUserAgent, iPhone, "de" ) +
+      singlePermutationBlock( permutation4, userAgent, mobileUserAgent, retina, "de" ) +
+      "</permutations>\n";
+
+    createPermutationsXML( servlet, permutationContent );
+
+    setupManifestFile( servlet, permutation1 );
+    setupManifestFile( servlet, permutation2 );
+    setupManifestFile( servlet, permutation3 );
+    setupManifestFile( servlet, permutation4 );
 
     final HttpServletResponse response = mock( HttpServletResponse.class );
     final ServletOutputStream output = mock( ServletOutputStream.class );
