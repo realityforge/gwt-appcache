@@ -325,8 +325,8 @@ It is important to the MGWT framework to distinguish between retina and non-reti
 the iphone and ipad variants. The retina versions inspect the `window.devicePixelRatio` browser property
 similarly to the above `pixel.density` example. Rather than making this a separate configuration
 property, MGWT conflates this with operating system. As a result it uses a custom strategy to
-merge the multiple permutations manifests as can be observed at [Html5ManifestServletBase](https://github.com/realityforge/mgwt/blob/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/Html5ManifestServletBase.java#L16-L63).
-MGWT also defines several [property providers](https://github.com/realityforge/mgwt/tree/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/propertyprovider).
+merge the multiple permutations manifests as can be observed at [AbstractMgwtManifestServlet](https://github.com/realityforge/gwt-appcache/blob/master/server/src/main/java/org/realityforge/gwt/appcache/server/mgwt/AbstractMgwtManifestServlet.java#L15-L62).
+MGWT also defines several [property providers](https://github.com/realityforge/gwt-appcache/tree/master/server/src/main/java/org/realityforge/gwt/appcache/server/mgwt).
 There is a [pull request](https://github.com/dankurka/mgwt/pull/37) where you can look at the
 work required to re-integrate the functionality back into the MGWT framework. This is a good
 example of complex integration of `gwt-appcache`.
