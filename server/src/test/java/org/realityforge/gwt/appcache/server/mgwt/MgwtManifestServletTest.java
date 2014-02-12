@@ -129,7 +129,7 @@ public class MgwtManifestServletTest
     verify( response ).sendError( HttpServletResponse.SC_NOT_FOUND );
   }
 
-    @Test
+  @Test
   public void serve_withMissingNonRetina()
     throws Exception
   {
@@ -156,7 +156,7 @@ public class MgwtManifestServletTest
     verify( response ).sendError( HttpServletResponse.SC_NOT_FOUND );
   }
 
-    @Test
+  @Test
   public void serve_withNoMatch()
     throws Exception
   {
