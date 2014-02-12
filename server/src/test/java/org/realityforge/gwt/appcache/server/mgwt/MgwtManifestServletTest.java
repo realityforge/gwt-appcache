@@ -3,6 +3,8 @@ package org.realityforge.gwt.appcache.server.mgwt;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -224,19 +226,24 @@ public class MgwtManifestServletTest
     final String permutationContent =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
       "<permutations>\n" +
-      "   <permutation name=\"" + permutation1 + "\">\n" +
-      "      <user.agent>" + userAgent + "</user.agent>\n" +
-      "      <mobile.user.agent>" + mobileUserAgent + "</mobile.user.agent>\n" +
-      "      <mgwt.os>" + os1 + "</mgwt.os>\n" +
-      "   </permutation>\n" +
-      "   <permutation name=\"" + permutation2 + "\">\n" +
-      "      <user.agent>" + userAgent + "</user.agent>\n" +
-      "      <mobile.user.agent>" + mobileUserAgent + "</mobile.user.agent>\n" +
-      "      <mgwt.os>" + os2 + "</mgwt.os>\n" +
-      "   </permutation>\n" +
+      singlePermutationBlock( permutation1, userAgent, mobileUserAgent, os1, null ) +
+      singlePermutationBlock( permutation2, userAgent, mobileUserAgent, os2, null ) +
       "</permutations>\n";
 
     createPermutationsXML( servlet, permutationContent );
+  }
+
+  private String singlePermutationBlock( @Nonnull final String name,
+                                         @Nonnull final String userAgent,
+                                         @Nonnull final String mobileUserAgent,
+                                         @Nonnull final String os,
+                                         @Nullable final String language )
+  {
+    return "   <permutation name=\"" + name + "\">\n" +
+           "      <user.agent>" + userAgent + "</user.agent>\n" +
+           "      <mobile.user.agent>" + mobileUserAgent + "</mobile.user.agent>\n" +
+           "      <mgwt.os>" + os + "</mgwt.os>\n" +
+           "   </permutation>\n";
   }
 
   private void createPermutationsXML( final TestManifestServlet servlet, final String fileContent )
