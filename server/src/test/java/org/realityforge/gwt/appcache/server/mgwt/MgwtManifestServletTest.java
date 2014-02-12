@@ -239,11 +239,28 @@ public class MgwtManifestServletTest
                                          @Nonnull final String os,
                                          @Nullable final String language )
   {
-    return "   <permutation name=\"" + name + "\">\n" +
-           "      <user.agent>" + userAgent + "</user.agent>\n" +
-           "      <mobile.user.agent>" + mobileUserAgent + "</mobile.user.agent>\n" +
-           "      <mgwt.os>" + os + "</mgwt.os>\n" +
-           "   </permutation>\n";
+    final StringBuilder sb = new StringBuilder();
+    sb.append( "   <permutation name=\"" + name + "\">\n" );
+    sb.append( "      <user.agent>" );
+    sb.append( userAgent );
+    sb.append( "</user.agent>\n" );
+    sb.append( "      <mobile.user.agent>" );
+    sb.append( mobileUserAgent );
+    sb.append( "</mobile.user.agent>\n" );
+
+    sb.append( "      <mgwt.os>" );
+    sb.append( os );
+    sb.append( "</mgwt.os>\n" );
+
+    if ( null != language )
+    {
+      sb.append( "      <locale>" );
+      sb.append( language );
+      sb.append( "</locale>\n" );
+    }
+
+    sb.append( "   </permutation>\n" );
+    return sb.toString();
   }
 
   private void createPermutationsXML( final TestManifestServlet servlet, final String fileContent )
