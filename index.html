@@ -53,19 +53,19 @@ references concerning the appcache spec.</p>
 </ul><div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-client<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-linker<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;dependency&gt;</span>
    <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
    <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-server<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 
@@ -347,8 +347,8 @@ based on the following configuration properties;</p>
 the iphone and ipad variants. The retina versions inspect the <code>window.devicePixelRatio</code> browser property
 similarly to the above <code>pixel.density</code> example. Rather than making this a separate configuration
 property, MGWT conflates this with operating system. As a result it uses a custom strategy to
-merge the multiple permutations manifests as can be observed at <a href="https://github.com/realityforge/mgwt/blob/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/Html5ManifestServletBase.java#L16-L63">Html5ManifestServletBase</a>.
-MGWT also defines several <a href="https://github.com/realityforge/mgwt/tree/use_gwt_appcache/src/main/java/com/googlecode/mgwt/linker/server/propertyprovider">property providers</a>.
+merge the multiple permutations manifests as can be observed at <a href="https://github.com/realityforge/gwt-appcache/blob/master/server/src/main/java/org/realityforge/gwt/appcache/server/mgwt/AbstractMgwtManifestServlet.java#L15-L62">AbstractMgwtManifestServlet</a>.
+MGWT also defines several <a href="https://github.com/realityforge/gwt-appcache/tree/master/server/src/main/java/org/realityforge/gwt/appcache/server/mgwt">property providers</a>.
 There is a <a href="https://github.com/dankurka/mgwt/pull/37">pull request</a> where you can look at the
 work required to re-integrate the functionality back into the MGWT framework. This is a good
 example of complex integration of <code>gwt-appcache</code>.</p>
@@ -365,7 +365,9 @@ example of complex integration of <code>gwt-appcache</code>.</p>
 
 <p>This library began as a enhancement of similar functionality in the
 <a href="https://github.com/dankurka/mgwt">MGWT</a> project by Daniel Kurka. All
-credit goes to Daniel for the initial code and idea.</p>
+credit goes to Daniel for the initial code and idea. The library is also
+inspired by work done by the <a href="https://github.com/bedatadriven/rebar">rebar</a>
+project. Thanks goes out to them as well.</p>
       </section>
     </div>
 
