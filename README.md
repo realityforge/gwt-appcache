@@ -70,7 +70,7 @@ The simplest way to appcache enable a GWT application is to;
 * declare the servlet that serves the manifest.
 
 ```java
-@WebServlet( urlPatterns = { "/myapp.manifest" } )
+@WebServlet( urlPatterns = { "/myapp.appcache" } )
 public class ManifestServlet
   extends AbstractManifestServlet
 {
@@ -207,7 +207,7 @@ public class UIModalityPropertyProvider
 ```
 
 ```java
-@WebServlet( urlPatterns = { "/myapp.manifest" } )
+@WebServlet( urlPatterns = { "/myapp.appcache" } )
 public class ManifestServlet
   extends AbstractManifestServlet
 {
@@ -247,7 +247,7 @@ the merged manifest to the client. This is done by marking the "pixel.density"
  property as client-side via;
 
 ```java
-@WebServlet( urlPatterns = { "/myapp.manifest" } )
+@WebServlet( urlPatterns = { "/myapp.appcache" } )
 public class ManifestServlet
   extends AbstractManifestServlet
 {
@@ -294,7 +294,7 @@ public class PixelDensityPropertyProvider
 ```
 
 ```java
-@WebServlet( urlPatterns = { "/myapp.manifest" } )
+@WebServlet( urlPatterns = { "/myapp.appcache" } )
 public class ManifestServlet
   extends AbstractManifestServlet
 {
