@@ -334,7 +334,7 @@ example of complex integration of `gwt-appcache`.
 Frequently Asked Questions
 --------------------------
 
-h3. Why do I get a 404 from the Manifest servlet when I specify a configuration property in .gwt.xml?
+### Why do I get a 404 from the Manifest servlet when I specify a configuration property in .gwt.xml?
 
 If you specify a configuration property in your .gwt.xml file such as below, the manifest servlet may
 start returning a 404. Why is this and how do I fix it?
