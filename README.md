@@ -331,6 +331,26 @@ There is a [pull request](https://github.com/dankurka/mgwt/pull/37) where you ca
 work required to re-integrate the functionality back into the MGWT framework. This is a good
 example of complex integration of `gwt-appcache`.
 
+How To: Configure the url for the Manifest servlet in web.xml
+-------------------------------------------------------------
+
+The above examples assume that annotations are used to configure the url for the manifest servlet. It
+is also possible to explicitly configure the url pattern in web.xml via a snippet similar to the
+following. This will configure the appcache manifest to be at the path "/somedir/example.appcache"
+relative to the application root. The manifest servlet will expect to find the permutations.xml file
+at the path "/somedir/example/permutations.xml" relative to the application root.
+
+```xml
+  <servlet>
+    <servlet-name>org.realityforge.gwt.appcache.example.server.ManifestServlet</servlet-name>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>org.realityforge.gwt.appcache.example.server.ManifestServlet</servlet-name>
+    <url-pattern>/somedir/example.appcache</url-pattern>
+  </servlet-mapping>
+```
+
 Frequently Asked Questions
 --------------------------
 
