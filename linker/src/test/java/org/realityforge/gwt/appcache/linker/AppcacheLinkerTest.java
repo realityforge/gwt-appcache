@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -390,6 +392,24 @@ public class AppcacheLinkerTest
   }
 
   @Test
+  public void parseFallbackResources()
+    throws Exception
+  {
+    final AppcacheLinker linker = new AppcacheLinker();
+    final HashSet<String> fallbackResources = new HashSet<String>();
+    fallbackResources.add( "a b" );
+    fallbackResources.add( "c   d" );
+    fallbackResources.add( " e   f" );
+    fallbackResources.add( "g h " );
+
+    final Map<String, String> map = linker.parseFallbackResources( TreeLogger.NULL, fallbackResources );
+    assertEquals( map.get( "a" ), "b" );
+    assertEquals( map.get( "c" ), "d" );
+    assertEquals( map.get( "e" ), "f" );
+    assertEquals( map.get( "g" ), "h" );
+  }
+
+  @Test
   public void writeManifest()
     throws Exception
   {
@@ -400,18 +420,22 @@ public class AppcacheLinkerTest
     final HashSet<String> cacheResources = new HashSet<String>();
     cacheResources.add( "mydir/file_with_$.js" );
     cacheResources.add( "5435435435435435FDEC.js" );
-    final String manifest = linker.writeManifest( TreeLogger.NULL, staticResources, cacheResources );
+    final HashMap<String, String> fallbackResources = new HashMap<String, String>();
+    fallbackResources.put( "online.png", "offline.png" );
+    final String manifest = linker.writeManifest( TreeLogger.NULL, staticResources, fallbackResources, cacheResources );
     final String[] lines = manifest.split( "\n" );
     assertEquals( lines[ 0 ], "CACHE MANIFEST" );
 
     final int cacheSectionStart = findLine( lines, 0, lines.length, "CACHE:" );
     final int networkSectionStart = findLine( lines, cacheSectionStart + 1, lines.length, "NETWORK:" );
+    final int fallbackSectionStart = findLine( lines, networkSectionStart + 1, lines.length, "FALLBACK:" );
 
     assertNotEquals( findLine( lines, networkSectionStart + 1, lines.length, "*" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "index.html" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "file%20with%20space.html" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "5435435435435435FDEC.js" ), -1 );
     assertNotEquals( findLine( lines, cacheSectionStart + 1, networkSectionStart, "mydir/file_with_%24.js" ), -1 );
+    assertNotEquals( findLine( lines, fallbackSectionStart + 1, lines.length, "online.png offline.png" ), -1 );
   }
 
   private int findLine( final String[] lines, final int start, final int end, final String line )

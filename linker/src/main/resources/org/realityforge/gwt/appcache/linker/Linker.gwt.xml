@@ -3,4 +3,7 @@
 
   <!-- Define the property that identifies additional static files that be included in the build -->
   <define-configuration-property name="appcache_static_files" is-multi-valued="true"/>
+
+  <!-- define property that configures fallback rules -->
+  <define-configuration-property name="appcache_fallback_files" is-multi-valued="true"/>
 </module>
