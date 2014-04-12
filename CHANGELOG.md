@@ -1,3 +1,7 @@
+## 1.0.4:
+* Add support for fallback resources via the GWT configuration property
+  'appcache_fallback_files'.
+
 ## 1.0.3:
 * Create a LocalePropertyProvider.
 * Import property providers and customized servlet compatible with MGWT framework.
