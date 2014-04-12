@@ -1,8 +1,10 @@
 package org.realityforge.gwt.appcache.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Permutation
@@ -11,6 +13,7 @@ public class Permutation
   private final String _permutationName;
   private final List<SelectionDescriptor> _selectors = new ArrayList<SelectionDescriptor>();
   private final HashSet<String> _permutationFiles = new HashSet<String>();
+  private final HashMap<String, String> _fallbackFiles = new HashMap<String, String>();
 
   public Permutation( final String permutationName )
   {
@@ -41,6 +44,11 @@ public class Permutation
   public Set<String> getPermutationFiles()
   {
     return _permutationFiles;
+  }
+
+  public Map<String, String> getFallbackFiles()
+  {
+    return _fallbackFiles;
   }
 
   public List<SelectionDescriptor> getSelectors()
