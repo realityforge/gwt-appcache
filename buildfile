@@ -1,5 +1,6 @@
 require 'buildr/single_intermediate_layout'
 require 'buildr/git_auto_version'
+require 'buildr/gpg'
 
 desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
