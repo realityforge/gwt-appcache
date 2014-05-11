@@ -54,4 +54,3 @@ public class ObsoleteEvent
     handler.onObsoleteEvent( this );
   }
 }
-

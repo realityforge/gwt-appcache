@@ -54,4 +54,3 @@ public class CheckingEvent
     handler.onCheckingEvent( this );
   }
 }
-

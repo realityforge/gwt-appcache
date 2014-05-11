@@ -54,4 +54,3 @@ public class UpdateReadyEvent
     handler.onUpdateReadyEvent( this );
   }
 }
-
