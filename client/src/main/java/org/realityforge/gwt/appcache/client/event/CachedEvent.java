@@ -54,4 +54,3 @@ public class CachedEvent
     handler.onCachedEvent( this );
   }
 }
-

@@ -100,10 +100,7 @@ public class AbstractMgwtManifestServletTest
       "\n" +
       "CACHE:\n" +
       permutation1 + ".txt\n" +
-      permutation2 + ".txt\n" +
-      "\n" +
-      "\n" +
-      "NETWORK:\n";
+      permutation2 + ".txt\n";
     verify( output ).write( combinedManifest.getBytes( "US-ASCII" ) );
   }
 
@@ -160,10 +157,7 @@ public class AbstractMgwtManifestServletTest
       permutation1 + ".txt\n" +
       permutation2 + ".txt\n" +
       permutation3 + ".txt\n" +
-      permutation4 + ".txt\n" +
-      "\n" +
-      "\n" +
-      "NETWORK:\n";
+      permutation4 + ".txt\n";
     verify( output ).write( combinedManifest.getBytes( "US-ASCII" ) );
   }
 
@@ -219,10 +213,7 @@ public class AbstractMgwtManifestServletTest
       "\n" +
       "CACHE:\n" +
       permutation1 + ".txt\n" +
-      permutation2 + ".txt\n" +
-      "\n" +
-      "\n" +
-      "NETWORK:\n";
+      permutation2 + ".txt\n";
     verify( output ).write( combinedManifest.getBytes( "US-ASCII" ) );
   }
 

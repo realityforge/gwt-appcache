@@ -19,6 +19,9 @@ public class PermutationTest
     permutation1.getPermutationFiles().add( "foo.txt" );
     assertEquals( permutation1.getPermutationFiles().size(), 1 );
     assertFalse( permutation1.equals( new Permutation( "Bar" ) ) );
+    assertEquals( permutation1.getFallbackFiles().size(), 0 );
+    permutation1.getFallbackFiles().put( "online.png", "offline.png" );
+    assertEquals( permutation1.getFallbackFiles().size(), 1 );
     assertTrue( permutation1.equals( permutation1 ) );
   }
 }

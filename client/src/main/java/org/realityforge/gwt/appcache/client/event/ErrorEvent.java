@@ -57,4 +57,3 @@ public class ErrorEvent
     handler.onErrorEvent( this );
   }
 }
-

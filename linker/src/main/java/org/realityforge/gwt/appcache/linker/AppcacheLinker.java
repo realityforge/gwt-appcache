@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
@@ -34,6 +36,7 @@ public final class AppcacheLinker
   extends AbstractLinker
 {
   public static final String STATIC_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_static_files";
+  public static final String FALLBACK_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_fallback_files";
 
   @Override
   public String getDescription()
@@ -70,7 +73,6 @@ public final class AppcacheLinker
       return new ArtifactSet( artifacts );
     }
 
-    final Set<String> externalFiles = getConfigurationValues( context, STATIC_FILES_CONFIGURATION_PROPERTY_NAME );
     final Set<String> allPermutationFiles = getAllPermutationFiles( permutationArtifacts );
 
     // get all artifacts
@@ -94,7 +96,10 @@ public final class AppcacheLinker
       }
 
       // build manifest
-      final String maniFest = writeManifest( logger, externalFiles, filesForCurrentPermutation );
+      final Set<String> externalFiles = getConfigurationValues( context, STATIC_FILES_CONFIGURATION_PROPERTY_NAME );
+      final Map<String, String> fallbackFiles =
+        parseFallbackResources( logger, getConfigurationValues( context, FALLBACK_FILES_CONFIGURATION_PROPERTY_NAME ) );
+      final String maniFest = writeManifest( logger, externalFiles, fallbackFiles, filesForCurrentPermutation );
       final String filename =
         permutation.getPermutation().getPermutationName() + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
       results.add( emitString( logger, maniFest, filename ) );
@@ -102,6 +107,28 @@ public final class AppcacheLinker
 
     results.add( createPermutationMap( logger, permutationArtifacts ) );
     return results;
+  }
+
+  @Nonnull
+  final Map<String, String> parseFallbackResources( @Nonnull final TreeLogger logger,
+                                                    @Nonnull final Set<String> values )
+    throws UnableToCompleteException
+  {
+    final HashMap<String, String> fallbackFiles = new HashMap<String, String>();
+    for ( final String line : values )
+    {
+      final String[] elements = line.trim().split( " +" );
+      if ( 2 != elements.length )
+      {
+        final String message = FALLBACK_FILES_CONFIGURATION_PROPERTY_NAME + " property value '" +
+                               line + "' should have two url paths separated by whitespace";
+        logger.log( Type.ERROR, message );
+        throw new UnableToCompleteException();
+      }
+      fallbackFiles.put( elements[ 0 ], elements[ 1 ] );
+    }
+
+    return fallbackFiles;
   }
 
   final ArtifactSet perPermutationLink( final TreeLogger logger,
@@ -165,17 +192,20 @@ public final class AppcacheLinker
    *
    * @param staticResources - the static resources of the app, such as
    *                        index.html file
+   * @param fallbackResources  the fall back files to add to the manifest.
    * @param cacheResources  the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
   final String writeManifest( final TreeLogger logger,
                               @Nonnull final Set<String> staticResources,
+                              @Nonnull final Map<String, String> fallbackResources,
                               @Nonnull final Set<String> cacheResources )
     throws UnableToCompleteException
   {
     final ManifestDescriptor descriptor = new ManifestDescriptor();
     descriptor.getCachedResources().addAll( staticResources );
     descriptor.getCachedResources().addAll( cacheResources );
+    descriptor.getFallbackResources().putAll( fallbackResources );
     Collections.sort( descriptor.getCachedResources() );
     descriptor.getNetworkResources().add( "*" );
     try
@@ -189,7 +219,8 @@ public final class AppcacheLinker
     }
   }
 
-  final Set<String> getConfigurationValues( final LinkerContext context, final String propertyName )
+  @Nonnull
+  final Set<String> getConfigurationValues( @Nonnull final LinkerContext context, @Nonnull final String propertyName )
   {
     final HashSet<String> set = new HashSet<String>();
     final SortedSet<ConfigurationProperty> properties = context.getConfigurationProperties();

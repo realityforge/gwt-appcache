@@ -53,4 +53,3 @@ public class NoUpdateEvent
     handler.onNoUpdateEvent( this );
   }
 }
-

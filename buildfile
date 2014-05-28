@@ -1,5 +1,6 @@
 require 'buildr/single_intermediate_layout'
 require 'buildr/git_auto_version'
+require 'buildr/gpg'
 
 desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
@@ -10,7 +11,7 @@ define 'gwt-appcache' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
-  pom.add_apache2_license
+  pom.add_apache_v2_license
   pom.add_github_project("realityforge/gwt-appcache")
   pom.add_developer('realityforge', "Peter Donald")
   pom.add_developer('dankurka', "Daniel Kurka")

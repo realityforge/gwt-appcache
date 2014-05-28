@@ -77,4 +77,3 @@ public class ProgressEvent
     handler.onProgressEvent( this );
   }
 }
-

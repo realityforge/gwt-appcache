@@ -3,7 +3,10 @@ package org.realityforge.gwt.appcache.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 public final class ManifestDescriptor
@@ -14,6 +17,8 @@ public final class ManifestDescriptor
   private final List<String> _cachedResources = new ArrayList<String>();
   ///List of resources that require the client to be online
   private final List<String> _networkResources = new ArrayList<String>();
+  ///List of fallback resources
+  private final Map<String, String> _fallbackResources = new HashMap<String, String>();
 
   @Nonnull
   public List<String> getCachedResources()
@@ -25,6 +30,12 @@ public final class ManifestDescriptor
   public List<String> getNetworkResources()
   {
     return _networkResources;
+  }
+
+  @Nonnull
+  public Map<String, String> getFallbackResources()
+  {
+    return _fallbackResources;
   }
 
   public void merge( @Nonnull final ManifestDescriptor other )
@@ -43,6 +54,7 @@ public final class ManifestDescriptor
         _networkResources.add( resource );
       }
     }
+    _fallbackResources.putAll( other.getFallbackResources() );
   }
 
   @Override
@@ -62,6 +74,7 @@ public final class ManifestDescriptor
     final ManifestDescriptor descriptor = new ManifestDescriptor();
     final int cacheMode = 1;
     final int networkMode = 2;
+    final int fallbackMode = 3;
     int mode = cacheMode;
     for ( int i = 1; i < lines.length; i++ )
     {
@@ -79,13 +92,27 @@ public final class ManifestDescriptor
       {
         mode = networkMode;
       }
+      else if ( "FALLBACK:".equals( line ) )
+      {
+        mode = fallbackMode;
+      }
       else if ( networkMode == mode )
       {
         descriptor.getNetworkResources().add( urlDecode( line ) );
       }
-      else //if ( cacheMode == mode )
+      else if ( cacheMode == mode )
       {
         descriptor.getCachedResources().add( urlDecode( line ) );
+      }
+      else if ( fallbackMode == mode )
+      {
+        final String[] elements = line.split( " +" );
+        if ( 2 != elements.length )
+        {
+          final String message = "Fallback line '" + line + "' should have two url paths separated by whitespace";
+          throw new IllegalArgumentException( message );
+        }
+        descriptor.getFallbackResources().put( urlDecode( elements[ 0 ] ), urlDecode( elements[ 1 ] ) );
       }
     }
     return descriptor;
@@ -122,20 +149,35 @@ public final class ManifestDescriptor
       sb.append( urlEncode( resource ) ).append( "\n" );
     }
 
-    sb.append( "\n\n" );
-    sb.append( "NETWORK:\n" );
-    for ( final String resource : _networkResources )
+    if ( !_networkResources.isEmpty() )
     {
-      if ( CATCH_ALL.equals( resource ) )
+      sb.append( "\n\n" );
+      sb.append( "NETWORK:\n" );
+      for ( final String resource : _networkResources )
       {
-        sb.append( CATCH_ALL ).append( "\n" );
-      }
-      else
-      {
-        sb.append( urlEncode( resource ) ).append( "\n" );
+        if ( CATCH_ALL.equals( resource ) )
+        {
+          sb.append( CATCH_ALL ).append( "\n" );
+        }
+        else
+        {
+          sb.append( urlEncode( resource ) ).append( "\n" );
+        }
       }
     }
 
+    if ( !_fallbackResources.isEmpty() )
+    {
+      sb.append( "\n\n" );
+      sb.append( "FALLBACK:\n" );
+      for ( final Entry<String, String> entry : _fallbackResources.entrySet() )
+      {
+        sb.append( urlEncode( entry.getKey() ) );
+        sb.append( " " );
+        sb.append( urlEncode( entry.getValue() ) );
+        sb.append( "\n" );
+      }
+    }
     return sb.toString();
   }
 

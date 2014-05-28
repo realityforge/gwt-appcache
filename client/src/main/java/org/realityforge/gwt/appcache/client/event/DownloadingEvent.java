@@ -54,4 +54,3 @@ public class DownloadingEvent
     handler.onDownloadingEvent( this );
   }
 }
-
