@@ -1,4 +1,7 @@
 ## 1.0.6 (Pending):
+* Rather than returning a 500 response when the servlet is unable to locate
+  and/or process the manifest files, return a 404. This ensures that the
+  appcache manifest is removed from the client.
 * Update the set of inherits clauses from .gwt.xml file to exclude
   "com.google.gwt.core.Core" that can be derived from other modules and to
   include "com.google.gwt.event.Event" as this is required by the project.

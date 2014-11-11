@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -36,6 +38,8 @@ import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 public abstract class AbstractManifestServlet
   extends HttpServlet
 {
+  private static final Logger LOG = Logger.getLogger( AbstractManifestServlet.class.getName() );
+
   static final String DISABLE_MANIFEST_COOKIE_NAME = "appcache_disable";
   static final String DISABLE_MANIFEST_COOKIE_VALUE = "1";
 
@@ -105,19 +109,27 @@ public abstract class AbstractManifestServlet
       return;
     }
 
-    final String moduleName = getModuleName( request );
-    final String baseUrl = getBaseUrl( request );
-    final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
-    final String[] permutations = selectPermutations( baseUrl, moduleName, computedBindings );
-    if ( null != permutations )
+    try
     {
-      final String manifest = 1 == permutations.length ?
-                              loadManifest( baseUrl, moduleName, permutations[ 0 ] ) :
-                              loadAndMergeManifests( baseUrl, moduleName, permutations );
-      serveStringManifest( response, manifest );
+      final String moduleName = getModuleName( request );
+      final String baseUrl = getBaseUrl( request );
+      final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
+      final String[] permutations = selectPermutations( baseUrl, moduleName, computedBindings );
+      if ( null != permutations )
+      {
+        final String manifest = 1 == permutations.length ?
+                                loadManifest( baseUrl, moduleName, permutations[ 0 ] ) :
+                                loadAndMergeManifests( baseUrl, moduleName, permutations );
+        serveStringManifest( response, manifest );
+      }
+      else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
+      {
+        response.sendError( HttpServletResponse.SC_NOT_FOUND );
+      }
     }
-    else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
+    catch ( final ServletException se )
     {
+      LOG.log( Level.WARNING, "Error generating response for manifest", se );
       response.sendError( HttpServletResponse.SC_NOT_FOUND );
     }
   }
