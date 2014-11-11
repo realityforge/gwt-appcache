@@ -1,3 +1,8 @@
+## 1.0.6 (Pending):
+* Update the set of inherits clauses from .gwt.xml file to exclude
+  "com.google.gwt.core.Core" that can be derived from other modules and to
+  include "com.google.gwt.event.Event" as this is required by the project.
+
 ## 1.0.5:
 * Update AbstractManifestServlet so it does not assume the file system and
   instead accesses manifests and the permutations descriptor via getResource()
