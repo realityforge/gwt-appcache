@@ -1,3 +1,8 @@
+## 1.0.5 (Pending):
+* Update AbstractManifestServlet so it does not assume the file system and
+  instead accesses manifests and the permutations descriptor via getResource()
+  and getResourceAsStream().
+
 ## 1.0.4:
 * Add support for fallback resources via the GWT configuration property
   'appcache_fallback_files'.
