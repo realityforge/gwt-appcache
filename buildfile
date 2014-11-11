@@ -2,6 +2,7 @@ require 'buildr/single_intermediate_layout'
 require 'buildr/git_auto_version'
 require 'buildr/gpg'
 require 'buildr/custom_pom'
+require 'buildr/gwt'
 
 desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
@@ -21,6 +22,11 @@ define 'gwt-appcache' do
   desc 'GWT AppCache client code'
   define 'client' do
     compile.with :javax_annotation, :gwt_user
+
+    gwt(['org.realityforge.gwt.appcache.Appcache'],
+        :java_args => ['-Xms512M', '-Xmx1024M', '-XX:PermSize=128M', '-XX:MaxPermSize=256M'],
+        :draft_compile => (ENV['FAST_GWT'] == 'true'),
+        :dependencies => [:javax_validation, :javax_validation_sources] + project.compile.dependencies)
 
     test.using :testng
     test.with :mockito
