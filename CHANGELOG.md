@@ -1,4 +1,4 @@
-## 1.0.5 (Pending):
+## 1.0.5:
 * Update AbstractManifestServlet so it does not assume the file system and
   instead accesses manifests and the permutations descriptor via getResource()
   and getResourceAsStream().
