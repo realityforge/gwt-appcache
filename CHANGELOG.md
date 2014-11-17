@@ -1,4 +1,4 @@
-## 1.0.6 (Pending):
+## 1.0.6:
 * Rather than returning a 500 response when the servlet is unable to locate
   and/or process the manifest files, return a 404. This ensures that the
   appcache manifest is removed from the client.
