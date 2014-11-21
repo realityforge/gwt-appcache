@@ -1,4 +1,6 @@
 ## 1.0.7 (Pending):
+* Add nullability annotations on to PropertyProvider interface to highlight
+  incorrect usage.
 
 ## 1.0.6:
 * Rather than returning a 500 response when the servlet is unable to locate

@@ -1,10 +1,13 @@
 package org.realityforge.gwt.appcache.server.propertyprovider;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 public class LocalePropertyProvider
   implements PropertyProvider
 {
+  @Nonnull
   @Override
   public String getPropertyName()
   {
@@ -12,7 +15,8 @@ public class LocalePropertyProvider
   }
 
   @Override
-  public String getPropertyValue( final HttpServletRequest request )
+  @Nullable
+  public String getPropertyValue( @Nonnull final HttpServletRequest request )
   {
     final String queryString = request.getQueryString();
     if ( null != queryString )

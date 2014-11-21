@@ -1,5 +1,7 @@
 package org.realityforge.gwt.appcache.server;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
@@ -15,6 +17,7 @@ public final class TestPropertyProvider
     _value = value;
   }
 
+  @Nonnull
   @Override
   public String getPropertyName()
   {
@@ -22,7 +25,8 @@ public final class TestPropertyProvider
   }
 
   @Override
-  public String getPropertyValue( final HttpServletRequest request )
+  @Nullable
+  public String getPropertyValue( @Nonnull final HttpServletRequest request )
     throws Exception
   {
     return _value;
