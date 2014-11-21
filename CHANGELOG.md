@@ -1,3 +1,5 @@
+## 1.0.8 (Pending):
+
 ## 1.0.7:
 * Fix bug in AbstractManifestServlet which results in a NullPointerException
   when a provider does not return a value. An example where this occurs is
