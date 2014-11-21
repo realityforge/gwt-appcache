@@ -295,7 +295,11 @@ public abstract class AbstractManifestServlet
       final List<BindingProperty> computedBindings = new ArrayList<BindingProperty>( _providers.size() );
       for ( final PropertyProvider provider : _providers )
       {
-        computedBindings.add( new BindingProperty( provider.getPropertyName(), provider.getPropertyValue( request ) ) );
+        final String propertyValue = provider.getPropertyValue( request );
+        if ( null != propertyValue )
+        {
+          computedBindings.add( new BindingProperty( provider.getPropertyName(), propertyValue ) );
+        }
       }
       return computedBindings;
     }

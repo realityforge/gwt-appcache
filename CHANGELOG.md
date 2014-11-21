@@ -1,4 +1,8 @@
 ## 1.0.7 (Pending):
+* Fix bug in AbstractManifestServlet which results in a NullPointerException
+  when a provider does not return a value. An example where this occurs is
+  when a client-side property provider can also be derived on on the
+  server-side when a cookie is set. Reported by Paul French.
 * Add nullability annotations on to PropertyProvider interface to highlight
   incorrect usage.
 
