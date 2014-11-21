@@ -1,4 +1,4 @@
-## 1.0.7 (Pending):
+## 1.0.7:
 * Fix bug in AbstractManifestServlet which results in a NullPointerException
   when a provider does not return a value. An example where this occurs is
   when a client-side property provider can also be derived on on the
