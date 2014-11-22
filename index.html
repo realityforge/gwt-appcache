@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Gwt-appcache : GWT AppCache Support Library" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Gwt-appcache : GWT AppCache Support Library">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="gwt-appcache" class="anchor" href="#gwt-appcache"><span class="octicon octicon-link"></span></a>gwt-appcache</h1>
+<a id="gwt-appcache" class="anchor" href="#gwt-appcache" aria-hidden="true"><span class="octicon octicon-link"></span></a>gwt-appcache</h1>
 
 <p><a href="http://travis-ci.org/realityforge/gwt-appcache"><img src="https://secure.travis-ci.org/realityforge/gwt-appcache.png?branch=master" alt="Build Status"></a></p>
 
@@ -44,92 +44,101 @@ of the appcache specification. See the appendix section includes further
 references concerning the appcache spec.</p>
 
 <h2>
-<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick Start</h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start</h2>
 
 <p>The simplest way to appcache enable a GWT application is to;</p>
 
 <ul>
 <li>add the following dependencies into the build system. i.e.</li>
-</ul><div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
-   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
-   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-client<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
-   <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;dependency&gt;</span>
-   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
-   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-linker<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
-   <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;dependency&gt;</span>
-   <span class="nt">&lt;groupId&gt;</span>org.realityforge.gwt.appcache<span class="nt">&lt;/groupId&gt;</span>
-   <span class="nt">&lt;artifactId&gt;</span>gwt-appcache-server<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.2<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+</ul>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+   &lt;<span class="pl-ent">groupId</span>&gt;org.realityforge.gwt.appcache&lt;/<span class="pl-ent">groupId</span>&gt;
+   &lt;<span class="pl-ent">artifactId</span>&gt;gwt-appcache-client&lt;/<span class="pl-ent">artifactId</span>&gt;
+   &lt;<span class="pl-ent">version</span>&gt;1.0.7&lt;/<span class="pl-ent">version</span>&gt;
+   &lt;<span class="pl-ent">scope</span>&gt;provided&lt;/<span class="pl-ent">scope</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+   &lt;<span class="pl-ent">groupId</span>&gt;org.realityforge.gwt.appcache&lt;/<span class="pl-ent">groupId</span>&gt;
+   &lt;<span class="pl-ent">artifactId</span>&gt;gwt-appcache-linker&lt;/<span class="pl-ent">artifactId</span>&gt;
+   &lt;<span class="pl-ent">version</span>&gt;1.0.7&lt;/<span class="pl-ent">version</span>&gt;
+   &lt;<span class="pl-ent">scope</span>&gt;provided&lt;/<span class="pl-ent">scope</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+   &lt;<span class="pl-ent">groupId</span>&gt;org.realityforge.gwt.appcache&lt;/<span class="pl-ent">groupId</span>&gt;
+   &lt;<span class="pl-ent">artifactId</span>&gt;gwt-appcache-server&lt;/<span class="pl-ent">artifactId</span>&gt;
+   &lt;<span class="pl-ent">version</span>&gt;1.0.7&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <ul>
 <li>add the following snippet into the .gwt.xml file.</li>
-</ul><div class="highlight highlight-xml"><pre><span class="nt">&lt;module</span> <span class="na">rename-to=</span><span class="s">'myapp'</span><span class="nt">&gt;</span>
+</ul>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">module</span> <span class="pl-e">rename-to</span>=<span class="pl-s1"><span class="pl-pds">'</span>myapp<span class="pl-pds">'</span></span>&gt;
   ...
 
-  <span class="c">&lt;!-- Enable the client-side library --&gt;</span>
-  <span class="nt">&lt;inherits</span> <span class="na">name=</span><span class="s">"org.realityforge.gwt.appcache.Appcache"</span><span class="nt">/&gt;</span>
+  <span class="pl-c">&lt;!-- Enable the client-side library --&gt;</span>
+  &lt;<span class="pl-ent">inherits</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>org.realityforge.gwt.appcache.Appcache<span class="pl-pds">"</span></span>/&gt;
 
-  <span class="c">&lt;!-- Enable the linker --&gt;</span>
-  <span class="nt">&lt;inherits</span> <span class="na">name=</span><span class="s">"org.realityforge.gwt.appcache.linker.Linker"</span><span class="nt">/&gt;</span>
+  <span class="pl-c">&lt;!-- Enable the linker --&gt;</span>
+  &lt;<span class="pl-ent">inherits</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>org.realityforge.gwt.appcache.linker.Linker<span class="pl-pds">"</span></span>/&gt;
 
-  <span class="c">&lt;!-- enable the linker that generates the manifest --&gt;</span>
-  <span class="nt">&lt;add-linker</span> <span class="na">name=</span><span class="s">"appcache"</span><span class="nt">/&gt;</span>
+  <span class="pl-c">&lt;!-- enable the linker that generates the manifest --&gt;</span>
+  &lt;<span class="pl-ent">add-linker</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>appcache<span class="pl-pds">"</span></span>/&gt;
 
-  <span class="c">&lt;!-- configure all the static files not managed by the GWT compiler --&gt;</span>
-  <span class="nt">&lt;extend-configuration-property</span> <span class="na">name=</span><span class="s">"appcache_static_files"</span> <span class="na">value=</span><span class="s">"./"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;extend-configuration-property</span> <span class="na">name=</span><span class="s">"appcache_static_files"</span> <span class="na">value=</span><span class="s">"index.html"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/module&gt;</span>
-</pre></div>
+  <span class="pl-c">&lt;!-- configure all the static files not managed by the GWT compiler --&gt;</span>
+  &lt;<span class="pl-ent">extend-configuration-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>appcache_static_files<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>./<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">extend-configuration-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>appcache_static_files<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>index.html<span class="pl-pds">"</span></span>/&gt;
+
+  <span class="pl-c">&lt;!-- configure fallback rules used by the client when offline --&gt;</span>
+  &lt;<span class="pl-ent">extend-configuration-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>appcache_fallback_files<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>online.png offline.png<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">extend-configuration-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>appcache_fallback_files<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>myDynamicService.jsp  myOfflineData.json<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">module</span>&gt;</pre></div>
 
 <ul>
 <li>configure html that launches the application to look for the manifest.</li>
-</ul><div class="highlight highlight-xml"><pre><span class="cp">&lt;!doctype html&gt;</span>
-<span class="nt">&lt;html</span> <span class="na">manifest=</span><span class="s">"myapp.appcache"</span><span class="nt">&gt;</span>
+</ul>
+
+<div class="highlight highlight-xml"><pre>&lt;!doctype html&gt;
+&lt;<span class="pl-ent">html</span> <span class="pl-e">manifest</span>=<span class="pl-s1"><span class="pl-pds">"</span>myapp.appcache<span class="pl-pds">"</span></span>&gt;
    ...
-<span class="nt">&lt;/html&gt;</span>
-</pre></div>
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
 
 <ul>
 <li>declare the servlet that serves the manifest.</li>
-</ul><div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
-  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
-<span class="o">{</span>
-  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+</ul>
+
+<div class="highlight highlight-java"><pre>@WebServlet( urlPatterns <span class="pl-k">=</span> { <span class="pl-s1"><span class="pl-pds">"</span>/myapp.appcache<span class="pl-pds">"</span></span> } )
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">ManifestServlet</span>
+  <span class="pl-s">extends</span> <span class="pl-e">AbstractManifestServlet</span>
+{
+  <span class="pl-s">public</span> <span class="pl-en">ManifestServlet</span>()
+  {
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">UserAgentPropertyProvider</span>() );
+  }
+}</pre></div>
 
 <ul>
 <li>interact with the application from within the browser.</li>
-</ul><div class="highlight highlight-java"><pre><span class="kd">final</span> <span class="n">ApplicationCache</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ApplicationCache</span><span class="o">.</span><span class="na">getApplicationCacheIfSupported</span><span class="o">();</span>
-<span class="k">if</span> <span class="o">(</span> <span class="kc">null</span> <span class="o">!=</span> <span class="n">cache</span> <span class="o">)</span>
-<span class="o">{</span>
-  <span class="n">cache</span><span class="o">.</span><span class="na">addUpdateReadyHandler</span><span class="o">(</span> <span class="k">new</span> <span class="n">UpdateReadyEvent</span><span class="o">.</span><span class="na">Handler</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdateReadyEvent</span><span class="o">(</span> <span class="nd">@Nonnull</span> <span class="kd">final</span> <span class="n">UpdateReadyEvent</span> <span class="n">event</span> <span class="o">)</span>
-    <span class="o">{</span>
-      <span class="c1">//Force a cache update if new version is available</span>
-      <span class="n">cache</span><span class="o">.</span><span class="na">swapCache</span><span class="o">();</span>
-    <span class="o">}</span>
-  <span class="o">}</span> <span class="o">);</span>
+</ul>
 
-  <span class="c1">// Ask the browser to recheck the cache</span>
-  <span class="n">cache</span><span class="o">.</span><span class="na">requestUpdate</span><span class="o">();</span>
+<div class="highlight highlight-java"><pre><span class="pl-s">final</span> <span class="pl-stj">ApplicationCache</span> cache <span class="pl-k">=</span> <span class="pl-stj">ApplicationCache</span><span class="pl-k">.</span>getApplicationCacheIfSupported();
+<span class="pl-k">if</span> ( <span class="pl-c1">null</span> <span class="pl-k">!=</span> cache )
+{
+  cache<span class="pl-k">.</span>addUpdateReadyHandler( <span class="pl-k">new</span> <span class="pl-stj">UpdateReadyEvent</span>.<span class="pl-stj">Handler</span>()
+  {
+    @<span class="pl-stj">Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> onUpdateReadyEvent( @<span class="pl-stj">Nonnull</span> <span class="pl-s">final</span> <span class="pl-stj">UpdateReadyEvent</span> event )
+    {
+      <span class="pl-c">//Force a cache update if new version is available</span>
+      cache<span class="pl-k">.</span>swapCache();
+    }
+  } );
 
-  <span class="o">...</span>
-</pre></div>
+  <span class="pl-c">// Ask the browser to recheck the cache</span>
+  cache<span class="pl-k">.</span>requestUpdate();
+
+  <span class="pl-c1">...</span></pre></div>
 
 <p>This should be sufficient to get your application using the appcache. If you
 load the application in a modern browser you should see it making use of the
@@ -140,14 +149,15 @@ cache in the console.</p>
 project.</p>
 
 <h2>
-<a name="how-does-it-work" class="anchor" href="#how-does-it-work"><span class="octicon octicon-link"></span></a>How does it work?</h2>
+<a id="how-does-it-work" class="anchor" href="#how-does-it-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How does it work?</h2>
 
 <p>For every permutation generated by the GWT compiler, a separate manifest file
 is generated. The manifest includes almost all public resources generated by
 GWT with the exception of some used during debugging and development (i.e.
 <code>myapp.devmode.js</code> and <code>compilation-mappings.txt</code>). The manifest also includes
 any additional files declared using the "<code>appcache_static_files</code>" configuration
-setting.</p>
+setting. (It should be noted that the "<code>appcache_static_files</code>" files are
+relative to the manifest file).</p>
 
 <p>After the GWT compiler has generated all the different permutations, a single
 xml descriptor <code>permutations.xml</code> is generated that lists all the permutations
@@ -165,7 +175,7 @@ the correct permutation and thus the correct manifest file. The selected manifes
 file is returned to the requester.</p>
 
 <h2>
-<a name="how-to-define-a-new-selection-configuration" class="anchor" href="#how-to-define-a-new-selection-configuration"><span class="octicon octicon-link"></span></a>How To: Define a new Selection Configuration</h2>
+<a id="how-to-define-a-new-selection-configuration" class="anchor" href="#how-to-define-a-new-selection-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To: Define a new Selection Configuration</h2>
 
 <p>Sometimes it is useful to define a new configuration property in the gwt module
 descriptors that will define new permutations. A fairly typical example would
@@ -175,72 +185,68 @@ ui and workflow in the application.</p>
 
 <p>Step 1 is to define the configuration in the gwt module descriptor. i.e.</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;define-property</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">values=</span><span class="s">"phone, tablet, desktop"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;property-provider</span> <span class="na">name=</span><span class="s">"ui.modality"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[</span>
-<span class="cp">  {</span>
-<span class="cp">    var ua = window.navigator.userAgent.toLowerCase();</span>
-<span class="cp">    if ( ua.indexOf('android') != -1 ) { return 'phone'; }</span>
-<span class="cp">    if ( ua.indexOf('iphone') != -1 ) { return 'phone'; }</span>
-<span class="cp">    if ( ua.indexOf('ipad') != -1 ) { return 'tablet'; }</span>
-<span class="cp">    return 'desktop';</span>
-<span class="cp">  }</span>
-<span class="cp">]]&gt;</span><span class="nt">&lt;/property-provider&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">define-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span> <span class="pl-e">values</span>=<span class="pl-s1"><span class="pl-pds">"</span>phone, tablet, desktop<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">property-provider</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span>&gt;<span class="pl-s1"><span class="pl-pds">&lt;![CDATA[</span></span>
+<span class="pl-s1">  {</span>
+<span class="pl-s1">    var ua = window.navigator.userAgent.toLowerCase();</span>
+<span class="pl-s1">    if ( ua.indexOf('android') != -1 ) { return 'phone'; }</span>
+<span class="pl-s1">    if ( ua.indexOf('iphone') != -1 ) { return 'phone'; }</span>
+<span class="pl-s1">    if ( ua.indexOf('ipad') != -1 ) { return 'tablet'; }</span>
+<span class="pl-s1">    return 'desktop';</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1"><span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">property-provider</span>&gt;</pre></div>
 
 <p>Step 2 is to use the new configuration property to control the deferred binding
 rules in gwt modules. For example, the following could be added to a .gwt.xml
 module file;</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.DesktopInjectorWrapper"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"desktop"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/replace-with&gt;</span>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">replace-with</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.DesktopInjectorWrapper<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">when-type-is</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.InjectorWrapper<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">when-property-is</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>desktop<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">replace-with</span>&gt;
 
-<span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.TabletInjectorWrapper"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"tablet"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/replace-with&gt;</span>
+&lt;<span class="pl-ent">replace-with</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.TabletInjectorWrapper<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">when-type-is</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.InjectorWrapper<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">when-property-is</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>tablet<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">replace-with</span>&gt;
 
-<span class="nt">&lt;replace-with</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.PhoneInjectorWrapper"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;when-type-is</span> <span class="na">class=</span><span class="s">"com.biz.client.gin.InjectorWrapper"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;when-property-is</span> <span class="na">name=</span><span class="s">"ui.modality"</span> <span class="na">value=</span><span class="s">"phone"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/replace-with&gt;</span>
-</pre></div>
+&lt;<span class="pl-ent">replace-with</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.PhoneInjectorWrapper<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">when-type-is</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>com.biz.client.gin.InjectorWrapper<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">when-property-is</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>phone<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">replace-with</span>&gt;</pre></div>
 
 <p>Step 3 is to define a property provider for your new configuration property and
 add it to the manifest servlet. i.e.</p>
 
-<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UIModalityPropertyProvider</span>
-  <span class="kd">implements</span> <span class="n">PropertyProvider</span>
-<span class="o">{</span>
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyValue</span><span class="o">(</span> <span class="kd">final</span> <span class="n">HttpServletRequest</span> <span class="n">request</span> <span class="o">)</span>
-  <span class="o">{</span>
-    <span class="kd">final</span> <span class="n">String</span> <span class="n">ua</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span> <span class="s">"User-Agent"</span> <span class="o">).</span><span class="na">toLowerCase</span><span class="o">();</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"android"</span> <span class="o">)</span> <span class="o">||</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"phone"</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"phone"</span><span class="o">;</span> <span class="o">}</span>
-    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span> <span class="n">ua</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span> <span class="s">"ipad"</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"tablet"</span><span class="o">;</span> <span class="o">}</span>
-    <span class="k">else</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"desktop"</span><span class="o">;</span> <span class="o">}</span>
-  <span class="o">}</span>
+<div class="highlight highlight-java"><pre><span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">UIModalityPropertyProvider</span>
+  <span class="pl-s">implements</span> <span class="pl-e">PropertyProvider</span>
+{
+  <span class="pl-st">@Override</span>
+  <span class="pl-s">public</span> <span class="pl-stj">String</span> <span class="pl-en">getPropertyValue</span>( <span class="pl-s">final</span> <span class="pl-stj">HttpServletRequest</span> <span class="pl-v">request</span> )
+  {
+    <span class="pl-s">final</span> <span class="pl-stj">String</span> ua <span class="pl-k">=</span> request<span class="pl-k">.</span>getHeader( <span class="pl-s1"><span class="pl-pds">"</span>User-Agent<span class="pl-pds">"</span></span> )<span class="pl-k">.</span>toLowerCase();
+    <span class="pl-k">if</span> ( ua<span class="pl-k">.</span>contains( <span class="pl-s1"><span class="pl-pds">"</span>android<span class="pl-pds">"</span></span> ) <span class="pl-k">||</span> ua<span class="pl-k">.</span>contains( <span class="pl-s1"><span class="pl-pds">"</span>phone<span class="pl-pds">"</span></span> ) ) { <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>phone<span class="pl-pds">"</span></span>; }
+    <span class="pl-k">else</span> <span class="pl-k">if</span> ( ua<span class="pl-k">.</span>contains( <span class="pl-s1"><span class="pl-pds">"</span>ipad<span class="pl-pds">"</span></span> ) ) { <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>tablet<span class="pl-pds">"</span></span>; }
+    <span class="pl-k">else</span> { <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>desktop<span class="pl-pds">"</span></span>; }
+  }
 
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyName</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="k">return</span> <span class="s">"ui.modality"</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+  <span class="pl-st">@Override</span>
+  <span class="pl-s">public</span> <span class="pl-stj">String</span> <span class="pl-en">getPropertyName</span>()
+  {
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>ui.modality<span class="pl-pds">"</span></span>;
+  }
+}</pre></div>
 
-<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
-  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
-<span class="o">{</span>
-  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UIModalityPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>@WebServlet( urlPatterns <span class="pl-k">=</span> { <span class="pl-s1"><span class="pl-pds">"</span>/myapp.appcache<span class="pl-pds">"</span></span> } )
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">ManifestServlet</span>
+  <span class="pl-s">extends</span> <span class="pl-e">AbstractManifestServlet</span>
+{
+  <span class="pl-s">public</span> <span class="pl-en">ManifestServlet</span>()
+  {
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">UIModalityPropertyProvider</span>() );
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">UserAgentPropertyProvider</span>() );
+  }
+}</pre></div>
 
 <p>This example demonstrates a simple mechanism for supporting server-side derivable
 configuration properties to select a permutation. In some cases, the selection
@@ -248,38 +254,36 @@ property can only be determined on the client. This scenario is more complex and
 requires a combination of cookies and dynamic host pages to address.</p>
 
 <h2>
-<a name="how-to-define-a-new-client-side-selection-configuration" class="anchor" href="#how-to-define-a-new-client-side-selection-configuration"><span class="octicon octicon-link"></span></a>How To: Define a new client-side selection Configuration</h2>
+<a id="how-to-define-a-new-client-side-selection-configuration" class="anchor" href="#how-to-define-a-new-client-side-selection-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To: Define a new client-side selection Configuration</h2>
 
 <p>Sometimes configuration properties can only be determined on the client. A good
 example is the device pixel density that can be determined by inspecting the
 "window.devicePixelRatio" property in the browser.</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;define-property</span> <span class="na">name=</span><span class="s">"pixel.density"</span> <span class="na">values=</span><span class="s">"high, low"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;property-provider</span> <span class="na">name=</span><span class="s">"pixel.density"</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[</span>
-<span class="cp">  {</span>
-<span class="cp">  if(window.devicePixelRatio &gt;= 2) { return 'high'; }</span>
-<span class="cp">  return 'low';</span>
-<span class="cp">  }</span>
-<span class="cp">]]&gt;</span><span class="nt">&lt;/property-provider&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">define-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span> <span class="pl-e">values</span>=<span class="pl-s1"><span class="pl-pds">"</span>high, low<span class="pl-pds">"</span></span>/&gt;
+  &lt;<span class="pl-ent">property-provider</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span>&gt;<span class="pl-s1"><span class="pl-pds">&lt;![CDATA[</span></span>
+<span class="pl-s1">  {</span>
+<span class="pl-s1">  if(window.devicePixelRatio &gt;= 2) { return 'high'; }</span>
+<span class="pl-s1">  return 'low';</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1"><span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">property-provider</span>&gt;</pre></div>
 
 <p>The gwt-appcache library can defer the selection of the property to the client-side
 by merging the manifests of the high and low density permutations and returning
 the merged manifest to the client. This is done by marking the "pixel.density"
  property as client-side via;</p>
 
-<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
-  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
-<span class="o">{</span>
-  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-    <span class="o">...</span>
-    <span class="n">addClientSideSelectionProperty</span><span class="o">(</span> <span class="s">"pixel.density"</span> <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>@WebServlet( urlPatterns <span class="pl-k">=</span> { <span class="pl-s1"><span class="pl-pds">"</span>/myapp.appcache<span class="pl-pds">"</span></span> } )
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">ManifestServlet</span>
+  <span class="pl-s">extends</span> <span class="pl-e">AbstractManifestServlet</span>
+{
+  <span class="pl-s">public</span> <span class="pl-en">ManifestServlet</span>()
+  {
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">UserAgentPropertyProvider</span>() );
+    <span class="pl-c1">...</span>
+    addClientSideSelectionProperty( <span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span> );
+  }
+}</pre></div>
 
 <p>This will mean that the client ultimately caches extra data that may not be used
 by the client. This may be acceptable for small applications but a better approach
@@ -287,47 +291,45 @@ is to detect the pixel density and set a cookie prior to navigating to the page
 that hosts the application. The server can then attempt to determine the value of
 the configuration property using the cookie name like;</p>
 
-<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PixelDensityPropertyProvider</span>
-  <span class="kd">implements</span> <span class="n">PropertyProvider</span>
-<span class="o">{</span>
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"pixel.density"</span><span class="o">;</span> <span class="o">}</span>
+<div class="highlight highlight-java"><pre><span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">PixelDensityPropertyProvider</span>
+  <span class="pl-s">implements</span> <span class="pl-e">PropertyProvider</span>
+{
+  <span class="pl-st">@Override</span>
+  <span class="pl-s">public</span> <span class="pl-stj">String</span> <span class="pl-en">getPropertyName</span>() { <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span>; }
 
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPropertyValue</span><span class="o">(</span> <span class="n">HttpServletRequest</span> <span class="n">request</span> <span class="o">)</span>
-  <span class="o">{</span>
-    <span class="kd">final</span> <span class="n">Cookie</span><span class="o">[]</span> <span class="n">cookies</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getCookies</span><span class="o">();</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="kc">null</span> <span class="o">!=</span> <span class="n">cookies</span> <span class="o">)</span>
-    <span class="o">{</span>
-      <span class="k">for</span> <span class="o">(</span> <span class="kd">final</span> <span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">cookies</span> <span class="o">)</span>
-      <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span> <span class="s">"pixel.density"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span> <span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">)</span> <span class="o">)</span>
-        <span class="o">{</span>
-          <span class="k">return</span> <span class="n">cookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+  <span class="pl-st">@Override</span>
+  <span class="pl-s">public</span> <span class="pl-stj">String</span> <span class="pl-en">getPropertyValue</span>( <span class="pl-stj">HttpServletRequest</span> <span class="pl-v">request</span> )
+  {
+    <span class="pl-s">final</span> <span class="pl-st">Cookie</span>[] cookies <span class="pl-k">=</span> request<span class="pl-k">.</span>getCookies();
+    <span class="pl-k">if</span> ( <span class="pl-c1">null</span> <span class="pl-k">!=</span> cookies )
+    {
+      <span class="pl-k">for</span> ( <span class="pl-s">final</span> <span class="pl-stj">Cookie</span> cookie <span class="pl-k">:</span> cookies )
+      {
+        <span class="pl-k">if</span> ( <span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span><span class="pl-k">.</span>equals( cookie<span class="pl-k">.</span>getName() ) )
+        {
+          <span class="pl-k">return</span> cookie<span class="pl-k">.</span>getValue();
+        }
+      }
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">null</span>;
+  }
+}</pre></div>
 
-<div class="highlight highlight-java"><pre><span class="nd">@WebServlet</span><span class="o">(</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"/myapp.manifest"</span> <span class="o">}</span> <span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ManifestServlet</span>
-  <span class="kd">extends</span> <span class="n">AbstractManifestServlet</span>
-<span class="o">{</span>
-  <span class="kd">public</span> <span class="nf">ManifestServlet</span><span class="o">()</span>
-  <span class="o">{</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">UserAgentPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-    <span class="n">addPropertyProvider</span><span class="o">(</span> <span class="k">new</span> <span class="n">PixelDensityPropertyProvider</span><span class="o">()</span> <span class="o">);</span>
-    <span class="o">...</span>
-    <span class="n">addClientSideSelectionProperty</span><span class="o">(</span> <span class="s">"pixel.density"</span> <span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>@WebServlet( urlPatterns <span class="pl-k">=</span> { <span class="pl-s1"><span class="pl-pds">"</span>/myapp.appcache<span class="pl-pds">"</span></span> } )
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">ManifestServlet</span>
+  <span class="pl-s">extends</span> <span class="pl-e">AbstractManifestServlet</span>
+{
+  <span class="pl-s">public</span> <span class="pl-en">ManifestServlet</span>()
+  {
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">UserAgentPropertyProvider</span>() );
+    addPropertyProvider( <span class="pl-k">new</span> <span class="pl-stj">PixelDensityPropertyProvider</span>() );
+    <span class="pl-c1">...</span>
+    addClientSideSelectionProperty( <span class="pl-s1"><span class="pl-pds">"</span>pixel.density<span class="pl-pds">"</span></span> );
+  }
+}</pre></div>
 
 <h2>
-<a name="how-to-integrate-into-existing-framework" class="anchor" href="#how-to-integrate-into-existing-framework"><span class="octicon octicon-link"></span></a>How To: Integrate into existing framework</h2>
+<a id="how-to-integrate-into-existing-framework" class="anchor" href="#how-to-integrate-into-existing-framework" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To: Integrate into existing framework</h2>
 
 <p>The gwt-appcache library was designed to be easy to integrate into any other
 gwt framework. A good example is the wonderful <a href="https://github.com/dankurka/mgwt">MGWT</a>
@@ -343,7 +345,9 @@ based on the following configuration properties;</p>
 <code>user.agent</code> - A standard gwt configuration property.</li>
 <li>
 <code>phonegap.env</code> - Always <code>no</code> for web applications.</li>
-</ul><p>It is important to the MGWT framework to distinguish between retina and non-retina versions of
+</ul>
+
+<p>It is important to the MGWT framework to distinguish between retina and non-retina versions of
 the iphone and ipad variants. The retina versions inspect the <code>window.devicePixelRatio</code> browser property
 similarly to the above <code>pixel.density</code> example. Rather than making this a separate configuration
 property, MGWT conflates this with operating system. As a result it uses a custom strategy to
@@ -354,14 +358,56 @@ work required to re-integrate the functionality back into the MGWT framework. Th
 example of complex integration of <code>gwt-appcache</code>.</p>
 
 <h2>
-<a name="appendix" class="anchor" href="#appendix"><span class="octicon octicon-link"></span></a>Appendix</h2>
+<a id="how-to-configure-the-url-for-the-manifest-servlet-in-webxml" class="anchor" href="#how-to-configure-the-url-for-the-manifest-servlet-in-webxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To: Configure the url for the Manifest servlet in web.xml</h2>
+
+<p>The above examples assume that annotations are used to configure the url for the manifest servlet. It
+is also possible to explicitly configure the url pattern in web.xml via a snippet similar to the
+following. This will configure the appcache manifest to be at the path "/somedir/example.appcache"
+relative to the application root. The manifest servlet will expect to find the permutations.xml file
+at the path "/somedir/example/permutations.xml" relative to the application root.</p>
+
+<div class="highlight highlight-xml"><pre>  &lt;<span class="pl-ent">servlet</span>&gt;
+    &lt;<span class="pl-ent">servlet-name</span>&gt;org.realityforge.gwt.appcache.example.server.ManifestServlet&lt;/<span class="pl-ent">servlet-name</span>&gt;
+  &lt;/<span class="pl-ent">servlet</span>&gt;
+
+  &lt;<span class="pl-ent">servlet-mapping</span>&gt;
+    &lt;<span class="pl-ent">servlet-name</span>&gt;org.realityforge.gwt.appcache.example.server.ManifestServlet&lt;/<span class="pl-ent">servlet-name</span>&gt;
+    &lt;<span class="pl-ent">url-pattern</span>&gt;/somedir/example.appcache&lt;/<span class="pl-ent">url-pattern</span>&gt;
+  &lt;/<span class="pl-ent">servlet-mapping</span>&gt;</pre></div>
+
+<h2>
+<a id="frequently-asked-questions" class="anchor" href="#frequently-asked-questions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Frequently Asked Questions</h2>
+
+<h3>
+<a id="why-do-i-get-a-404-from-the-manifest-servlet-when-i-specify-a-configuration-property-in-gwtxml" class="anchor" href="#why-do-i-get-a-404-from-the-manifest-servlet-when-i-specify-a-configuration-property-in-gwtxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why do I get a 404 from the Manifest servlet when I specify a configuration property in .gwt.xml?</h3>
+
+<p>If you specify a configuration property in your .gwt.xml file such as below, the manifest servlet may
+start returning a 404. Why is this and how do I fix it?</p>
+
+<div class="highlight highlight-xml"><pre>  &lt;<span class="pl-ent">set-property</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>user.agent<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span>safari<span class="pl-pds">"</span></span> /&gt;</pre></div>
+
+<p>The Manifest servlet uses the permutations.xml to determine how to select the permutation(s)
+to serve. The properties generated by the PropertyProvider instances added to the manifest must
+match the set of properties that are in the permutations.xml. If you add a property provider
+that generates a property that is not present in permutations.xml then the manifest servlet will
+never be able to find a permutation that matches that property and thus a 404 will be returned.</p>
+
+<p>When you specified a single value for the user.agent property above, the user.agent configuration was
+made into a constant and thus it could not be used to distinguish between permutations. As a result, the
+property no longer appears in the permutations.xml file. At this point it is necessary to remove the
+UserAgentPropertyProvider from the manifest servlet.</p>
+
+<h2>
+<a id="appendix" class="anchor" href="#appendix" aria-hidden="true"><span class="octicon octicon-link"></span></a>Appendix</h2>
 
 <ul>
 <li><a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">A Beginner's Guide to Using the Application Cache</a></li>
 <li><a href="http://appcachefacts.info/">Appcache Facts</a></li>
 <li><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html">Offline Web Application Standard</a></li>
-</ul><h2>
-<a name="credit" class="anchor" href="#credit"><span class="octicon octicon-link"></span></a>Credit</h2>
+</ul>
+
+<h2>
+<a id="credit" class="anchor" href="#credit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credit</h2>
 
 <p>This library began as a enhancement of similar functionality in the
 <a href="https://github.com/dankurka/mgwt">MGWT</a> project by Daniel Kurka. All
