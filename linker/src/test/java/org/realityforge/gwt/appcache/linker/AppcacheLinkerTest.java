@@ -118,7 +118,7 @@ public class AppcacheLinkerTest
     assertEquals( values.size(), 3 );
 
     final List<BindingProperty> x = ensureBinding( values, "X", 1 );
-    assertProperty( x.get( 0 ), "user.agent", "ie8,ie9,ie10" );
+        assertProperty(x.get(0), "user.agent", "ie10,ie9,ie8");
 
     final List<BindingProperty> z = ensureBinding( values, "Z", 1 );
     assertProperty( z.get( 0 ), "user.agent", "gecko_16" );
