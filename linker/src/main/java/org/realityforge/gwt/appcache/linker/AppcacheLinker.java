@@ -183,7 +183,8 @@ public final class AppcacheLinker
 
   private boolean shouldAddToManifest( final String path )
   {
-    return !( path.equals( "compilation-mappings.txt" ) || path.endsWith( ".devmode.js" ) );
+    return !( path.equals( "compilation-mappings.txt" ) || path.endsWith( ".devmode.js" ) ||
+            path.endsWith( ".cache.js.gz" ));
   }
 
   /**

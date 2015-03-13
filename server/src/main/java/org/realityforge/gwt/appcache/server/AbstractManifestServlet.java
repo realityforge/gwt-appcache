@@ -1,11 +1,12 @@
 package org.realityforge.gwt.appcache.server;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -26,7 +29,7 @@ import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
 /**
  * Base class for servlet the does server-side permutation selection and serves the correct appcache manifest.
- *
+ * <p/>
  * The servlet calls a chain of PropertyProvider instances to derive properties that are used to select the
  * appropriate manifest at runtime. Sometimes, certain properties can not be determined definitively except on
  * client-side and thus the servlet may need to serve up a manifest that merges appcache manifests for multiple
@@ -35,6 +38,8 @@ import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 public abstract class AbstractManifestServlet
   extends HttpServlet
 {
+  private static final Logger LOG = Logger.getLogger( AbstractManifestServlet.class.getName() );
+
   static final String DISABLE_MANIFEST_COOKIE_NAME = "appcache_disable";
   static final String DISABLE_MANIFEST_COOKIE_VALUE = "1";
 
@@ -49,7 +54,7 @@ public abstract class AbstractManifestServlet
   private transient ArrayList<String> _clientSideSelectionProperties = new ArrayList<String>();
   private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
   private transient List<SelectionDescriptor> _selectionDescriptors;
-  private transient Map<String,String> _cache;
+  private transient Map<String, String> _cache;
   private transient boolean _enableCache;
 
   protected AbstractManifestServlet()
@@ -69,7 +74,7 @@ public abstract class AbstractManifestServlet
 
   protected final void enableCache()
   {
-    if( null == _cache )
+    if ( null == _cache )
     {
       _cache = new HashMap<String, String>();
     }
@@ -104,19 +109,27 @@ public abstract class AbstractManifestServlet
       return;
     }
 
-    final String moduleName = getModuleName( request );
-    final String baseUrl = getBaseUrl( request );
-    final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
-    final String[] permutations = selectPermutations( baseUrl, moduleName, computedBindings );
-    if ( null != permutations )
+    try
     {
-      final String manifest = 1 == permutations.length ?
-                              loadManifest( baseUrl, moduleName, permutations[ 0 ] ) :
-                              loadAndMergeManifests( baseUrl, moduleName, permutations );
-      serveStringManifest( response, manifest );
+      final String moduleName = getModuleName( request );
+      final String baseUrl = getBaseUrl( request );
+      final List<BindingProperty> computedBindings = calculateBindingPropertiesForClient( request );
+      final String[] permutations = selectPermutations( baseUrl, moduleName, computedBindings );
+      if ( null != permutations )
+      {
+        final String manifest = 1 == permutations.length ?
+                                loadManifest( baseUrl, moduleName, permutations[ 0 ] ) :
+                                loadAndMergeManifests( baseUrl, moduleName, permutations );
+        serveStringManifest( response, manifest );
+      }
+      else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
+      {
+        response.sendError( HttpServletResponse.SC_NOT_FOUND );
+      }
     }
-    else if ( !handleUnmatchedRequest( request, response, moduleName, baseUrl, computedBindings ) )
+    catch ( final ServletException se )
     {
+      LOG.log( Level.WARNING, "Error generating response for manifest", se );
       response.sendError( HttpServletResponse.SC_NOT_FOUND );
     }
   }
@@ -164,10 +177,10 @@ public abstract class AbstractManifestServlet
     throws ServletException
   {
     final String cacheKey = toCacheKey( baseUrl, moduleName, permutationNames );
-    if( isCacheEnabled() )
+    if ( isCacheEnabled() )
     {
       final String manifest = _cache.get( cacheKey );
-      if( null != manifest )
+      if ( null != manifest )
       {
         return manifest;
       }
@@ -213,17 +226,20 @@ public abstract class AbstractManifestServlet
   {
     final String cacheKey = baseUrl + moduleName + "/" + strongName;
     final String filePath = cacheKey + Permutation.PERMUTATION_MANIFEST_FILE_ENDING;
-    if( isCacheEnabled() )
+    if ( isCacheEnabled() )
     {
       final String manifest = _cache.get( cacheKey );
-      if( null != manifest )
+      if ( null != manifest )
       {
         return manifest;
       }
     }
-    final String realPath = getServletContext().getRealPath( filePath );
-    assert null != realPath;
-    final String manifest = readFile( new File( realPath ) );
+    final InputStream content = getServletContext().getResourceAsStream( filePath );
+    if ( null == content )
+    {
+      throw new ServletException( "Unable to locate manifest file: " + filePath );
+    }
+    final String manifest = readFile( content );
     if ( isCacheEnabled() )
     {
       _cache.put( cacheKey, manifest );
@@ -238,14 +254,13 @@ public abstract class AbstractManifestServlet
     return base.substring( 0, base.lastIndexOf( "/" ) + 1 );
   }
 
-  private String readFile( final File file )
+  private String readFile( final InputStream content )
     throws ServletException
   {
-    final StringWriter sw = new StringWriter();
-    FileReader fileReader = null;
     try
     {
-      fileReader = new FileReader( file );
+      final StringWriter sw = new StringWriter();
+      final InputStreamReader fileReader = new InputStreamReader( content );
       final BufferedReader br = new BufferedReader( fileReader );
       String line;
       while ( null != ( line = br.readLine() ) )
@@ -255,22 +270,19 @@ public abstract class AbstractManifestServlet
 
       return sw.toString();
     }
-    catch ( final Exception e )
+    catch ( final IOException e )
     {
-      throw new ServletException( "error while reading manifest file", e );
+      throw new ServletException( "Error while reading manifest file", e );
     }
     finally
     {
-      if ( null != fileReader )
+      try
       {
-        try
-        {
-          fileReader.close();
-        }
-        catch ( final IOException ioe )
-        {
-          //Ignored
-        }
+        content.close();
+      }
+      catch ( final IOException ioe )
+      {
+        //Ignored
       }
     }
   }
@@ -283,7 +295,11 @@ public abstract class AbstractManifestServlet
       final List<BindingProperty> computedBindings = new ArrayList<BindingProperty>( _providers.size() );
       for ( final PropertyProvider provider : _providers )
       {
-        computedBindings.add( new BindingProperty( provider.getPropertyName(), provider.getPropertyValue( request ) ) );
+        final String propertyValue = provider.getPropertyValue( request );
+        if ( null != propertyValue )
+        {
+          computedBindings.add( new BindingProperty( provider.getPropertyName(), propertyValue ) );
+        }
       }
       return computedBindings;
     }
@@ -402,7 +418,7 @@ public abstract class AbstractManifestServlet
 
   /**
    * Return an array of permutation names that are selected based on supplied properties.
-   *
+   * <p/>
    * The array may be null if no permutation could be found. It may be a single value if
    * the bindings uniquely identify a permutation or it may be multiple values if client side
    * properties are not specified and the server side properties do not uniquely identify a
@@ -478,20 +494,32 @@ public abstract class AbstractManifestServlet
   }
 
   final List<SelectionDescriptor> getPermutationDescriptors( @Nonnull final String baseUrl,
-                                                               @Nonnull final String moduleName )
+                                                             @Nonnull final String moduleName )
     throws Exception
   {
-    final String realPath =
-      getServletContext().getRealPath( baseUrl + moduleName + "/" + PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME );
-    final File permutationDescriptor = new File( realPath );
-    final long lastModified = permutationDescriptor.lastModified();
+    final String filePath = baseUrl + moduleName + "/" + PermutationsIO.PERMUTATIONS_DESCRIPTOR_FILE_NAME;
+    final URL content = getServletContext().getResource( filePath );
+    if ( null == content )
+    {
+      throw new ServletException( "Unable to locate permutations file: " + filePath );
+    }
+    final URLConnection connection = content.openConnection();
+    final long lastModified = connection.getLastModified();
     if ( null == _selectionDescriptors || _permutationsDescriptorLastModified < lastModified )
     {
-      _selectionDescriptors = PermutationsIO.deserialize( new FileInputStream( realPath ) );
-      _permutationsDescriptorLastModified = lastModified;
-      if( null != _cache )
+      final InputStream inputStream = connection.getInputStream();
+      try
       {
-        _cache.clear();
+        _selectionDescriptors = PermutationsIO.deserialize( inputStream );
+        _permutationsDescriptorLastModified = lastModified;
+        if ( null != _cache )
+        {
+          _cache.clear();
+        }
+      }
+      finally
+      {
+        inputStream.close();
       }
     }
     return _selectionDescriptors;

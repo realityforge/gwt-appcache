@@ -1,5 +1,7 @@
 package org.realityforge.gwt.appcache.server.mgwt;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.realityforge.gwt.appcache.server.BindingProperty;
@@ -16,6 +18,7 @@ public final class MgwtOsPropertyProvider
   static final BindingProperty iPad_retina = new BindingProperty( "mgwt.os", "ipad_retina" );
   static final BindingProperty iPad_undefined = new BindingProperty( "mgwt.os", "ipad_undefined" );
 
+  @Nonnull
   @Override
   public String getPropertyName()
   {
@@ -23,7 +26,8 @@ public final class MgwtOsPropertyProvider
   }
 
   @Override
-  public String getPropertyValue( HttpServletRequest request )
+  @Nullable
+  public String getPropertyValue( @Nonnull HttpServletRequest request )
   {
     final String userAgent = request.getHeader( "User-Agent" ).toLowerCase();
 

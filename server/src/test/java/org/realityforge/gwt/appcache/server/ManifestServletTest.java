@@ -1,6 +1,8 @@
 package org.realityforge.gwt.appcache.server;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,10 +83,9 @@ public class ManifestServletTest
     final HttpServletRequest request = mock( HttpServletRequest.class );
     final HttpServletResponse response = mock( HttpServletResponse.class );
     when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
-    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
-      thenReturn( permutations.getAbsolutePath() );
-    when( servlet.getServletContext().getRealPath( "/fgis/" + strongPermutation + ".appcache" ) ).
-      thenReturn( manifest.getAbsolutePath() );
+    when( servlet.getServletContext().getResource( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.toURI().toURL() );
+    configureManifest( servlet, "/fgis/" + strongPermutation + ".appcache", manifest );
 
     final ServletOutputStream output = mock( ServletOutputStream.class );
     when( response.getOutputStream() ).thenReturn( output );
@@ -124,12 +125,10 @@ public class ManifestServletTest
     final HttpServletRequest request = mock( HttpServletRequest.class );
     final HttpServletResponse response = mock( HttpServletResponse.class );
     when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
-    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
-      thenReturn( permutations.getAbsolutePath() );
-    when( servlet.getServletContext().getRealPath( "/fgis/P1.appcache" ) ).
-      thenReturn( manifest1.getAbsolutePath() );
-    when( servlet.getServletContext().getRealPath( "/fgis/P2.appcache" ) ).
-      thenReturn( manifest2.getAbsolutePath() );
+    when( servlet.getServletContext().getResource( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.toURI().toURL() );
+    configureManifest( servlet, "/fgis/P1.appcache", manifest1 );
+    configureManifest( servlet, "/fgis/P2.appcache", manifest2 );
 
     final ServletOutputStream output = mock( ServletOutputStream.class );
     when( response.getOutputStream() ).thenReturn( output );
@@ -166,8 +165,8 @@ public class ManifestServletTest
     final HttpServletRequest request = mock( HttpServletRequest.class );
     final HttpServletResponse response = mock( HttpServletResponse.class );
     when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
-    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
-      thenReturn( permutations.getAbsolutePath() );
+    when( servlet.getServletContext().getResource( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.toURI().toURL() );
 
     servlet.doGet( request, response );
 
@@ -189,8 +188,8 @@ public class ManifestServletTest
     final HttpServletRequest request = mock( HttpServletRequest.class );
     final HttpServletResponse response = mock( HttpServletResponse.class );
     when( request.getServletPath() ).thenReturn( "/fgis.appcache" );
-    when( servlet.getServletContext().getRealPath( "/fgis/permutations.xml" ) ).
-      thenReturn( permutations.getAbsolutePath() );
+    when( servlet.getServletContext().getResource( "/fgis/permutations.xml" ) ).
+      thenReturn( permutations.toURI().toURL() );
 
     servlet.setUnmatchedHandlerResponse( true );
 
@@ -303,8 +302,10 @@ public class ManifestServletTest
     final String expectedManifest = "XXXX\n";
     final File manifestFile = createFile( "manifest", "appcache", expectedManifest );
 
-    when( servlet.getServletContext().getRealPath( "/foo/myapp/12345.appcache" ) ).
-      thenReturn( manifestFile.getAbsolutePath() );
+    configureManifest( servlet, "/foo/myapp/12345.appcache", manifestFile );
+    when( servlet.getServletContext().getResourceAsStream( "/foo/myapp/12345.appcache" ) ).
+      thenReturn( new FileInputStream( manifestFile ),
+                  new FileInputStream( manifestFile ) );
 
     final String manifest = servlet.loadManifest( "/foo/", "myapp", "12345" );
     assertEquals( manifest, expectedManifest );
@@ -312,7 +313,7 @@ public class ManifestServletTest
     final String manifest2 = servlet.loadManifest( "/foo/", "myapp", "12345" );
     assertTrue( manifest2 == manifest );
 
-    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/12345.appcache" );
+    verify( servlet.getServletContext(), times( 1 ) ).getResourceAsStream( "/foo/myapp/12345.appcache" );
 
     servlet.disableCache();
 
@@ -320,7 +321,14 @@ public class ManifestServletTest
     assertTrue( manifest3 != manifest );
     assertEquals( manifest3, manifest );
 
-    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/12345.appcache" );
+    verify( servlet.getServletContext(), times( 2 ) ).getResourceAsStream( "/foo/myapp/12345.appcache" );
+  }
+
+  private void configureManifest( final TestManifestServlet servlet, final String path, final File manifestFile )
+    throws FileNotFoundException
+  {
+    when( servlet.getServletContext().getResourceAsStream( path ) ).
+      thenReturn( new FileInputStream( manifestFile ) );
   }
 
   @SuppressWarnings( "StringEquality" )
@@ -336,11 +344,12 @@ public class ManifestServletTest
     final File manifestFile1 = createFile( "manifest", "appcache", manifest1 );
     final File manifestFile2 = createFile( "manifest", "appcache", manifest2 );
 
-    when( servlet.getServletContext().getRealPath( "/foo/myapp/m1.appcache" ) ).
-      thenReturn( manifestFile1.getAbsolutePath() );
-
-    when( servlet.getServletContext().getRealPath( "/foo/myapp/m2.appcache" ) ).
-      thenReturn( manifestFile2.getAbsolutePath() );
+    when( servlet.getServletContext().getResourceAsStream( "/foo/myapp/m1.appcache" ) ).
+      thenReturn( new FileInputStream( manifestFile1 ),
+                  new FileInputStream( manifestFile1 ) );
+    when( servlet.getServletContext().getResourceAsStream( "/foo/myapp/m2.appcache" ) ).
+      thenReturn( new FileInputStream( manifestFile2 ),
+                  new FileInputStream( manifestFile2 ) );
 
     final String manifest = servlet.loadAndMergeManifests( "/foo/", "myapp", "m1", "m2" );
     final ManifestDescriptor result = ManifestDescriptor.parse( manifest );
@@ -358,7 +367,7 @@ public class ManifestServletTest
     final String manifestResult2 = servlet.loadAndMergeManifests( "/foo/", "myapp", "m1", "m2" );
     assertTrue( manifestResult2 == manifest );
 
-    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/m2.appcache" );
+    verify( servlet.getServletContext(), times( 1 ) ).getResourceAsStream( "/foo/myapp/m2.appcache" );
 
     servlet.disableCache();
 
@@ -366,7 +375,7 @@ public class ManifestServletTest
     assertTrue( manifestResult3 != manifest );
     assertEquals( manifestResult3, manifest );
 
-    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/m2.appcache" );
+    verify( servlet.getServletContext(), times( 2 ) ).getResourceAsStream( "/foo/myapp/m2.appcache" );
   }
 
   @Test
@@ -598,7 +607,7 @@ public class ManifestServletTest
                                            final String[] clientSideProperties,
                                            final List<BindingProperty> computedBindings,
                                            final String... expected )
-    throws IOException, ServletException
+    throws Exception
   {
     final TestManifestServlet servlet = new TestManifestServlet();
     for ( final String property : clientSideProperties )
@@ -606,13 +615,21 @@ public class ManifestServletTest
       servlet.addClientSideSelectionProperty( property );
     }
 
-    final ServletContext servletContext = servlet.getServletContext();
     final File permutations = createFile( "permutations", "xml", permutationContent );
-    when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
+    configurePermutationsFile( servlet, "/foo/myapp/permutations.xml", permutations );
 
     final String[] selected = servlet.selectPermutations( "/foo/", "myapp", computedBindings );
 
     assertEquals( selected, expected );
+  }
+
+  private void configurePermutationsFile( final TestManifestServlet servlet,
+                                          final String path,
+                                          final File permutations )
+    throws Exception
+  {
+    when( servlet.getServletContext().getResource( path ) ).thenReturn( permutations.toURI().toURL() );
+    configureManifest( servlet, path, permutations );
   }
 
   @Test
@@ -655,17 +672,17 @@ public class ManifestServletTest
   {
     final TestManifestServlet servlet = new TestManifestServlet();
 
-    final ServletContext servletContext = servlet.getServletContext();
     final String permutationContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations></permutations>\n";
     final File permutations = createFile( "permutations", "xml", permutationContent );
     final File manifestFile = createFile( "manifest", "appcache", "XXXX\n" );
-        when( servlet.getServletContext().getRealPath( "/foo/myapp/12345.appcache" ) ).
-      thenReturn( manifestFile.getAbsolutePath() );
-
+    when( servlet.getServletContext().getResourceAsStream( "/foo/myapp/12345.appcache" ) ).
+      thenReturn( new FileInputStream( manifestFile ),
+                  new FileInputStream( manifestFile ),
+                  new FileInputStream( manifestFile ) );
 
     assertTrue( permutations.setLastModified( 0 ) );
 
-    when( servletContext.getRealPath( "/foo/myapp/permutations.xml" ) ).thenReturn( permutations.getAbsolutePath() );
+    configurePermutationsFile( servlet, "/foo/myapp/permutations.xml", permutations );
 
     final List<SelectionDescriptor> descriptors = servlet.getPermutationDescriptors( "/foo/", "myapp" );
     assertNotNull( descriptors );
@@ -675,7 +692,7 @@ public class ManifestServletTest
 
     final String manifest2 = servlet.loadManifest( "/foo/", "myapp", "12345" );
     assertTrue( manifest2 == manifest );
-    verify( servlet.getServletContext(), times( 1 ) ).getRealPath( "/foo/myapp/12345.appcache" );
+    verify( servlet.getServletContext(), times( 1 ) ).getResourceAsStream( "/foo/myapp/12345.appcache" );
 
     assertTrue( permutations.setLastModified( Long.MAX_VALUE ) );
 
@@ -683,7 +700,7 @@ public class ManifestServletTest
 
     final String manifest3 = servlet.loadManifest( "/foo/", "myapp", "12345" );
     assertTrue( manifest3 != manifest );
-    verify( servlet.getServletContext(), times( 2 ) ).getRealPath( "/foo/myapp/12345.appcache" );
+    verify( servlet.getServletContext(), times( 2 ) ).getResourceAsStream( "/foo/myapp/12345.appcache" );
 
     assertTrue( permutations.delete() );
   }

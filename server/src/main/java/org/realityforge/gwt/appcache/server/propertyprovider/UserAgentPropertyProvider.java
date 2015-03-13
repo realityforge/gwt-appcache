@@ -2,6 +2,8 @@ package org.realityforge.gwt.appcache.server.propertyprovider;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 public class UserAgentPropertyProvider
@@ -10,7 +12,8 @@ public class UserAgentPropertyProvider
   private final Pattern _geckoRevisionPattern = Pattern.compile( "rv:([0-9]+)\\.([0-9]+)" );
 
   @Override
-  public String getPropertyValue( final HttpServletRequest request )
+  @Nullable
+  public String getPropertyValue( @Nonnull final HttpServletRequest request )
   {
     final String userAgent = request.getHeader( "User-Agent" ).toLowerCase();
     if ( userAgent.contains( "msie 10." ) )
@@ -51,6 +54,7 @@ public class UserAgentPropertyProvider
     }
   }
 
+  @Nonnull
   @Override
   public String getPropertyName()
   {

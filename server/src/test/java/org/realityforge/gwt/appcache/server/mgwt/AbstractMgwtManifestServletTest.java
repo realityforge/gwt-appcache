@@ -1,6 +1,7 @@
 package org.realityforge.gwt.appcache.server.mgwt;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.annotation.Nonnull;
@@ -304,8 +305,8 @@ public class AbstractMgwtManifestServletTest
     final String manifestContent = "CACHE MANIFEST\n" + strongPermutation + ".txt\n";
     final File manifest = createFile( "manifest", "appcache", manifestContent );
 
-    when( servlet.getServletContext().getRealPath( "/mymodule/" + strongPermutation + ".appcache" ) ).
-      thenReturn( manifest.getAbsolutePath() );
+    when( servlet.getServletContext().getResourceAsStream( "/mymodule/" + strongPermutation + ".appcache" ) ).
+      thenReturn( new FileInputStream( manifest ) );
     return manifestContent;
   }
 
@@ -382,8 +383,10 @@ public class AbstractMgwtManifestServletTest
     throws IOException
   {
     final File file = createFile( "permutations", "xml", fileContent );
-    when( servlet.getServletContext().getRealPath( "/mymodule/permutations.xml" ) ).
-      thenReturn( file.getAbsolutePath() );
+    when( servlet.getServletContext().getResource( "/mymodule/permutations.xml" ) ).
+      thenReturn( file.toURI().toURL() );
+    when( servlet.getServletContext().getResourceAsStream( "/mymodule/permutations.xml" ) ).
+      thenReturn( new FileInputStream( file ) );
   }
 
   private void setProperties( final TestManifestServlet servlet,

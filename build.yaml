@@ -5,8 +5,10 @@ repositories:
 artifacts:
   javax_servlet: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:jar:1.0
   javax_annotation: com.google.code.findbugs:jsr305:jar:2.0.1
-  gwt_user: com.google.gwt:gwt-user:jar:2.5.1
-  gwt_dev: com.google.gwt:gwt-dev:jar:2.5.1
+  gwt_user: com.google.gwt:gwt-user:jar:2.6.1
+  gwt_dev: com.google.gwt:gwt-dev:jar:2.6.1
+  javax_validation: javax.validation:validation-api:jar:1.0.0.GA
+  javax_validation_sources: javax.validation:validation-api:jar:sources:1.0.0.GA
 
   # Mocking library used in tests
   mockito: org.mockito:mockito-all:jar:1.8.5
