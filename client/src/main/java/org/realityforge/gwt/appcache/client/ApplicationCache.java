@@ -4,6 +4,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.realityforge.gwt.appcache.client.event.CachedEvent;
 import org.realityforge.gwt.appcache.client.event.CheckingEvent;
 import org.realityforge.gwt.appcache.client.event.DownloadingEvent;
@@ -31,6 +32,7 @@ public abstract class ApplicationCache
 
   private final EventBus _eventBus;
 
+  @Nullable
   public static ApplicationCache getApplicationCacheIfSupported()
   {
     if ( null == g_cache )
