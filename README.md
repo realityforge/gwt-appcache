@@ -107,7 +107,6 @@ if ( null != cache )
   ...
 ```
 
-
 This should be sufficient to get your application using the appcache. If you
 load the application in a modern browser you should see it making use of the
 cache in the console.
@@ -270,7 +269,6 @@ by the client. This may be acceptable for small applications but a better approa
 is to detect the pixel density and set a cookie prior to navigating to the page
 that hosts the application. The server can then attempt to determine the value of
 the configuration property using the cookie name like;
-
 
 ```java
 public class PixelDensityPropertyProvider
