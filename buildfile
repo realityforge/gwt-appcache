@@ -7,8 +7,8 @@ require 'buildr/gwt'
 desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
   project.group = 'org.realityforge.gwt.appcache'
-  compile.options.source = '1.6'
-  compile.options.target = '1.6'
+  compile.options.source = '1.7'
+  compile.options.target = '1.7'
   compile.options.lint = 'all'
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
