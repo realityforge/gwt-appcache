@@ -24,7 +24,7 @@ define 'gwt-appcache' do
     compile.with :javax_annotation, :gwt_user
 
     gwt(['org.realityforge.gwt.appcache.Appcache'],
-        :java_args => ['-Xms512M', '-Xmx1024M', '-XX:PermSize=128M', '-XX:MaxPermSize=256M'],
+        :java_args => %w(-Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M),
         :draft_compile => (ENV['FAST_GWT'] == 'true'),
         :dependencies => [:javax_validation, :javax_validation_sources] + project.compile.dependencies)
 
