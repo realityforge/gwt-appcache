@@ -1,3 +1,5 @@
+## 1.0.10 (Pending):
+
 ## 1.0.9:
 * Annotate ApplicationCache.getApplicationCacheIfSupported() with Nullable to
   make it clear that null can be returned.
