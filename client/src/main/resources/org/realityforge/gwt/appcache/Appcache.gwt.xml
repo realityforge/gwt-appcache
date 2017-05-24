@@ -2,6 +2,7 @@
   <inherits name='com.google.gwt.event.Event'/>
   <inherits name='com.google.web.bindery.event.Event'/>
   <inherits name='com.google.gwt.dom.DOM'/>
+  <inherits name='com.google.gwt.user.User'/>
 
   <!-- Define the appcache support property -->
   <define-property name="appcacheSupport" values="maybe,no"/>
