@@ -29,7 +29,7 @@ import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
 /**
  * Base class for servlet the does server-side permutation selection and serves the correct appcache manifest.
- * <p/>
+ *
  * The servlet calls a chain of PropertyProvider instances to derive properties that are used to select the
  * appropriate manifest at runtime. Sometimes, certain properties can not be determined definitively except on
  * client-side and thus the servlet may need to serve up a manifest that merges appcache manifests for multiple
@@ -418,7 +418,7 @@ public abstract class AbstractManifestServlet
 
   /**
    * Return an array of permutation names that are selected based on supplied properties.
-   * <p/>
+   *
    * The array may be null if no permutation could be found. It may be a single value if
    * the bindings uniquely identify a permutation or it may be multiple values if client side
    * properties are not specified and the server side properties do not uniquely identify a
