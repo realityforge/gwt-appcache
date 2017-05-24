@@ -1,6 +1,5 @@
 package org.realityforge.gwt.appcache.linker;
 
-import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.LinkerContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -205,8 +204,8 @@ public class AppcacheLinkerTest
     final PermutationArtifact artifact1 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) );
     final PermutationArtifact artifact2 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "2" ) );
     artifacts1.add( artifact1 );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "path1", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "path2", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "path1", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "path2", new byte[ 0 ] ) );
     artifacts1.add( artifact2 );
     final ArrayList<PermutationArtifact> permutationArtifacts = linker.getPermutationArtifacts( artifacts1 );
     assertEquals( permutationArtifacts.size(), 2 );
@@ -221,8 +220,8 @@ public class AppcacheLinkerTest
     final AppcacheLinker linker = new AppcacheLinker();
     final ArtifactSet artifacts1 = new ArtifactSet();
     artifacts1.add( new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "file1.txt", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "file1.txt", new byte[ 0 ] ) );
     final TreeMap<String, String> configs2 = new TreeMap<String, String>();
     configs2.put( "user.agent", "ie9" );
     configs2.put( "screen.size", "large" );
@@ -280,8 +279,8 @@ public class AppcacheLinkerTest
   {
     final AppcacheLinker linker = new AppcacheLinker();
     final ArtifactSet artifacts1 = new ArtifactSet();
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "file1.txt", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "file1.txt", new byte[ 0 ] ) );
     final TreeMap<String, String> configs2 = new TreeMap<String, String>();
     configs2.put( "user.agent", "ie9" );
     artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
@@ -373,14 +372,14 @@ public class AppcacheLinkerTest
     final PermutationArtifact artifact1 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) );
     final PermutationArtifact artifact2 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "2" ) );
     artifacts1.add( artifact1 );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "path1", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "path2", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "path1", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "path2", new byte[ 0 ] ) );
     final StandardGeneratedResource resource =
-      new StandardGeneratedResource( Generator.class, "path3", new byte[ 0 ] );
+      new StandardGeneratedResource( "path3", new byte[ 0 ] );
     resource.setVisibility( Visibility.Private );
     artifacts1.add( resource );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "compilation-mappings.txt", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( Generator.class, "myapp.devmode.js", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "compilation-mappings.txt", new byte[ 0 ] ) );
+    artifacts1.add( new StandardGeneratedResource( "myapp.devmode.js", new byte[ 0 ] ) );
     artifacts1.add( artifact2 );
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );

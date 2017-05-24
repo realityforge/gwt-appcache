@@ -29,13 +29,7 @@ final class TestConfigurationProperty
   {
     return _name;
   }
-
-  @Override
-  public String getValue()
-  {
-    throw new IllegalStateException();
-  }
-
+  
   @Override
   public List<String> getValues()
   {
