@@ -29,7 +29,7 @@ final class TestConfigurationProperty
   {
     return _name;
   }
-  
+
   @Override
   public List<String> getValues()
   {
