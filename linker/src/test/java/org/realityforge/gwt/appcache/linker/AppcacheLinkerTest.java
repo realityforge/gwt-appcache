@@ -332,7 +332,8 @@ public class AppcacheLinkerTest
     assertEquals( artifacts.getPartialPath(), "permutations.xml" );
     assertTrue( ( artifacts.getLastModified() - System.currentTimeMillis() < 1000L ) );
     final String content = toContents( artifacts );
-    assertEquals( content, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><permutations>\n" +
+    assertEquals( content, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                           "<permutations>\n" +
                            "<permutation name=\"X\">\n" +
                            "<user.agent>ie9</user.agent>\n" +
                            "</permutation>\n" +
