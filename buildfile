@@ -6,8 +6,8 @@ require 'buildr/gwt'
 desc 'GWT AppCache Support Library'
 define 'gwt-appcache' do
   project.group = 'org.realityforge.gwt.appcache'
-  compile.options.source = '1.7'
-  compile.options.target = '1.7'
+  compile.options.source = '1.8'
+  compile.options.target = '1.8'
   compile.options.lint = 'all'
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
@@ -23,7 +23,7 @@ define 'gwt-appcache' do
     compile.with :javax_annotation, :gwt_user
 
     gwt(['org.realityforge.gwt.appcache.Appcache'],
-        :java_args => %w(-Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M),
+        :java_args => %w(-Xms512M -Xmx1024M),
         :draft_compile => (ENV['FAST_GWT'] == 'true'),
         :dependencies => [:javax_validation, :javax_validation_sources] + project.compile.dependencies)
 
