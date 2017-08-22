@@ -29,7 +29,7 @@ public final class FormFactorPropertyProvider
     return "desktop";
   }
 
-  private boolean isSupportedMobileAgent( final String userAgent )
+  private boolean isSupportedMobileAgent( @Nonnull final String userAgent )
   {
     return ( userAgent.contains( "Mobi" ) ||
              userAgent.contains( "DoCoMo" ) ||
@@ -55,7 +55,7 @@ public final class FormFactorPropertyProvider
              userAgent.contains( "uZardWeb" ) );
   }
 
-  private boolean isUnsupportedMobileAgent( final String userAgent )
+  private boolean isUnsupportedMobileAgent( @Nonnull final String userAgent )
   {
     return ( userAgent.contains( "Silk-Accelerated" ) ||
              userAgent.contains( "Pad" ) ||
@@ -64,7 +64,7 @@ public final class FormFactorPropertyProvider
              userAgent.contains( "SCH-I800" ) );
   }
 
-  private boolean isSupportedTabletAgent( final String userAgent )
+  private boolean isSupportedTabletAgent( @Nonnull final String userAgent )
   {
     return ( userAgent.contains( "Pad" ) ||
              userAgent.contains( "Android" ) ||
