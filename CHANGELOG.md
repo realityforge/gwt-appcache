@@ -1,4 +1,4 @@
-## 1.0.10 (Pending):
+## 1.0.10:
 * Add `org.realityforge.gwt.appcache.server.gwtp.MobileUserAgentProvider` that
   defines properties in a mechanism suitable for GWTP framework. Submitted by
   Andrea Granados.
