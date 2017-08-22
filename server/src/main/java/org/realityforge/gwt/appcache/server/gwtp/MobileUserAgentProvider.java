@@ -1,9 +1,8 @@
 package org.realityforge.gwt.appcache.server.gwtp;
 
-import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
-
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
+import org.realityforge.gwt.appcache.server.propertyprovider.PropertyProvider;
 
 public final class MobileUserAgentProvider
   implements PropertyProvider
