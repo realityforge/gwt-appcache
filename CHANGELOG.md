@@ -1,4 +1,7 @@
 ## 1.0.10 (Pending):
+* Add `org.realityforge.gwt.appcache.server.gwtp.MobileUserAgentProvider` that
+  defines properties in a mechanism suitable for GWTP framework. Submitted by
+  Andrea Granados.
 
 ## 1.0.9:
 * Annotate ApplicationCache.getApplicationCacheIfSupported() with Nullable to
