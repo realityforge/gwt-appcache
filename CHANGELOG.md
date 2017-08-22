@@ -1,4 +1,6 @@
 ## 1.0.11 (Pending):
+* Rename `org.realityforge.gwt.appcache.server.gwtp.MobileUserAgentProvider` to
+  `org.realityforge.gwt.appcache.server.gwtp.FormFactorPropertyProvider`
 
 ## 1.0.10:
 * Add `org.realityforge.gwt.appcache.server.gwtp.MobileUserAgentProvider` that
