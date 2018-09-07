@@ -247,7 +247,7 @@ public abstract class AbstractManifestServlet
     return manifest;
   }
 
-  final String getBaseUrl( final HttpServletRequest request )
+  protected String getBaseUrl( final HttpServletRequest request )
   {
     final String base = request.getServletPath();
     // cut off module
@@ -526,7 +526,7 @@ public abstract class AbstractManifestServlet
   }
 
   @Nonnull
-  final String getModuleName( @Nonnull final HttpServletRequest request )
+  protected String getModuleName( @Nonnull final HttpServletRequest request )
     throws ServletException
   {
     final String servletPath = request.getServletPath();
