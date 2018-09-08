@@ -1,3 +1,9 @@
+## 1.0.12:
+* Make the `AbstractManifestServlet.getBaseUrl()` method and the
+  `AbstractManifestServlet.getModuleName()` method protected so that they can be
+  overridden in sub-classes. This allows alternative strategies such as embedding
+  the selected locale in the manifest url. Submitted by Alex Bertram.
+
 ## 1.0.11:
 * Rename `org.realityforge.gwt.appcache.server.gwtp.MobileUserAgentProvider` to
   `org.realityforge.gwt.appcache.server.gwtp.FormFactorPropertyProvider`
