@@ -17,7 +17,7 @@ import org.realityforge.gwt.appcache.client.html5.Html5ApplicationCache;
 
 public abstract class ApplicationCache
 {
-  public static enum Status
+  public enum Status
   {
     UNCACHED,
     IDLE,
