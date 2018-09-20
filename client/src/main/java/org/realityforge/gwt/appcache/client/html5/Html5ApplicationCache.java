@@ -8,11 +8,6 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import org.realityforge.gwt.appcache.client.ApplicationCache;
-import org.realityforge.gwt.appcache.client.event.CachedEvent;
-import org.realityforge.gwt.appcache.client.event.ErrorEvent;
-import org.realityforge.gwt.appcache.client.event.NoUpdateEvent;
-import org.realityforge.gwt.appcache.client.event.ObsoleteEvent;
-import org.realityforge.gwt.appcache.client.event.UpdateReadyEvent;
 
 public final class Html5ApplicationCache
   extends ApplicationCache
@@ -106,46 +101,11 @@ public final class Html5ApplicationCache
     // All of these may be required due to; network failure, intermediate cache not passing
     // back to server, overlapping requests etc.
     final ArrayList<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
-    registrations.add( addErrorHandler( new ErrorEvent.Handler()
-    {
-      @Override
-      public void onErrorEvent( @Nonnull final ErrorEvent event )
-      {
-        cacheRemovalCleanup( registrations );
-      }
-    } ) );
-    registrations.add( addObsoleteHandler( new ObsoleteEvent.Handler()
-    {
-      @Override
-      public void onObsoleteEvent( @Nonnull final ObsoleteEvent event )
-      {
-        cacheRemovalCleanup( registrations );
-      }
-    } ) );
-    registrations.add( addNoUpdateHandler( new NoUpdateEvent.Handler()
-    {
-      @Override
-      public void onNoUpdateEvent( @Nonnull final NoUpdateEvent event )
-      {
-        cacheRemovalCleanup( registrations );
-      }
-    } ) );
-    registrations.add( addUpdateReadyHandler( new UpdateReadyEvent.Handler()
-    {
-      @Override
-      public void onUpdateReadyEvent( @Nonnull final UpdateReadyEvent event )
-      {
-        cacheRemovalCleanup( registrations );
-      }
-    } ) );
-    registrations.add( addCachedHandler( new CachedEvent.Handler()
-    {
-      @Override
-      public void onCachedEvent( @Nonnull final CachedEvent event )
-      {
-        cacheRemovalCleanup( registrations );
-      }
-    } ) );
+    registrations.add( addErrorHandler( e -> cacheRemovalCleanup( registrations ) ) );
+    registrations.add( addObsoleteHandler( e -> cacheRemovalCleanup( registrations ) ) );
+    registrations.add( addNoUpdateHandler( e -> cacheRemovalCleanup( registrations ) ) );
+    registrations.add( addUpdateReadyHandler( e -> cacheRemovalCleanup( registrations ) ) );
+    registrations.add( addCachedHandler( e -> cacheRemovalCleanup( registrations ) ) );
     try
     {
       update0();
