@@ -1,7 +1,7 @@
 # gwt-appcache
 
 [![Build Status](https://secure.travis-ci.org/realityforge/gwt-appcache.svg?branch=master)](http://travis-ci.org/realityforge/gwt-appcache)
-[<img src="https://img.shields.io/maven-central/v/org.realityforge.gwt.appcache/gwt-appcache-*.svg?label=latest%20release"/>](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.realityforge.gwt.websockets%22%20a%3A%22gwt-websockets%22)
+[<img src="https://img.shields.io/maven-central/v/org.realityforge.gwt.appcache/gwt-appcache-client.svg?label=latest%20release"/>](https://search.maven.org/search?q=g:org.realityforge.gwt.appcache)
 
 The HTML5 Appcache specification is a mechanism for enabling offline
 HTML5 applications. This library provides a simple way to generate the
