@@ -15,13 +15,14 @@ import com.google.gwt.core.ext.linker.Shardable;
 import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.realityforge.gwt.appcache.server.BindingProperty;
@@ -201,10 +202,14 @@ public final class AppcacheLinker
     throws UnableToCompleteException
   {
     final ManifestDescriptor descriptor = new ManifestDescriptor();
-    descriptor.getCachedResources().addAll( staticResources );
-    descriptor.getCachedResources().addAll( cacheResources );
+    final List<String> cachedResources =
+      Stream
+        .concat( staticResources.stream(), cacheResources.stream() )
+        .sorted()
+        .distinct()
+        .collect( Collectors.toList() );
+    descriptor.getCachedResources().addAll( cachedResources );
     descriptor.getFallbackResources().putAll( fallbackResources );
-    Collections.sort( descriptor.getCachedResources() );
     descriptor.getNetworkResources().add( "*" );
     try
     {

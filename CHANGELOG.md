@@ -1,3 +1,8 @@
+## Unreleased
+* Fix bug that allowed duplicates to appear in the cache if a resource is present
+  as both a resource generate by GWT tool chain as well as a resource configured
+  statically via the `appcache_static_files` property.
+
 ## 1.0.12:
 * Make the `AbstractManifestServlet.getBaseUrl()` method and the
   `AbstractManifestServlet.getModuleName()` method protected so that they can be
