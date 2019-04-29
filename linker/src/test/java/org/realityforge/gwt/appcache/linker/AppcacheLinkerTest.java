@@ -197,23 +197,6 @@ public class AppcacheLinkerTest
   }
 
   @Test
-  public void getPermutationArtifacts()
-  {
-    final AppcacheLinker linker = new AppcacheLinker();
-    final ArtifactSet artifacts1 = new ArtifactSet();
-    final PermutationArtifact artifact1 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) );
-    final PermutationArtifact artifact2 = new PermutationArtifact( AppcacheLinker.class, new Permutation( "2" ) );
-    artifacts1.add( artifact1 );
-    artifacts1.add( new StandardGeneratedResource( "path1", new byte[ 0 ] ) );
-    artifacts1.add( new StandardGeneratedResource( "path2", new byte[ 0 ] ) );
-    artifacts1.add( artifact2 );
-    final ArrayList<PermutationArtifact> permutationArtifacts = linker.getPermutationArtifacts( artifacts1 );
-    assertEquals( permutationArtifacts.size(), 2 );
-    assertTrue( permutationArtifacts.contains( artifact1 ) );
-    assertTrue( permutationArtifacts.contains( artifact2 ) );
-  }
-
-  @Test
   public void calculatePermutation()
     throws UnableToCompleteException
   {

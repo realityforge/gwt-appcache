@@ -66,7 +66,8 @@ public final class AppcacheLinker
                                       final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
-    final ArrayList<PermutationArtifact> permutationArtifacts = getPermutationArtifacts( artifacts );
+    final ArrayList<PermutationArtifact> permutationArtifacts =
+      new ArrayList<>( artifacts.find( PermutationArtifact.class ) );
     if ( 0 == permutationArtifacts.size() )
     {
       // hosted mode
@@ -156,16 +157,6 @@ public final class AppcacheLinker
       files.addAll( artifact.getPermutation().getPermutationFiles() );
     }
     return files;
-  }
-
-  final ArrayList<PermutationArtifact> getPermutationArtifacts( final ArtifactSet artifacts )
-  {
-    final ArrayList<PermutationArtifact> results = new ArrayList<>();
-    for ( final PermutationArtifact permutationArtifact : artifacts.find( PermutationArtifact.class ) )
-    {
-      results.add( permutationArtifact );
-    }
-    return results;
   }
 
   final Set<String> getArtifactsForCompilation( final LinkerContext context, final ArtifactSet artifacts )
