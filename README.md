@@ -118,7 +118,7 @@ project.
 
 [Elemental2](https://github.com/google/elemental2) is Is a library from Google
 that provides type checked access to all browser APIs for Java code. It is generated
-from externs files and is a much more up to date library. 
+from externs files and is a much more up to date library.
 
 This is the recommended approach for modern applications. To use it you need to follow
 the above quick start with the following modifications.
