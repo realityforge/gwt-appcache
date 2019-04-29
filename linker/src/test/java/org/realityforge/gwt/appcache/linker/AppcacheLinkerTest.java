@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -222,7 +223,7 @@ public class AppcacheLinkerTest
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
 
     final TreeSet<SelectionProperty> properties =
-      new TreeSet<>( StandardLinkerContext.CONFIGURATION_PROPERTY_COMPARATOR );
+      new TreeSet<>( Comparator.comparing( SelectionProperty::getName ) );
     properties.add( new TestSelectionProperty( "user.agent", false ) );
     properties.add( new TestSelectionProperty( "screen.size", false ) );
     properties.add( new TestSelectionProperty( "geolocationSupport", true ) );
