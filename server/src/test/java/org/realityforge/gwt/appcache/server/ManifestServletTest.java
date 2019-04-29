@@ -402,21 +402,21 @@ public class ManifestServletTest
   {
     final TestManifestServlet servlet = new TestManifestServlet();
 
-    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<>();
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       descriptors.add( new SelectionDescriptor( "P1", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie8" );
       descriptors.add( new SelectionDescriptor( "P2", properties ) );
     }
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie9" );
 
     servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
@@ -433,21 +433,21 @@ public class ManifestServletTest
   {
     final TestManifestServlet servlet = new TestManifestServlet();
 
-    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<>();
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       descriptors.add( new SelectionDescriptor( "P1", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie8" );
       descriptors.add( new SelectionDescriptor( "P2", properties ) );
     }
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie10" );
 
     servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
@@ -462,36 +462,36 @@ public class ManifestServletTest
   {
     final TestManifestServlet servlet = new TestManifestServlet();
 
-    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<>();
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       bp( properties, "screen.size", "large" );
       descriptors.add( new SelectionDescriptor( "P1", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       bp( properties, "screen.size", "small" );
       descriptors.add( new SelectionDescriptor( "P2", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie10" );
       bp( properties, "screen.size", "large" );
       descriptors.add( new SelectionDescriptor( "P3", properties ) );
     }
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie10" );
       bp( properties, "screen.size", "small" );
       descriptors.add( new SelectionDescriptor( "P4", properties ) );
     }
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie10" );
 
     servlet.reduceToMatchingDescriptors( computedBindings, descriptors );
@@ -509,36 +509,36 @@ public class ManifestServletTest
   {
     final TestManifestServlet servlet = new TestManifestServlet();
 
-    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final ArrayList<SelectionDescriptor> descriptors = new ArrayList<>();
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       bp( properties, "screen.size", "large" );
       descriptors.add( new SelectionDescriptor( "P1", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie9" );
       bp( properties, "screen.size", "small" );
       descriptors.add( new SelectionDescriptor( "P2", properties ) );
     }
 
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie10" );
       bp( properties, "screen.size", "large" );
       descriptors.add( new SelectionDescriptor( "P3", properties ) );
     }
     {
-      final ArrayList<BindingProperty> properties = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> properties = new ArrayList<>();
       bp( properties, "user.agent", "ie10" );
       bp( properties, "screen.size", "small" );
       descriptors.add( new SelectionDescriptor( "P4", properties ) );
     }
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie10" );
     bp( computedBindings, "os.name", "ms" );
 
@@ -581,7 +581,7 @@ public class ManifestServletTest
 
     // Complete match
     {
-      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
       bp( computedBindings, "user.agent", "ie8" );
       bp( computedBindings, "screen.size", "big" );
       ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, "P1" );
@@ -589,14 +589,14 @@ public class ManifestServletTest
 
     // Partial match
     {
-      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
       bp( computedBindings, "user.agent", "ie8" );
       ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, "P1", "P2", "P3" );
     }
 
     // No match
     {
-      final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+      final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
       bp( computedBindings, "user.agent", "ie9" );
       bp( computedBindings, "screen.size", "big" );
       ensurePermutationsSelected( permutationContent, clientSideProperties, computedBindings, (String[]) null );
@@ -718,7 +718,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie9" );
 
     ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
@@ -741,7 +741,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie9" );
 
     ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
@@ -763,7 +763,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie9" );
 
     ensurePermutationsSelected( permutationContent, new String[ 0 ], computedBindings, strongPermutation );
@@ -791,7 +791,7 @@ public class ManifestServletTest
       "   </permutation>\n" +
       "</permutations>\n";
 
-    final ArrayList<BindingProperty> computedBindings = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> computedBindings = new ArrayList<>();
     bp( computedBindings, "user.agent", "ie9" );
     bp( computedBindings, "screen.size", "biggo" );
     bp( computedBindings, "color.depth", "much" );

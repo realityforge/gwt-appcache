@@ -14,11 +14,11 @@ public final class ManifestDescriptor
   private static final String CATCH_ALL = "*";
 
   ///List of resources to cache
-  private final List<String> _cachedResources = new ArrayList<String>();
+  private final List<String> _cachedResources = new ArrayList<>();
   ///List of resources that require the client to be online
-  private final List<String> _networkResources = new ArrayList<String>();
+  private final List<String> _networkResources = new ArrayList<>();
   ///List of fallback resources
-  private final Map<String, String> _fallbackResources = new HashMap<String, String>();
+  private final Map<String, String> _fallbackResources = new HashMap<>();
 
   @Nonnull
   public List<String> getCachedResources()

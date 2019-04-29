@@ -23,8 +23,8 @@ public class AbstractMgwtManifestServlet
     final boolean isIPadWithoutCookie = computedBindings.contains( MgwtOsPropertyProvider.iPad_undefined );
     if ( isIPhoneWithoutCookie || isIPadWithoutCookie )
     {
-      final List<BindingProperty> nonRetinaMatch = new ArrayList<BindingProperty>();
-      final List<BindingProperty> retinaMatch = new ArrayList<BindingProperty>();
+      final List<BindingProperty> nonRetinaMatch = new ArrayList<>();
+      final List<BindingProperty> retinaMatch = new ArrayList<>();
       if ( isIPhoneWithoutCookie )
       {
         computedBindings.remove( MgwtOsPropertyProvider.iPhone_undefined );

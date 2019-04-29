@@ -41,7 +41,7 @@ final class TestSelectionProperty
   @Override
   public SortedSet<String> getPossibleValues()
   {
-    return new TreeSet<String>();
+    return new TreeSet<>();
   }
 
   @Override

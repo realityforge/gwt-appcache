@@ -11,9 +11,9 @@ public class Permutation
 {
   public static final String PERMUTATION_MANIFEST_FILE_ENDING = ".appcache";
   private final String _permutationName;
-  private final List<SelectionDescriptor> _selectors = new ArrayList<SelectionDescriptor>();
-  private final HashSet<String> _permutationFiles = new HashSet<String>();
-  private final HashMap<String, String> _fallbackFiles = new HashMap<String, String>();
+  private final List<SelectionDescriptor> _selectors = new ArrayList<>();
+  private final HashSet<String> _permutationFiles = new HashSet<>();
+  private final HashMap<String, String> _fallbackFiles = new HashMap<>();
 
   public Permutation( final String permutationName )
   {

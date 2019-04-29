@@ -35,8 +35,8 @@ public class AppcacheLinkerTest
   public void getConfigurationValues()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final TreeSet<ConfigurationProperty> properties = new TreeSet<ConfigurationProperty>();
-    properties.add( new TestConfigurationProperty( "ba", new ArrayList<String>() ) );
+    final TreeSet<ConfigurationProperty> properties = new TreeSet<>();
+    properties.add( new TestConfigurationProperty( "ba", new ArrayList<>() ) );
     properties.add( new TestConfigurationProperty( "foo", Arrays.asList( "V1", "V2" ) ) );
     final LinkerContext context = mock( LinkerContext.class );
     when( context.getConfigurationProperties() ).thenReturn( properties );
@@ -49,7 +49,7 @@ public class AppcacheLinkerTest
   public void joinValues()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final TreeSet<String> strings = new TreeSet<String>();
+    final TreeSet<String> strings = new TreeSet<>();
     assertEquals( linker.joinValues( strings ), "" );
     strings.add( "a" );
     assertEquals( linker.joinValues( strings ), "a" );
@@ -62,8 +62,8 @@ public class AppcacheLinkerTest
   public void collectValuesForKey()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final ArrayList<SelectionDescriptor> bindings = new ArrayList<SelectionDescriptor>();
-    final ArrayList<BindingProperty> binding0 = new ArrayList<BindingProperty>();
+    final ArrayList<SelectionDescriptor> bindings = new ArrayList<>();
+    final ArrayList<BindingProperty> binding0 = new ArrayList<>();
     bp( binding0, "a", "z1" );
     bp( binding0, "b", "z2" );
     bindings.add( new SelectionDescriptor( "X", binding0 ) );
@@ -71,7 +71,7 @@ public class AppcacheLinkerTest
     assertEquals( values0.size(), 1 );
     assertTrue( values0.contains( "z1" ) );
 
-    final ArrayList<BindingProperty> binding1 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> binding1 = new ArrayList<>();
     bp( binding1, "a", "w1" );
     bp( binding1, "b", "w2" );
     bindings.add( new SelectionDescriptor( "X", binding1 ) );
@@ -87,30 +87,30 @@ public class AppcacheLinkerTest
   {
     final AppcacheLinker linker = new AppcacheLinker();
 
-    final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
-    final ArrayList<BindingProperty> binding0 = new ArrayList<BindingProperty>();
+    final ArrayList<PermutationArtifact> artifacts = new ArrayList<>();
+    final ArrayList<BindingProperty> binding0 = new ArrayList<>();
     bp( binding0, "user.agent", "ie8" );
     bp( binding0, "some.key", "blah" );
     bp( binding0, "other.key", "blee" );
-    final Permutation permutation = addPermutation( artifacts, "X", binding0, new HashSet<String>() );
-    final ArrayList<BindingProperty> binding01 = new ArrayList<BindingProperty>();
+    final Permutation permutation = addPermutation( artifacts, "X", binding0, new HashSet<>() );
+    final ArrayList<BindingProperty> binding01 = new ArrayList<>();
     bp( binding01, "user.agent", "ie9" );
     bp( binding01, "some.key", "blah" );
     bp( binding01, "other.key", "blee" );
-    addSoftPermutation( permutation, binding01, new HashSet<String>() );
-    final ArrayList<BindingProperty> binding02 = new ArrayList<BindingProperty>();
+    addSoftPermutation( permutation, binding01, new HashSet<>() );
+    final ArrayList<BindingProperty> binding02 = new ArrayList<>();
     bp( binding02, "user.agent", "ie10" );
     bp( binding02, "some.key", "blah" );
     bp( binding02, "other.key", "blee" );
-    addSoftPermutation( permutation, binding02, new HashSet<String>() );
+    addSoftPermutation( permutation, binding02, new HashSet<>() );
 
-    final ArrayList<BindingProperty> binding1 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> binding1 = new ArrayList<>();
     bp( binding1, "user.agent", "safari" );
-    addPermutation( artifacts, "Y", binding1, new HashSet<String>() );
+    addPermutation( artifacts, "Y", binding1, new HashSet<>() );
 
-    final ArrayList<BindingProperty> binding2 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> binding2 = new ArrayList<>();
     bp( binding2, "user.agent", "gecko_16" );
-    addPermutation( artifacts, "Z", binding2, new HashSet<String>() );
+    addPermutation( artifacts, "Z", binding2, new HashSet<>() );
 
     final List<SelectionDescriptor> values = linker.collectPermutationSelectors( TreeLogger.NULL, artifacts );
 
@@ -183,13 +183,13 @@ public class AppcacheLinkerTest
   public void getAllPermutationFiles()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final ArrayList<PermutationArtifact> artifacts = new ArrayList<PermutationArtifact>();
-    final HashSet<String> files1 = new HashSet<String>();
+    final ArrayList<PermutationArtifact> artifacts = new ArrayList<>();
+    final HashSet<String> files1 = new HashSet<>();
     files1.add( "File1.txt" );
-    addPermutation( artifacts, "X", new ArrayList<BindingProperty>(), files1 );
-    final HashSet<String> files2 = new HashSet<String>();
+    addPermutation( artifacts, "X", new ArrayList<>(), files1 );
+    final HashSet<String> files2 = new HashSet<>();
     files2.add( "File2.txt" );
-    addPermutation( artifacts, "X", new ArrayList<BindingProperty>(), files2 );
+    addPermutation( artifacts, "X", new ArrayList<>(), files2 );
     final Set<String> files = linker.getAllPermutationFiles( artifacts );
     assertEquals( files.size(), 2 );
     assertTrue( files.contains( "File1.txt" ) );
@@ -222,12 +222,12 @@ public class AppcacheLinkerTest
     artifacts1.add( new PermutationArtifact( AppcacheLinker.class, new Permutation( "1" ) ) );
     artifacts1.add( new StandardGeneratedResource( "myapp.devmode.js", new byte[ 0 ] ) );
     artifacts1.add( new StandardGeneratedResource( "file1.txt", new byte[ 0 ] ) );
-    final TreeMap<String, String> configs2 = new TreeMap<String, String>();
+    final TreeMap<String, String> configs2 = new TreeMap<>();
     configs2.put( "user.agent", "ie9" );
     configs2.put( "screen.size", "large" );
     configs2.put( "geolocationSupport", "maybe" );
     artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
-    final TreeMap<String, String> configs3 = new TreeMap<String, String>();
+    final TreeMap<String, String> configs3 = new TreeMap<>();
     configs3.put( "user.agent", "ie9" );
     configs3.put( "screen.size", "small" );
     configs3.put( "geolocationSupport", "maybe" );
@@ -236,7 +236,7 @@ public class AppcacheLinkerTest
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
 
-    final TreeSet<SelectionProperty> properties = new TreeSet<SelectionProperty>();
+    final TreeSet<SelectionProperty> properties = new TreeSet<>();
     properties.add( new TestSelectionProperty( "user.agent", false ) );
     properties.add( new TestSelectionProperty( "screen.size", false ) );
     properties.add( new TestSelectionProperty( "geolocationSupport", true ) );
@@ -281,7 +281,7 @@ public class AppcacheLinkerTest
     final ArtifactSet artifacts1 = new ArtifactSet();
     artifacts1.add( new StandardGeneratedResource( "myapp.devmode.js", new byte[ 0 ] ) );
     artifacts1.add( new StandardGeneratedResource( "file1.txt", new byte[ 0 ] ) );
-    final TreeMap<String, String> configs2 = new TreeMap<String, String>();
+    final TreeMap<String, String> configs2 = new TreeMap<>();
     configs2.put( "user.agent", "ie9" );
     artifacts1.add( new SelectionInformation( "S2", 0, configs2 ) );
 
@@ -316,11 +316,11 @@ public class AppcacheLinkerTest
     throws UnableToCompleteException, IOException
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final ArrayList<PermutationArtifact> artifacts1 = new ArrayList<PermutationArtifact>();
+    final ArrayList<PermutationArtifact> artifacts1 = new ArrayList<>();
     final Permutation permutation = new Permutation( "X" );
 
     artifacts1.add( new PermutationArtifact( AppcacheLinker.class, permutation ) );
-    final List<BindingProperty> configs2 = new ArrayList<BindingProperty>();
+    final List<BindingProperty> configs2 = new ArrayList<>();
     bp( configs2, "user.agent", "ie9" );
     permutation.getSelectors().add( new SelectionDescriptor( "X", configs2 ) );
 
@@ -396,7 +396,7 @@ public class AppcacheLinkerTest
     throws Exception
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final HashSet<String> fallbackResources = new HashSet<String>();
+    final HashSet<String> fallbackResources = new HashSet<>();
     fallbackResources.add( "a b" );
     fallbackResources.add( "c   d" );
     fallbackResources.add( " e   f" );
@@ -414,13 +414,13 @@ public class AppcacheLinkerTest
     throws Exception
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final HashSet<String> staticResources = new HashSet<String>();
+    final HashSet<String> staticResources = new HashSet<>();
     staticResources.add( "index.html" );
     staticResources.add( "file with space.html" );
-    final HashSet<String> cacheResources = new HashSet<String>();
+    final HashSet<String> cacheResources = new HashSet<>();
     cacheResources.add( "mydir/file_with_$.js" );
     cacheResources.add( "5435435435435435FDEC.js" );
-    final HashMap<String, String> fallbackResources = new HashMap<String, String>();
+    final HashMap<String, String> fallbackResources = new HashMap<>();
     fallbackResources.put( "online.png", "offline.png" );
     final String manifest = linker.writeManifest( TreeLogger.NULL, staticResources, fallbackResources, cacheResources );
     final String[] lines = manifest.split( "\n" );

@@ -65,19 +65,19 @@ public class PermutationsIOTest
     final String value22 = "smallish";
     final String value31 = "ie8,ie9,ie10,gecko1_8";
 
-    final ArrayList<SelectionDescriptor> input = new ArrayList<SelectionDescriptor>();
-    final ArrayList<BindingProperty> input1 = new ArrayList<BindingProperty>();
+    final ArrayList<SelectionDescriptor> input = new ArrayList<>();
+    final ArrayList<BindingProperty> input1 = new ArrayList<>();
     input1.add( new BindingProperty( key1, value11 ) );
     input1.add( new BindingProperty( key2, value12 ) );
     input1.add( new BindingProperty( key3, value13 ) );
     input.add( new SelectionDescriptor( permutation1, input1 ) );
 
-    final ArrayList<BindingProperty> input2 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> input2 = new ArrayList<>();
     input2.add( new BindingProperty( key1, value21 ) );
     input2.add( new BindingProperty( key2, value22 ) );
     input.add( new SelectionDescriptor( permutation2, input2 ) );
 
-    final ArrayList<BindingProperty> input3 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> input3 = new ArrayList<>();
     input3.add( new BindingProperty( key1, value31 ) );
     input.add( new SelectionDescriptor( permutation3, input3 ) );
 

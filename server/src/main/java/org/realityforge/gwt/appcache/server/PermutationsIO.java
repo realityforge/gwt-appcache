@@ -30,7 +30,7 @@ public final class PermutationsIO
   public static List<SelectionDescriptor> deserialize( final InputStream stream )
     throws Exception
   {
-    final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final List<SelectionDescriptor> descriptors = new ArrayList<>();
 
     final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( stream );
     final Element permutationsNode = document.getDocumentElement();
@@ -61,7 +61,7 @@ public final class PermutationsIO
   {
     final String strongName = permutationNode.getAttribute( PERMUTATION_NAME );
 
-    final ArrayList<BindingProperty> list = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> list = new ArrayList<>();
 
     final NodeList variableNodes = permutationNode.getChildNodes();
     for ( int i = 0; i < variableNodes.getLength(); i++ )

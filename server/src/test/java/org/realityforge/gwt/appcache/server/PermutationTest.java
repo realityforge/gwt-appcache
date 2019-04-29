@@ -13,7 +13,7 @@ public class PermutationTest
     final Permutation permutation1 = new Permutation( "Foo" );
     assertEquals( permutation1.getPermutationName(), "Foo" );
     assertEquals( permutation1.getSelectors().size(), 0 );
-    permutation1.getSelectors().add( new SelectionDescriptor( "Foo", new ArrayList<BindingProperty>() ) );
+    permutation1.getSelectors().add( new SelectionDescriptor( "Foo", new ArrayList<>() ) );
     assertEquals( permutation1.getSelectors().size(), 1 );
     assertEquals( permutation1.getPermutationFiles().size(), 0 );
     permutation1.getPermutationFiles().add( "foo.txt" );

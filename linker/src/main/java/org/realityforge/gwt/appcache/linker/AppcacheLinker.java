@@ -82,7 +82,7 @@ public final class AppcacheLinker
     for ( final PermutationArtifact permutation : permutationArtifacts )
     {
       // make a copy of all artifacts
-      final HashSet<String> filesForCurrentPermutation = new HashSet<String>( allArtifacts );
+      final HashSet<String> filesForCurrentPermutation = new HashSet<>( allArtifacts );
       // remove all permutations
       filesForCurrentPermutation.removeAll( allPermutationFiles );
       // add files of the one permutation we are interested in
@@ -114,7 +114,7 @@ public final class AppcacheLinker
                                                     @Nonnull final Set<String> values )
     throws UnableToCompleteException
   {
-    final HashMap<String, String> fallbackFiles = new HashMap<String, String>();
+    final HashMap<String, String> fallbackFiles = new HashMap<>();
     for ( final String line : values )
     {
       final String[] elements = line.trim().split( " +" );
@@ -150,7 +150,7 @@ public final class AppcacheLinker
 
   final Set<String> getAllPermutationFiles( final ArrayList<PermutationArtifact> artifacts )
   {
-    final Set<String> files = new HashSet<String>();
+    final Set<String> files = new HashSet<>();
     for ( final PermutationArtifact artifact : artifacts )
     {
       files.addAll( artifact.getPermutation().getPermutationFiles() );
@@ -160,7 +160,7 @@ public final class AppcacheLinker
 
   final ArrayList<PermutationArtifact> getPermutationArtifacts( final ArtifactSet artifacts )
   {
-    final ArrayList<PermutationArtifact> results = new ArrayList<PermutationArtifact>();
+    final ArrayList<PermutationArtifact> results = new ArrayList<>();
     for ( final PermutationArtifact permutationArtifact : artifacts.find( PermutationArtifact.class ) )
     {
       results.add( permutationArtifact );
@@ -170,7 +170,7 @@ public final class AppcacheLinker
 
   final Set<String> getArtifactsForCompilation( final LinkerContext context, final ArtifactSet artifacts )
   {
-    final Set<String> artifactNames = new HashSet<String>();
+    final Set<String> artifactNames = new HashSet<>();
     for ( final EmittedArtifact artifact : artifacts.find( EmittedArtifact.class ) )
     {
       if ( Visibility.Public == artifact.getVisibility() && shouldAddToManifest( artifact.getPartialPath() ) )
@@ -223,7 +223,7 @@ public final class AppcacheLinker
   @Nonnull
   final Set<String> getConfigurationValues( @Nonnull final LinkerContext context, @Nonnull final String propertyName )
   {
-    final HashSet<String> set = new HashSet<String>();
+    final HashSet<String> set = new HashSet<>();
     final SortedSet<ConfigurationProperty> properties = context.getConfigurationProperties();
     for ( final ConfigurationProperty configurationProperty : properties )
     {
@@ -258,12 +258,12 @@ public final class AppcacheLinker
   final List<SelectionDescriptor> collectPermutationSelectors( final TreeLogger logger,
                                                                  final Collection<PermutationArtifact> artifacts )
   {
-    final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+    final List<SelectionDescriptor> descriptors = new ArrayList<>();
     for ( final PermutationArtifact artifact : artifacts )
     {
       final Permutation permutation = artifact.getPermutation();
-      final List<BindingProperty> calculatedBindings = new ArrayList<BindingProperty>();
-      final HashSet<String> completed = new HashSet<String>();
+      final List<BindingProperty> calculatedBindings = new ArrayList<>();
+      final HashSet<String> completed = new HashSet<>();
 
       final List<SelectionDescriptor> selectors = permutation.getSelectors();
       final SelectionDescriptor firstSelector = selectors.iterator().next();
@@ -296,7 +296,7 @@ public final class AppcacheLinker
 
   final HashSet<String> collectValuesForKey( final List<SelectionDescriptor> selectors, final String key )
   {
-    final HashSet<String> values = new HashSet<String>();
+    final HashSet<String> values = new HashSet<>();
     for ( final SelectionDescriptor selector : selectors )
     {
       for ( final BindingProperty property : selector.getBindingProperties() )
@@ -347,7 +347,7 @@ public final class AppcacheLinker
         final Set<String> artifactsForCompilation = getArtifactsForCompilation( context, artifacts );
         permutation.getPermutationFiles().addAll( artifactsForCompilation );
       }
-      final List<BindingProperty> list = new ArrayList<BindingProperty>();
+      final List<BindingProperty> list = new ArrayList<>();
       for ( final SelectionProperty property : context.getProperties() )
       {
         if ( !property.isDerived() )

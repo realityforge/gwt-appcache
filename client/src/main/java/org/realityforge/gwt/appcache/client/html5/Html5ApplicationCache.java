@@ -100,7 +100,7 @@ public final class Html5ApplicationCache
     // Register handlers for every terminal event so we can ensure that we remove the cookie.
     // All of these may be required due to; network failure, intermediate cache not passing
     // back to server, overlapping requests etc.
-    final ArrayList<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
+    final ArrayList<HandlerRegistration> registrations = new ArrayList<>();
     registrations.add( addErrorHandler( e -> cacheRemovalCleanup( registrations ) ) );
     registrations.add( addObsoleteHandler( e -> cacheRemovalCleanup( registrations ) ) );
     registrations.add( addNoUpdateHandler( e -> cacheRemovalCleanup( registrations ) ) );

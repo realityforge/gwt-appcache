@@ -12,7 +12,7 @@ public class SelectionDescriptorTest
     final String permutationName = "P1";
     final BindingProperty p1 = new BindingProperty( "A", "1" );
     final BindingProperty p2 = new BindingProperty( "B", "2" );
-    final ArrayList<BindingProperty> bindingProperties = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> bindingProperties = new ArrayList<>();
     bindingProperties.add( p1 );
     bindingProperties.add( p2 );
     final SelectionDescriptor descriptor = new SelectionDescriptor( permutationName, bindingProperties );
@@ -33,22 +33,22 @@ public class SelectionDescriptorTest
     final BindingProperty bp2 = new BindingProperty( "B", "2" );
     final BindingProperty bp3 = new BindingProperty( "C", "3" );
 
-    final ArrayList<BindingProperty> bindingProperties1 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> bindingProperties1 = new ArrayList<>();
     bindingProperties1.add( bp1 );
     bindingProperties1.add( bp2 );
 
     // Different order from bindingProperties1
-    final ArrayList<BindingProperty> bindingProperties2 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> bindingProperties2 = new ArrayList<>();
     bindingProperties2.add( bp2 );
     bindingProperties2.add( bp1 );
 
     // Different properties
-    final ArrayList<BindingProperty> bindingProperties3 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> bindingProperties3 = new ArrayList<>();
     bindingProperties3.add( bp1 );
     bindingProperties3.add( bp3 );
 
     // Different properties
-    final ArrayList<BindingProperty> bindingProperties4 = new ArrayList<BindingProperty>();
+    final ArrayList<BindingProperty> bindingProperties4 = new ArrayList<>();
     bindingProperties4.add( bp1 );
     bindingProperties4.add( bp2 );
     bindingProperties4.add( bp3 );

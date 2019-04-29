@@ -38,7 +38,7 @@ public class ErrorEvent
     public void onErrorEvent( @Nonnull ErrorEvent event );
   }
 
-  private static final GwtEvent.Type<Handler> TYPE = new Type<Handler>();
+  private static final GwtEvent.Type<Handler> TYPE = new Type<>();
 
   public static GwtEvent.Type<Handler> getType()
   {

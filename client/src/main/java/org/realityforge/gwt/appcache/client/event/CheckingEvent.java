@@ -35,7 +35,7 @@ public class CheckingEvent
     void onCheckingEvent( @Nonnull CheckingEvent event );
   }
 
-  private static final GwtEvent.Type<Handler> TYPE = new Type<Handler>();
+  private static final GwtEvent.Type<Handler> TYPE = new Type<>();
 
   public static GwtEvent.Type<Handler> getType()
   {

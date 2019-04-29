@@ -50,8 +50,8 @@ public abstract class AbstractManifestServlet
   private static final Pattern MODULE_PATTERN =
     Pattern.compile( "/([a-zA-Z0-9]+)\\" + Permutation.PERMUTATION_MANIFEST_FILE_ENDING + "$" );
 
-  private transient ArrayList<PropertyProvider> _providers = new ArrayList<PropertyProvider>();
-  private transient ArrayList<String> _clientSideSelectionProperties = new ArrayList<String>();
+  private transient ArrayList<PropertyProvider> _providers = new ArrayList<>();
+  private transient ArrayList<String> _clientSideSelectionProperties = new ArrayList<>();
   private transient long _permutationsDescriptorLastModified = Long.MIN_VALUE;
   private transient List<SelectionDescriptor> _selectionDescriptors;
   private transient Map<String, String> _cache;
@@ -76,7 +76,7 @@ public abstract class AbstractManifestServlet
   {
     if ( null == _cache )
     {
-      _cache = new HashMap<String, String>();
+      _cache = new HashMap<>();
     }
     _enableCache = true;
   }
@@ -292,7 +292,7 @@ public abstract class AbstractManifestServlet
   {
     try
     {
-      final List<BindingProperty> computedBindings = new ArrayList<BindingProperty>( _providers.size() );
+      final List<BindingProperty> computedBindings = new ArrayList<>( _providers.size() );
       for ( final PropertyProvider provider : _providers )
       {
         final String propertyValue = provider.getPropertyValue( request );
@@ -431,9 +431,9 @@ public abstract class AbstractManifestServlet
   {
     try
     {
-      final List<SelectionDescriptor> descriptors = new ArrayList<SelectionDescriptor>();
+      final List<SelectionDescriptor> descriptors = new ArrayList<>();
       descriptors.addAll( getPermutationDescriptors( baseUrl, moduleName ) );
-      final List<BindingProperty> bindings = new ArrayList<BindingProperty>();
+      final List<BindingProperty> bindings = new ArrayList<>();
       bindings.addAll( computedBindings );
       reduceToMatchingDescriptors( bindings, descriptors );
       if ( 0 == bindings.size() )
@@ -444,7 +444,7 @@ public abstract class AbstractManifestServlet
         }
         else
         {
-          final ArrayList<String> permutations = new ArrayList<String>();
+          final ArrayList<String> permutations = new ArrayList<>();
           for ( final SelectionDescriptor descriptor : descriptors )
           {
             if ( descriptor.getBindingProperties().size() == computedBindings.size() )
