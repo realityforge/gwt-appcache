@@ -220,10 +220,7 @@ public final class AppcacheLinker
     {
       if ( propertyName.equals( configurationProperty.getName() ) )
       {
-        for ( final String value : configurationProperty.getValues() )
-        {
-          set.add( value );
-        }
+        set.addAll( configurationProperty.getValues() );
       }
     }
 
