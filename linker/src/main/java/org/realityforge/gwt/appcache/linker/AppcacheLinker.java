@@ -16,7 +16,6 @@ import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -268,14 +267,7 @@ public final class AppcacheLinker
           completed.add( key );
         }
       }
-      Collections.sort( calculatedBindings, new Comparator<BindingProperty>()
-      {
-        @Override
-        public int compare( final BindingProperty o1, final BindingProperty o2 )
-        {
-          return o2.getComponents().length - o1.getComponents().length;
-        }
-      } );
+      calculatedBindings.sort( ( o1, o2 ) -> o2.getComponents().length - o1.getComponents().length );
       descriptors.add( new SelectionDescriptor( permutation.getPermutationName(), calculatedBindings ) );
     }
     logger.log( Type.DEBUG, "Permutation map created with " + descriptors.size() + " descriptors." );
