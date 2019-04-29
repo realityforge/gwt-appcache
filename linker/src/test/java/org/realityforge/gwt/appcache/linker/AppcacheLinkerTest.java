@@ -10,6 +10,7 @@ import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
 import com.google.gwt.core.ext.linker.SelectionProperty;
 import com.google.gwt.core.ext.linker.impl.SelectionInformation;
 import com.google.gwt.core.ext.linker.impl.StandardGeneratedResource;
+import com.google.gwt.core.ext.linker.impl.StandardLinkerContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class AppcacheLinkerTest
   public void getConfigurationValues()
   {
     final AppcacheLinker linker = new AppcacheLinker();
-    final TreeSet<ConfigurationProperty> properties = new TreeSet<>();
+    final TreeSet<ConfigurationProperty> properties =
+      new TreeSet<>( StandardLinkerContext.CONFIGURATION_PROPERTY_COMPARATOR );
     properties.add( new TestConfigurationProperty( "ba", new ArrayList<>() ) );
     properties.add( new TestConfigurationProperty( "foo", Arrays.asList( "V1", "V2" ) ) );
     final LinkerContext context = mock( LinkerContext.class );
