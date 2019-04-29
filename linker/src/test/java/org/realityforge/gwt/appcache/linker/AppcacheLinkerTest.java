@@ -221,7 +221,8 @@ public class AppcacheLinkerTest
     final LinkerContext linkerContext = mock( LinkerContext.class );
     when( linkerContext.getModuleName() ).thenReturn( "myapp" );
 
-    final TreeSet<SelectionProperty> properties = new TreeSet<>();
+    final TreeSet<SelectionProperty> properties =
+      new TreeSet<>( StandardLinkerContext.CONFIGURATION_PROPERTY_COMPARATOR );
     properties.add( new TestSelectionProperty( "user.agent", false ) );
     properties.add( new TestSelectionProperty( "screen.size", false ) );
     properties.add( new TestSelectionProperty( "geolocationSupport", true ) );
