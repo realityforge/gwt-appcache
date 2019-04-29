@@ -13,7 +13,7 @@ public class PermutationArtifact
 
   private final Permutation _permutation;
 
-  public PermutationArtifact( final Class<? extends Linker> linker, final Permutation permutation )
+  PermutationArtifact( final Class<? extends Linker> linker, final Permutation permutation )
   {
     super( linker );
     _permutation = permutation;
@@ -37,7 +37,7 @@ public class PermutationArtifact
     return PermutationArtifact.class;
   }
 
-  public Permutation getPermutation()
+  Permutation getPermutation()
   {
     return _permutation;
   }
