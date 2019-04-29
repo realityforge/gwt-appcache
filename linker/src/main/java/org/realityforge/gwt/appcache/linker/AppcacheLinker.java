@@ -30,7 +30,7 @@ import org.realityforge.gwt.appcache.server.Permutation;
 import org.realityforge.gwt.appcache.server.PermutationsIO;
 import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 
-@LinkerOrder(LinkerOrder.Order.POST)
+@LinkerOrder( LinkerOrder.Order.POST )
 @Shardable
 public final class AppcacheLinker
   extends AbstractLinker
@@ -184,17 +184,17 @@ public final class AppcacheLinker
   private boolean shouldAddToManifest( final String path )
   {
     return !( path.equals( "compilation-mappings.txt" ) || path.endsWith( ".devmode.js" ) ||
-            path.endsWith( ".cache.js.gz" ));
+              path.endsWith( ".cache.js.gz" ) );
   }
 
   /**
    * Write a manifest file for the given set of artifacts and return it as a
    * string
    *
-   * @param staticResources - the static resources of the app, such as
-   *                        index.html file
-   * @param fallbackResources  the fall back files to add to the manifest.
-   * @param cacheResources  the gwt output artifacts like cache.html files
+   * @param staticResources   - the static resources of the app, such as
+   *                          index.html file
+   * @param fallbackResources the fall back files to add to the manifest.
+   * @param cacheResources    the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
   final String writeManifest( final TreeLogger logger,
@@ -256,7 +256,7 @@ public final class AppcacheLinker
   }
 
   final List<SelectionDescriptor> collectPermutationSelectors( final TreeLogger logger,
-                                                                 final Collection<PermutationArtifact> artifacts )
+                                                               final Collection<PermutationArtifact> artifacts )
   {
     final List<SelectionDescriptor> descriptors = new ArrayList<>();
     for ( final PermutationArtifact artifact : artifacts )
