@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.realityforge.gwt.appcache.server.BindingProperty;
 import org.realityforge.gwt.appcache.server.ManifestDescriptor;
 import org.realityforge.gwt.appcache.server.Permutation;
@@ -44,9 +45,9 @@ public final class AppcacheLinker
   }
 
   @Override
-  public ArtifactSet link( final TreeLogger logger,
-                           final LinkerContext context,
-                           final ArtifactSet artifacts,
+  public ArtifactSet link( @Nonnull final TreeLogger logger,
+                           @Nonnull final LinkerContext context,
+                           @Nonnull final ArtifactSet artifacts,
                            final boolean onePermutation )
     throws UnableToCompleteException
   {
@@ -60,9 +61,10 @@ public final class AppcacheLinker
     }
   }
 
-  private ArtifactSet perCompileLink( final TreeLogger logger,
-                                      final LinkerContext context,
-                                      final ArtifactSet artifacts )
+  @Nonnull
+  private ArtifactSet perCompileLink( @Nonnull final TreeLogger logger,
+                                      @Nonnull final LinkerContext context,
+                                      @Nonnull final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
     final ArrayList<PermutationArtifact> permutationArtifacts =
@@ -131,9 +133,10 @@ public final class AppcacheLinker
     return fallbackFiles;
   }
 
-  final ArtifactSet perPermutationLink( final TreeLogger logger,
-                                        final LinkerContext context,
-                                        final ArtifactSet artifacts )
+  @Nonnull
+  final ArtifactSet perPermutationLink( @Nonnull final TreeLogger logger,
+                                        @Nonnull final LinkerContext context,
+                                        @Nonnull final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
     final Permutation permutation = calculatePermutation( logger, context, artifacts );
@@ -148,7 +151,8 @@ public final class AppcacheLinker
     return results;
   }
 
-  final Set<String> getAllPermutationFiles( final ArrayList<PermutationArtifact> artifacts )
+  @Nonnull
+  final Set<String> getAllPermutationFiles( @Nonnull final ArrayList<PermutationArtifact> artifacts )
   {
     final Set<String> files = new HashSet<>();
     for ( final PermutationArtifact artifact : artifacts )
@@ -158,7 +162,9 @@ public final class AppcacheLinker
     return files;
   }
 
-  final Set<String> getArtifactsForCompilation( final LinkerContext context, final ArtifactSet artifacts )
+  @Nonnull
+  final Set<String> getArtifactsForCompilation( @Nonnull final LinkerContext context,
+                                                @Nonnull final ArtifactSet artifacts )
   {
     final Set<String> artifactNames = new HashSet<>();
     for ( final EmittedArtifact artifact : artifacts.find( EmittedArtifact.class ) )
@@ -171,7 +177,7 @@ public final class AppcacheLinker
     return artifactNames;
   }
 
-  private boolean shouldAddToManifest( final String path )
+  private boolean shouldAddToManifest( @Nonnull final String path )
   {
     return !( path.equals( "compilation-mappings.txt" ) || path.endsWith( ".devmode.js" ) ||
               path.endsWith( ".cache.js.gz" ) );
@@ -187,7 +193,8 @@ public final class AppcacheLinker
    * @param cacheResources    the gwt output artifacts like cache.html files
    * @return the manifest as a string
    */
-  final String writeManifest( final TreeLogger logger,
+  @Nonnull
+  final String writeManifest( @Nonnull final TreeLogger logger,
                               @Nonnull final Set<String> staticResources,
                               @Nonnull final Map<String, String> fallbackResources,
                               @Nonnull final Set<String> cacheResources )
@@ -226,8 +233,9 @@ public final class AppcacheLinker
     return set;
   }
 
-  final EmittedArtifact createPermutationMap( final TreeLogger logger,
-                                              final Collection<PermutationArtifact> artifacts )
+  @Nonnull
+  final EmittedArtifact createPermutationMap( @Nonnull final TreeLogger logger,
+                                              @Nonnull final Collection<PermutationArtifact> artifacts )
     throws UnableToCompleteException
   {
     try
@@ -242,8 +250,9 @@ public final class AppcacheLinker
     }
   }
 
-  final List<SelectionDescriptor> collectPermutationSelectors( final TreeLogger logger,
-                                                               final Collection<PermutationArtifact> artifacts )
+  @Nonnull
+  final List<SelectionDescriptor> collectPermutationSelectors( @Nonnull final TreeLogger logger,
+                                                               @Nonnull final Collection<PermutationArtifact> artifacts )
   {
     final List<SelectionDescriptor> descriptors = new ArrayList<>();
     for ( final PermutationArtifact artifact : artifacts )
@@ -274,7 +283,9 @@ public final class AppcacheLinker
     return descriptors;
   }
 
-  final HashSet<String> collectValuesForKey( final List<SelectionDescriptor> selectors, final String key )
+  @Nonnull
+  final HashSet<String> collectValuesForKey( @Nonnull final List<SelectionDescriptor> selectors,
+                                             @Nonnull final String key )
   {
     final HashSet<String> values = new HashSet<>();
     for ( final SelectionDescriptor selector : selectors )
@@ -290,7 +301,8 @@ public final class AppcacheLinker
     return values;
   }
 
-  final String joinValues( final Set<String> values )
+  @Nonnull
+  final String joinValues( @Nonnull final Set<String> values )
   {
     final StringBuilder sb = new StringBuilder();
     for ( final String value : values )
@@ -307,9 +319,10 @@ public final class AppcacheLinker
   /**
    * Return the permutation for a single link step.
    */
-  final Permutation calculatePermutation( final TreeLogger logger,
-                                          final LinkerContext context,
-                                          final ArtifactSet artifacts )
+  @Nullable
+  final Permutation calculatePermutation( @Nonnull final TreeLogger logger,
+                                          @Nonnull final LinkerContext context,
+                                          @Nonnull final ArtifactSet artifacts )
     throws UnableToCompleteException
   {
     Permutation permutation = null;
