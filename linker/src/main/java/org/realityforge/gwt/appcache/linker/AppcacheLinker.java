@@ -34,8 +34,8 @@ import org.realityforge.gwt.appcache.server.SelectionDescriptor;
 public final class AppcacheLinker
   extends AbstractLinker
 {
-  public static final String STATIC_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_static_files";
-  public static final String FALLBACK_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_fallback_files";
+  private static final String STATIC_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_static_files";
+  private static final String FALLBACK_FILES_CONFIGURATION_PROPERTY_NAME = "appcache_fallback_files";
 
   @Override
   public String getDescription()
