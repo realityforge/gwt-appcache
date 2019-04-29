@@ -2,6 +2,7 @@
 * -text
 *.java text
 *.md text
+*.rake text
 *.xml text
 *.yaml text
 *.yml text
