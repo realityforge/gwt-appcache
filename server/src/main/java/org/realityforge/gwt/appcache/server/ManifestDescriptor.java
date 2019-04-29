@@ -104,7 +104,7 @@ public final class ManifestDescriptor
       {
         descriptor.getCachedResources().add( urlDecode( line ) );
       }
-      else if ( fallbackMode == mode )
+      else
       {
         final String[] elements = line.split( " +" );
         if ( 2 != elements.length )
