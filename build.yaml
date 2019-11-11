@@ -5,8 +5,8 @@ repositories:
 artifacts:
   javax_servlet: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:jar:1.0
   javax_annotation: org.realityforge.javax.annotation:javax.annotation:jar:1.0.1
-  gwt_user: com.google.gwt:gwt-user:jar:2.8.2
-  gwt_dev: com.google.gwt:gwt-dev:jar:2.8.2
+  gwt_user: org.realityforge.com.google.gwt:gwt-user:jar:2.8.2-v20191108
+  gwt_dev: org.realityforge.com.google.gwt:gwt-dev:jar:2.8.2-v20191108
   javax_validation: javax.validation:validation-api:jar:1.0.0.GA
   javax_validation_sources: javax.validation:validation-api:jar:sources:1.0.0.GA
 
