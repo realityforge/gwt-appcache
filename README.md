@@ -1,3 +1,7 @@
+> Project Archived: The browsers are discontinuing the Appcache support so this library no longer needs to exist and users should move to a ServiceWorker architecture instead.
+
+---
+
 # gwt-appcache
 
 [![Build Status](https://secure.travis-ci.org/realityforge/gwt-appcache.svg?branch=master)](http://travis-ci.org/realityforge/gwt-appcache)
